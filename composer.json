@@ -1,6 +1,6 @@
 {
-    "name": "cnizzardini/cakephp-YummyCake",
-    "description": "YummyCake plugin for CakePHP",
+    "name": "cnizzardini/cakephp-yummy",
+    "description": "Yummy plugin for CakePHP",
     "type": "cakephp-plugin",
     "require": {
         "php": ">=5.5.9",

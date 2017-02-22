@@ -1,6 +1,6 @@
 <?php
 
-namespace YummyCake\Controller;
+namespace Yummy\Controller;
 
 use App\Controller\AppController as BaseController;
 

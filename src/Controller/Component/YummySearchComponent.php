@@ -1,5 +1,5 @@
 <?php
-namespace YummyCake\Controller\Component;
+namespace Yummy\Controller\Component;
 
 use Cake\Controller\Component;
 //use Cake\Datasource\ConnectionManager;
