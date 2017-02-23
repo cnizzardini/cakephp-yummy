@@ -70,12 +70,16 @@ class YummyAclComponent extends Component
                 throw new InternalErrorException(__($controllerName . ' YummyAcl config "allow" option must be (1) not set, (2) an array of groups, or (3) equal to wildcard (*)'));
                 
             // check for group level access to this controller    
-            } else if( !in_array($config['group'], $config['allow']) ){
+            } else if( in_array($config['group'], $config['allow']) ){
+                return false;
+            
+            // not authorized
+            } else {
                 $this->Flash->warn(__('You are not authorized to view this section'),[
                     'params'=>['title'=>'Access denied']
                 ]);
                 return $controller->redirect($config['redirect']);
-            }
+            }            
         }
 
         // actions are not configured? 
