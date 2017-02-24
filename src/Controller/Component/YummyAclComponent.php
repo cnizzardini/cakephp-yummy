@@ -19,7 +19,10 @@ class YummyAclComponent extends Component
     ];
     
     /**
-     * beforeFilter - handles acl logic
+     * startup - this is a magic method that gets called by cake
+     * @todo this may need to operate differently for parsed extensions such as json and xml
+     * @return bool|\Cake\Network\Response| returns true if the acl passes, network response redirect if fails
+     * @throws InternalErrorException
      */
     public function startup() 
     {
@@ -45,7 +48,7 @@ class YummyAclComponent extends Component
         
         // do not bother with ACL checks if user is not logged in
         if( !$this->Auth->user() ){
-            return false;
+            return true;
         }
         
         // group is required, throw exception if not set
@@ -63,7 +66,7 @@ class YummyAclComponent extends Component
             
             // allow access to all actions in this controller
             if( $config['allow'] == '*' ){
-                return false;
+                return true;
             
             // must be an array at this point, throw exception
             } else if( !is_array($config['allow']) ){
@@ -71,7 +74,7 @@ class YummyAclComponent extends Component
                 
             // check for group level access to this controller    
             } else if( in_array($config['group'], $config['allow']) ){
-                return false;
+                return true;
             
             // not authorized
             } else {
@@ -101,6 +104,7 @@ class YummyAclComponent extends Component
             ]);
             return $controller->redirect($config['redirect']);
         }
+        return true;
     }
     
     /**
