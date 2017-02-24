@@ -6,13 +6,13 @@
         </a>
     </li>
     <li class="">
-        <a href="/yummy/">
+        <a href="/yummy/acl">
             <i class="ti-lock"></i>
             <p>Yummy ACL</p>
         </a>
     </li>
     <li class="">
-        <a href="/yummy/">
+        <a href="/yummy/search">
             <i class="ti-search"></i>
             <p>Yummy Search</p>
         </a>
