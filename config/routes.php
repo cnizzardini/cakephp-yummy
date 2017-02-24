@@ -4,8 +4,8 @@ use Cake\Routing\Router;
 use Cake\Routing\Route\DashedRoute;
 
 Router::plugin(
-    'YummyCake',
-    ['path' => '/yummy-cake'],
+    'Yummy',
+    ['path' => '/yummy'],
     function (RouteBuilder $routes) {
         $routes->fallbacks(DashedRoute::class);
     }
