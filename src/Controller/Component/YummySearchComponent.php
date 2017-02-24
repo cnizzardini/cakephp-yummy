@@ -86,7 +86,7 @@ class YummySearchComponent extends Component
      * @param string $field
      * @param string $operator
      * @param string $value
-     * @return mixed array on success, boolean false on error
+     * @return array|bool returns an array on success, false if operator is not found
      */
     private function getSqlCondition($field, $operator, $value)
     {
@@ -109,7 +109,7 @@ class YummySearchComponent extends Component
     
     /**
      * search - appends cakephp orm conditions to PaginatorComponent
-     * @return boolean
+     * @return bool
      */
     public function search()
     {
@@ -143,5 +143,6 @@ class YummySearchComponent extends Component
                 $controller->paginate['conditions'] = array_merge($controller->paginate['conditions'], $this->getSqlCondition($field,$operator,$search));
             }
         }
+        return true;
     }
 }
