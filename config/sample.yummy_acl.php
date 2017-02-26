@@ -9,13 +9,11 @@ return [
         ],
         'User' => [
             'actions' => [
-                'login' => '*',
-                'logout' => '*',
-                'forgot' => '*',
-                'password' => '*',
-                'index' => ['admin','manager','user'],
+                'index' => ['admin','manager'],
                 'edit' => ['admin','manager'],
                 'add' => ['admin'],
+                'login' => '*',
+                'logout' => '*',
             ]
         ]
     ]
