@@ -139,6 +139,7 @@ class YummyAclComponent extends Component
     /**
      * allow - set controller level acl
      * @param mixed $config
+     * @return void
      */
     public function allow($config)
     {
@@ -148,6 +149,7 @@ class YummyAclComponent extends Component
     /**
      * actions - set action level acl
      * @param mixed $config
+     * @return void
      */
     public function actions($config)
     {
