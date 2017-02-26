@@ -2,13 +2,17 @@
 
 Delightfully tasty tools for your cakephp project. 
 
-## About
+**YummySearch** 
 
-Contains rudimentary tools for enhancing your cakephp-3.x project including:
+A component that works with PaginatorComponent to add search functionality to tables.
 
-- YummySearch - a component that works with PaginatorComponent to add search functionality to tables.
-- YummyAcl - a component that works with Auth to add basic access controls to your site.
-- YummyTemplate - a series of bootstrap admin themes for your admin portal.
+**YummyAcl**
+
+A component that works with Auth to add basic access controls to your site. [Read documentation](https://github.com/cnizzardini/cakephp-yummy/wiki/YummyACL)
+
+**YummyTemplate** 
+
+A series of bootstrap admin themes for your admin portal.
 
 ## Installation
 
@@ -19,3 +23,15 @@ The recommended way to install composer packages is:
 ```
 composer require cnizzardini/cakephp-yummy
 ```
+
+## Configuration
+
+Edit File: config/bootstrap.php
+
+```
+Plugin::load('Yummy', ['bootstrap' => false, 'routes' => true]);
+```
+
+## Documentation
+
+Checkout the [Wiki](https://github.com/cnizzardini/cakephp-yummy/wiki/).
