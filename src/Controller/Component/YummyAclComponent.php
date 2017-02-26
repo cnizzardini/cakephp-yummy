@@ -3,6 +3,7 @@ namespace Yummy\Controller\Component;
 
 use Cake\Controller\Component;
 use Cake\Network\Exception\InternalErrorException;
+use Cake\Network\Exception\ForbiddenException;
 use Cake\Core\Configure;
 
 /**
@@ -14,7 +15,7 @@ class YummyAclComponent extends Component
     
     
     protected $_defaultConfig = [
-        'redirect' => '/',
+        //'redirect' => '/',
         //'allow' => '*'
     ];
     
@@ -27,10 +28,28 @@ class YummyAclComponent extends Component
     public function startup() 
     {
         $config = $this->config();
+
+        // if redirect is not defined then use settings from AuthComponent
+        if( !isset($config['redirect']) ){
+            $authConfig = $this->Auth->config();
+            
+            if( $authConfig['unauthorizedRedirect'] == true ){
+                $config['redirect'] = $authConfig['loginAction'];
+                
+            } else if( is_string($authConfig['unauthorizedRedirect']) ){
+                $config['redirect'] = $authConfig['unauthorizedRedirect'];
+                
+            } else if( $authConfig['unauthorizedRedirect'] == false ){
+                $config['redirect'] = 403;
+            }
+            else{
+                throw new InternalErrorException(__('YummyAcl requires the "redirect" option in config or Auth.loginAction or Auth.unauthorizedRedirect'));
+            }
+        }
         
         // access the userland controller
         $controller = $this->_registry->getController();
-        
+
         // are we using the yummy config file or controller level configurations?
         if( $this->config('config') == true ){
             $tmp = Configure::read('YummyAcl');
@@ -81,7 +100,12 @@ class YummyAclComponent extends Component
                 $this->Flash->warn(__('You are not authorized to view this section'),[
                     'params'=>['title'=>'Access denied']
                 ]);
-                return $controller->redirect($config['redirect']);
+                
+                if( $config['redirect'] == 403 ){
+                    throw new ForbiddenException();
+                } else {
+                    return $controller->redirect($config['redirect']);
+                }
             }            
         }
 
@@ -102,7 +126,11 @@ class YummyAclComponent extends Component
             $this->Flash->warn(__('You are not authorized to visit this page'),[
                 'params'=>['title'=>'Access denied']
             ]);
-            return $controller->redirect($config['redirect']);
+            if( $config['redirect'] == 403 ){
+                throw new ForbiddenException();
+            } else {
+                return $controller->redirect($config['redirect']);
+            }
         }
         return true;
     }
