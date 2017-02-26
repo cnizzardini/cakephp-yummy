@@ -16,7 +16,7 @@ class YummyAclComponent extends Component
     
     protected $_defaultConfig = [
         //'redirect' => '/',
-        //'allow' => '*'
+        //'config' => false,
     ];
     
     /**
