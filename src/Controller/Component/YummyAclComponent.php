@@ -52,6 +52,7 @@ class YummyAclComponent extends Component
 
         // are we using the yummy config file or controller level configurations?
         if( $this->config('config') == true ){
+            Configure::load('yummy_acl', 'default', false);
             $tmp = Configure::read('YummyAcl');
             
             if( !$tmp ){
