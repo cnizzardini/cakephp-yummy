@@ -161,7 +161,7 @@ class YummyAclComponent extends Component
     public function actions($config)
     {
         if( !is_array($config) || empty($config) ){
-            throw new InternalErrorException('YummyAcl::allow argument must be an array. Check documentation for array structure');
+            throw new InternalErrorException('YummyAcl::actions argument must be an array. Check documentation for array structure');
         }
         $this->_config['actions'] = $config;
         return true;
