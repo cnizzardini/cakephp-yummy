@@ -167,18 +167,17 @@ class YummyAclComponent extends Component
             // check for group level access to this controller    
             } else if( in_array($this->config('group'), $this->config('allow')) ){
                 return true;
+            }
             
             // not authorized
-            } else {
-                $this->Flash->warn(__('You are not authorized to view this section'),[
-                    'params'=>['title'=>'Access denied']
-                ]);
-                
-                if( $this->config('redirect') == 403 ){
-                    throw new ForbiddenException();
-                }
-                return false;
-            }            
+            $this->Flash->warn(__('You are not authorized to view this section'),[
+                'params'=>['title'=>'Access denied']
+            ]);
+
+            if( $this->config('redirect') == 403 ){
+                throw new ForbiddenException();
+            }
+            return false;
         }
     }
     
@@ -224,6 +223,7 @@ class YummyAclComponent extends Component
     
     /**
      * setRedirect - sets the redirect url
+     * @return void
      * @throws InternalErrorException
      */
     private function setRedirect()
