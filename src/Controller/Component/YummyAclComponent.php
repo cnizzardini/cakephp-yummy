@@ -240,8 +240,9 @@ class YummyAclComponent extends Component
             } else if( $authConfig['unauthorizedRedirect'] == false ){
                 $this->setConfig('redirect', 403);
             }
-            
-            throw new InternalErrorException(__('YummyAcl requires the "redirect" option in config or Auth.loginAction or Auth.unauthorizedRedirect'));
+            else{
+                throw new InternalErrorException(__('YummyAcl requires the "redirect" option in config or Auth.loginAction or Auth.unauthorizedRedirect'));
+            }
         }    
     }
 }
