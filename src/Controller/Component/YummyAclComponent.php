@@ -39,11 +39,6 @@ class YummyAclComponent extends Component
         // determine if we are using a flat file config
         $this->whichConfig();
         
-        // check if user is authenticated
-        if( $this->checkAuth() == false ){
-            return $this->controller->redirect($this->redirect('redirect'));
-        }
-        
         // check for controller level acl
         $hasController = $this->checkControllerAccess();
         if( $hasController === false ){
@@ -88,26 +83,6 @@ class YummyAclComponent extends Component
             throw new InternalErrorException('YummyAcl::actions argument must be an array. Check documentation for array structure');
         }
         $this->setConfig('actions', $config);
-        return true;
-    }
-    
-    /**
-     * checkAuth - checks if the user is authenticated
-     * @return boolean
-     * @throws ForbiddenException
-     */
-    private function checkAuth()
-    {   
-        if( !$this->Auth->user() ){
-            $this->Flash->warn(__('You are not logged in'),[
-                'params'=>['title'=>'Access denied']
-            ]);
-
-            if( $this->config('redirect') == 403 ){
-                throw new ForbiddenException();
-            }
-            return false;
-        }
         return true;
     }
     
@@ -214,10 +189,6 @@ class YummyAclComponent extends Component
             }
             
             $this->configShallow($config[ $this->controller->name ]);
-        }
-        
-        if( $this->config('group') == null ){
-            throw new InternalErrorException(__('The "group" option is required in YummyAcl config'));
         }
     }
     
