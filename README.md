@@ -1,6 +1,7 @@
 # Yummy plugin for CakePHP
 
 [![Software License](https://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat-square)](LICENSE.txt)
+[![Code Coverage](https://codeclimate.com/github/cnizzardini/cakephp-yummy/badges/gpa.svg)](Code Coverage)
 
 Delightfully tasty tools for your cakephp project. 
 
