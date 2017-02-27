@@ -98,15 +98,18 @@ class YummyAclComponent extends Component
         
         // actions are not configured? 
         if( !isset($config['actions']) ){
-            throw new InternalErrorException(__($this->controllerName . ' YummyAcl config is missing "actions". To enable access to all actions set "allow" equal to wildcard (*)'));
+            throw new InternalErrorException(__($this->controllerName . ' YummyAcl config is missing "actions". To enable access to all '
+                    . 'actions set "allow" equal to wildcard (*)'));
         
         // actions must be an array at this point
         } else if ( !is_array($config['actions']) ){
-            throw new InternalErrorException(__($this->controllerName . ' YummyAcl config "actions" should be an array of [action => [groups]]'));
+            throw new InternalErrorException(__($this->controllerName . ' YummyAcl config "actions" should be an array of '
+                    . '[action => [groups]]'));
 
         // $this->actionName must be a key in the actions array at this point
         } else if ( !isset($config['actions'][ $this->actionName ]) ){
-            throw new InternalErrorException(__($this->controllerName . ' YummyAcl config is missing the action "' . $this->actionName . '" as a key in the "actions" array'));
+            throw new InternalErrorException(__($this->controllerName . ' YummyAcl config is missing the action '
+                    . '"' . $this->actionName . '" as a key in the "actions" array'));
             
         // check for allow all or specific group
         } else if( $config['actions'][ $this->actionName ] != '*' && !in_array($config['group'], $config['actions'][$this->actionName]) ){
@@ -137,7 +140,8 @@ class YummyAclComponent extends Component
             
             // must be an array at this point, throw exception
             } else if( !is_array($this->config('allow')) ){
-                throw new InternalErrorException(__($this->controllerName . ' YummyAcl config "allow" option must be (1) not set, (2) an array of groups, or (3) equal to wildcard (*)'));
+                throw new InternalErrorException(__($this->controllerName . ' YummyAcl config "allow" option must be (1) not set, (2) an '
+                        . 'array of groups, or (3) equal to wildcard (*)'));
                 
             // check for group level access to this controller    
             } else if( in_array($this->config('group'), $this->config('allow')) ){
@@ -181,11 +185,13 @@ class YummyAclComponent extends Component
             $config = Configure::read('YummyAcl');
             
             if( !$config ){
-                throw new InternalErrorException(__('YummyAcl config file does not exist. Have you created it: YummyCake/config/acl_config.php?'));
+                throw new InternalErrorException(__('YummyAcl config file does not exist. Have you created it: '
+                        . 'YummyCake/config/acl_config.php?'));
             }
             
             if( !isset($config[ $this->controller->name ]) ){
-                throw new InternalErrorException(__('The controller "' . $this->controller->name . '" is missing from the YummyAcl config file'));
+                throw new InternalErrorException(__('The controller "' . $this->controller->name . '" is missing from the YummyAcl config '
+                        . 'file'));
             }
             
             $this->configShallow($config[ $this->controller->name ]);
@@ -216,7 +222,8 @@ class YummyAclComponent extends Component
                 $this->setConfig('redirect', 403);
             }
             else{
-                throw new InternalErrorException(__('YummyAcl requires the "redirect" option in config or Auth.loginAction or Auth.unauthorizedRedirect'));
+                throw new InternalErrorException(__('YummyAcl requires the "redirect" option in config or Auth.loginAction or '
+                        . 'Auth.unauthorizedRedirect'));
             }
         }    
     }
