@@ -1,5 +1,7 @@
 # Yummy plugin for CakePHP
 
+[![Software License](https://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat-square)](LICENSE.txt)
+
 Delightfully tasty tools for your cakephp project. 
 
 YummySearch - A component that works with PaginatorComponent to add search functionality to tables.
