@@ -170,11 +170,11 @@ class YummyAclComponent extends Component
     
     /**
      * actions - set ACLs for a controllers actions
-     * @param string|array $config
+     * @param array $config
      * @return bool true on succes
      * @throws InternalErrorException
      */
-    public function actions($config)
+    public function actions(array $config)
     {
         if( !is_array($config) || empty($config) ){
             throw new InternalErrorException('YummyAcl::actions argument must be an array. Check documentation for array structure');
