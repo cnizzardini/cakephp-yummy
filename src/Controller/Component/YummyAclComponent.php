@@ -29,9 +29,17 @@ class YummyAclComponent extends Component
     public function startup() 
     {
         $config = $this->config();
-
+        
         // access the userland controller
         $controller = $this->_registry->getController();
+
+        if( !isset($controller->Auth) ){
+            throw new InternalErrorException(__('YummyAcl requires the AuthComponent'));
+        }
+        
+        if( !isset($controller->Flash) ){
+            throw new InternalErrorException(__('YummyAcl requires the FlashComponent'));
+        }
         
         // if redirect is not defined then use settings from AuthComponent
         if( !isset($config['redirect']) ){
@@ -50,7 +58,7 @@ class YummyAclComponent extends Component
                 throw new InternalErrorException(__('YummyAcl requires the "redirect" option in config or Auth.loginAction or Auth.unauthorizedRedirect'));
             }
         }
-
+        
         // are we using the yummy config file or controller level configurations?
         if( $this->config('config') == true ){
             $tmp = Configure::read('YummyAcl');
@@ -60,7 +68,7 @@ class YummyAclComponent extends Component
             }
             
             if( !isset($tmp[ $controller->name ]) ){
-                throw new InternalErrorException(__('The controller (' . $controller->name . ') is missing from the YummyAcl config file'));
+                throw new InternalErrorException(__('The controller "' . $controller->name . '" is missing from the YummyAcl config file'));
             }
             
             $config = array_merge($config, $tmp[ $controller->name ]);
@@ -68,7 +76,15 @@ class YummyAclComponent extends Component
         
         // do not bother with ACL checks if user is not logged in
         if( !$this->Auth->user() ){
-            return true;
+            $this->Flash->warn(__('You are not logged in'),[
+                'params'=>['title'=>'Access denied']
+            ]);
+
+            if( $config['redirect'] == 403 ){
+                throw new ForbiddenException();
+            } else {
+                return $controller->redirect($config['redirect']);
+            }
         }
         
         // group is required, throw exception if not set
@@ -85,7 +101,7 @@ class YummyAclComponent extends Component
         if( isset($config['allow']) ){
             
             // allow access to all actions in this controller
-            if( $config['allow'] == '*' ){
+            if( $config['allow'] == '*' ){ die('123');
                 return true;
             
             // must be an array at this point, throw exception
@@ -109,7 +125,7 @@ class YummyAclComponent extends Component
                 }
             }            
         }
-
+        
         // actions are not configured? 
         if( !isset($config['actions']) ){
             throw new InternalErrorException(__($controllerName . ' YummyAcl config is missing "actions". To enable access to all actions set "allow" equal to wildcard (*)'));
@@ -120,7 +136,7 @@ class YummyAclComponent extends Component
 
         // $actionName must be a key in the actions array at this point
         } else if ( !isset($config['actions'][ $actionName ]) ){
-            throw new InternalErrorException(__($controllerName . ' YummyAcl config is missing the action (' . $actionName . ') as a key in the "actions" array'));
+            throw new InternalErrorException(__($controllerName . ' YummyAcl config is missing the action "' . $actionName . '" as a key in the "actions" array'));
             
         // check for allow all or specific group
         } else if( $config['actions'][ $actionName ] != '*' && !in_array($config['group'], $config['actions'][$actionName]) ){
