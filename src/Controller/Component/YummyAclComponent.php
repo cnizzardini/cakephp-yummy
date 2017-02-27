@@ -218,8 +218,8 @@ class YummyAclComponent extends Component
     }
     
     /**
-     * setRedirect - sets the redirect url
-     * @return void
+     * setRedirect - sets the redirect url or throws an exception if unable to determine redirect url
+     * @return boolean
      * @throws InternalErrorException
      */
     private function setRedirect()
@@ -229,17 +229,20 @@ class YummyAclComponent extends Component
             
             if( $authConfig['unauthorizedRedirect'] == true ){
                 $this->setConfig('redirect', $this->request->referer(true));
+                return true;
                 
             } else if( is_string($authConfig['unauthorizedRedirect']) ){
                 $this->setConfig('redirect', $authConfig['unauthorizedRedirect']);
+                return true;
                 
             } else if( $authConfig['unauthorizedRedirect'] == false ){
                 $this->setConfig('redirect', 403);
+                return true;
             }
-            else{
-                throw new InternalErrorException(__('YummyAcl requires the "redirect" option in config or '
-                        . 'Auth.loginAction or Auth.unauthorizedRedirect'));
-            }
-        }    
+            
+            throw new InternalErrorException(__('YummyAcl requires the "redirect" option in config or '
+                    . 'Auth.loginAction or Auth.unauthorizedRedirect'));
+        }
+        return true;
     }
 }
