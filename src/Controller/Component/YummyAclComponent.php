@@ -112,18 +112,22 @@ class YummyAclComponent extends Component
         } else if ( !isset($config['actions'][ $this->actionName ]) ){
             throw new InternalErrorException(__($this->controllerName . ' YummyAcl config is missing the action '
                     . '"' . $this->actionName . '" as a key in the "actions" array'));
+        
+        // check for allow all
+        } else if( $config['actions'][ $this->actionName ] == '*'){ 
+            return true;
             
-        // check for allow all or specific group
-        } else if( $config['actions'][ $this->actionName ] != '*' && !in_array($config['group'], $config['actions'][$this->actionName]) ){
-            $this->Flash->warn(__('You are not authorized to visit this page'),[
-                'params'=>['title'=>'Access denied']
-            ]);
-            if( $config['redirect'] == 403 ){
-                throw new ForbiddenException();
-            }
-            return false;
+        // check for defined group access
+        } else if( in_array($config['group'], $config['actions'][$this->actionName]) ){
+            return true;
         }
-        return true;
+        
+        $this->Flash->warn(__('You are not authorized to visit this page'),[
+            'params'=>['title'=>'Access denied']
+        ]);
+        if( $config['redirect'] == 403 ){
+            throw new ForbiddenException();
+        }
     }
     
     /**
