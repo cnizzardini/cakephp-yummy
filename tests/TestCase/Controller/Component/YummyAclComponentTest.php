@@ -77,7 +77,7 @@ class YummyAclComponentTest extends TestCase
     }
     
     /**
-     * testAllowGroupController - specific user group can access to controller
+     * testAllowGroupController - specific user group can access controller
      * @return void
      */
     public function testAllowGroupController()
