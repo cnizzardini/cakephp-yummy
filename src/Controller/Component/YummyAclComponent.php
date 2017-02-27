@@ -101,7 +101,7 @@ class YummyAclComponent extends Component
         if( isset($config['allow']) ){
             
             // allow access to all actions in this controller
-            if( $config['allow'] == '*' ){ die('123');
+            if( $config['allow'] == '*' ){
                 return true;
             
             // must be an array at this point, throw exception
