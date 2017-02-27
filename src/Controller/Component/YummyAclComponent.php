@@ -40,18 +40,19 @@ class YummyAclComponent extends Component
         $this->whichConfig();
         
         // check for controller level acl
-        $hasController = $this->checkControllerAccess();
-        if( $hasController === false ){
-            return $this->controller->redirect($this->config('redirect'));
-        } else if( $hasController === true ){
+        $hasControllerAccess = $this->checkControllerAccess();
+        
+        if( $hasControllerAccess === true ){
             return true;
+        } else if( $hasControllerAccess === false ){
+            return $this->controller->redirect($this->config('redirect'));
         }
         
         // check for action level acl
-        $hasAction = $this->checkActionAccess();
-        if( $hasAction == false ){
+        if( $this->checkActionAccess() == false ){
             return $this->controller->redirect($this->config('redirect'));
         }
+
         return true;
     }
     
@@ -89,14 +90,43 @@ class YummyAclComponent extends Component
     }
     
     /**
+     * denyAccess - sets flash message and if redirect is not set throws a 403 exception
+     * @return boolean - on false issue deny access
+     * @throws ForbiddenException
+     */
+    private function denyAccess()
+    {
+        $this->Flash->warn(__('You are not authorized to view this section'),[
+            'params'=>['title'=>'Access denied']
+        ]);
+        
+        if( $this->config('redirect') == 403 ){
+            throw new ForbiddenException();
+        }
+        
+        return false;
+    }
+    
+    /**
      * checkActionAccess - check if user has access to the requested action
-     * @return boolean - redirect on false
+     * @return boolean
      * @throws InternalErrorException
      * @throws ForbiddenException
      */
     private function checkActionAccess()
-    {
+    {   
         $config = $this->config();
+        
+        if( isset($config['actions'][$this->actionName]) ){
+            // check for allow all
+            if( $config['actions'][ $this->actionName ] == '*'){ 
+                return true;
+
+            // check for defined group access
+            } else if( in_array($config['group'], $config['actions'][$this->actionName]) ){
+                return true;
+            }
+        }
         
         // actions are not configured? 
         if( !isset($config['actions']) ){
@@ -112,27 +142,14 @@ class YummyAclComponent extends Component
         } else if ( !isset($config['actions'][ $this->actionName ]) ){
             throw new InternalErrorException(__($this->controllerName . ' YummyAcl config is missing the action '
                     . '"' . $this->actionName . '" as a key in the "actions" array'));
-        
-        // check for allow all
-        } else if( $config['actions'][ $this->actionName ] == '*'){ 
-            return true;
-            
-        // check for defined group access
-        } else if( in_array($config['group'], $config['actions'][$this->actionName]) ){
-            return true;
         }
         
-        $this->Flash->warn(__('You are not authorized to visit this page'),[
-            'params'=>['title'=>'Access denied']
-        ]);
-        if( $config['redirect'] == 403 ){
-            throw new ForbiddenException();
-        }
+        return $this->denyAccess();
     }
     
     /**
      * checkControllerAccess - check if user has access to the requested controller
-     * @return boolean|void - exit component on true, redirect on false, do nothing on void
+     * @return boolean|void - passes on true, redirect on false, do nothing on void
      * @throws InternalErrorException
      * @throws ForbiddenException
      */
@@ -154,15 +171,7 @@ class YummyAclComponent extends Component
                 return true;
             }
             
-            // not authorized
-            $this->Flash->warn(__('You are not authorized to view this section'),[
-                'params'=>['title'=>'Access denied']
-            ]);
-
-            if( $this->config('redirect') == 403 ){
-                throw new ForbiddenException();
-            }
-            return false;
+            return $this->denyAccess();
         }
     }
     
