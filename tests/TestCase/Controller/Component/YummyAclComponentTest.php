@@ -105,6 +105,10 @@ class YummyAclComponentTest extends TestCase
         $this->assertEquals('Cake\Http\Response', get_class($this->component->startup($event)));
     }
     
+    /**
+     * testAllowAllAction - all users can access the requested action
+     * @return void
+     */
     public function testAllowAllAction(){
         
         $this->component->actions(['index'=>'*']);
