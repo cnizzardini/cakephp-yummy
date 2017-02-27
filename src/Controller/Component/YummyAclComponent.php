@@ -4,6 +4,7 @@ namespace Yummy\Controller\Component;
 use Cake\Controller\Component;
 use Cake\Network\Exception\InternalErrorException;
 use Cake\Network\Exception\ForbiddenException;
+use Cake\Http\ServerRequest;
 use Cake\Core\Configure;
 
 /**
@@ -16,7 +17,7 @@ class YummyAclComponent extends Component
     
     protected $_defaultConfig = [
         //'redirect' => '/',
-        //'config' => false,
+        //'allow' => '*'
     ];
     
     /**
@@ -29,12 +30,15 @@ class YummyAclComponent extends Component
     {
         $config = $this->config();
 
+        // access the userland controller
+        $controller = $this->_registry->getController();
+        
         // if redirect is not defined then use settings from AuthComponent
         if( !isset($config['redirect']) ){
             $authConfig = $this->Auth->config();
             
             if( $authConfig['unauthorizedRedirect'] == true ){
-                $config['redirect'] = $authConfig['loginAction'];
+                $config['redirect'] = $this->request->referer(true);
                 
             } else if( is_string($authConfig['unauthorizedRedirect']) ){
                 $config['redirect'] = $authConfig['unauthorizedRedirect'];
@@ -46,13 +50,9 @@ class YummyAclComponent extends Component
                 throw new InternalErrorException(__('YummyAcl requires the "redirect" option in config or Auth.loginAction or Auth.unauthorizedRedirect'));
             }
         }
-        
-        // access the userland controller
-        $controller = $this->_registry->getController();
 
         // are we using the yummy config file or controller level configurations?
         if( $this->config('config') == true ){
-            Configure::load('yummy_acl', 'default', false);
             $tmp = Configure::read('YummyAcl');
             
             if( !$tmp ){
@@ -139,7 +139,6 @@ class YummyAclComponent extends Component
     /**
      * allow - set controller level acl
      * @param mixed $config
-     * @return void
      */
     public function allow($config)
     {
@@ -149,7 +148,6 @@ class YummyAclComponent extends Component
     /**
      * actions - set action level acl
      * @param mixed $config
-     * @return void
      */
     public function actions($config)
     {
