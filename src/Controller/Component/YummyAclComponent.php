@@ -14,7 +14,6 @@ class YummyAclComponent extends Component
 {	
     public $components = ['Flash','Auth'];
     
-    
     protected $_defaultConfig = [
         //'redirect' => '/',
         //'allow' => '*'
@@ -28,51 +27,19 @@ class YummyAclComponent extends Component
      */
     public function startup() 
     {
-        $config = $this->config();
-        
         // access the userland controller
         $controller = $this->_registry->getController();
 
-        if( !isset($controller->Auth) ){
-            throw new InternalErrorException(__('YummyAcl requires the AuthComponent'));
-        }
+        // check for required components
+        $this->requireComponents();
         
-        if( !isset($controller->Flash) ){
-            throw new InternalErrorException(__('YummyAcl requires the FlashComponent'));
-        }
+        // determine the redirect url
+        $this->setRedirect();
         
-        // if redirect is not defined then use settings from AuthComponent
-        if( !isset($config['redirect']) ){
-            $authConfig = $this->Auth->config();
-            
-            if( $authConfig['unauthorizedRedirect'] == true ){
-                $config['redirect'] = $this->request->referer(true);
-                
-            } else if( is_string($authConfig['unauthorizedRedirect']) ){
-                $config['redirect'] = $authConfig['unauthorizedRedirect'];
-                
-            } else if( $authConfig['unauthorizedRedirect'] == false ){
-                $config['redirect'] = 403;
-            }
-            else{
-                throw new InternalErrorException(__('YummyAcl requires the "redirect" option in config or Auth.loginAction or Auth.unauthorizedRedirect'));
-            }
-        }
+        // determine if we are using a flat file config
+        $this->whichConfig();
         
-        // are we using the yummy config file or controller level configurations?
-        if( $this->config('config') == true ){
-            $tmp = Configure::read('YummyAcl');
-            
-            if( !$tmp ){
-                throw new InternalErrorException(__('YummyAcl config file does not exist. Have you created it: YummyCake/config/acl_config.php?'));
-            }
-            
-            if( !isset($tmp[ $controller->name ]) ){
-                throw new InternalErrorException(__('The controller "' . $controller->name . '" is missing from the YummyAcl config file'));
-            }
-            
-            $config = array_merge($config, $tmp[ $controller->name ]);
-        }
+        $config = $this->config();
         
         // do not bother with ACL checks if user is not logged in
         if( !$this->Auth->user() ){
@@ -181,5 +148,69 @@ class YummyAclComponent extends Component
         }
         $this->_config['actions'] = $config;
         return true;
+    }
+    
+    /**
+     * requireComponents - throws exception if missing a required component
+     * @throws InternalErrorException
+     */
+    private function requireComponents()
+    {
+        $controller = $this->_registry->getController();
+        
+        if( !isset($controller->Auth) ){
+            throw new InternalErrorException(__('YummyAcl requires the AuthComponent'));
+        }
+        
+        if( !isset($controller->Flash) ){
+            throw new InternalErrorException(__('YummyAcl requires the FlashComponent'));
+        }
+    }
+    
+    /**
+     * whichConfig - whether to use the flat file config or not
+     * @throws InternalErrorException
+     */
+    private function whichConfig()
+    {
+        $controller = $this->_registry->getController();
+        
+        if( $this->config('config') == true ){
+            $config = Configure::read('YummyAcl');
+            
+            if( !$config ){
+                throw new InternalErrorException(__('YummyAcl config file does not exist. Have you created it: YummyCake/config/acl_config.php?'));
+            }
+            
+            if( !isset($config[ $controller->name ]) ){
+                throw new InternalErrorException(__('The controller "' . $controller->name . '" is missing from the YummyAcl config file'));
+            }
+            
+            $this->configShallow($config[ $controller->name ]);
+        }
+    }
+    
+    /**
+     * setRedirect - sets the redirect url
+     * @throws InternalErrorException
+     */
+    private function setRedirect()
+    {
+        if( $this->config('redirect') == null ){
+            $authConfig = $this->Auth->config();
+            
+            if( $authConfig['unauthorizedRedirect'] == true ){
+                $this->setConfig('redirect', $this->request->referer(true));
+                
+            } else if( is_string($authConfig['unauthorizedRedirect']) ){
+                $this->setConfig('redirect', $authConfig['unauthorizedRedirect']);
+                
+            } else if( $authConfig['unauthorizedRedirect'] == false ){
+                $this->setConfig('redirect', 403);
+            }
+            else{
+                throw new InternalErrorException(__('YummyAcl requires the "redirect" option in config or Auth.loginAction or Auth.unauthorizedRedirect'));
+            }
+        }    
     }
 }
