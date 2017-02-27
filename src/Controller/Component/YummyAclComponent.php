@@ -190,6 +190,10 @@ class YummyAclComponent extends Component
             
             $this->configShallow($config[ $this->controller->name ]);
         }
+        
+        if( $this->Auth->user() && $this->config('group') == null ){
+            throw new InternalErrorException(__('The "group" option is required in YummyAcl config'));
+        }
     }
     
     /**
