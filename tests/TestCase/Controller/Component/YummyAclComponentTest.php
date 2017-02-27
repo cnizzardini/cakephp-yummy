@@ -15,15 +15,13 @@ class YummyAclComponentTest extends TestCase
 {
 
     /**
-     * Test subject
-     *
+     * Test YummyAclComponent
      * @var \Yummy\Controller\Component\YummyAclComponent
      */
     public $YummyAclComponent;
 
     /**
      * setUp method
-     *
      * @return void
      */
     public function setUp()
@@ -56,7 +54,6 @@ class YummyAclComponentTest extends TestCase
 
     /**
      * tearDown method
-     *
      * @return void
      */
     public function tearDown()
@@ -67,7 +64,7 @@ class YummyAclComponentTest extends TestCase
     }
 
     /**
-     * Test allowing everyone access to controller
+     * testAllowAllController - all users can access the controllers actions
      * @return void
      */
     public function testAllowAllController()
@@ -80,7 +77,7 @@ class YummyAclComponentTest extends TestCase
     }
     
     /**
-     * Test allowing one group access to controller
+     * testAllowGroupController - specific user group can access to controller
      * @return void
      */
     public function testAllowGroupController()
@@ -93,7 +90,7 @@ class YummyAclComponentTest extends TestCase
     }
     
     /**
-     * Test denying one group access to controller
+     * testDenyGroupController - specific user group is denied access to controller
      * @return void
      */
     public function testDenyGroupController()
@@ -118,6 +115,10 @@ class YummyAclComponentTest extends TestCase
         $this->assertEquals(true, $this->component->startup($event));
     }
     
+    /**
+     * testAllowGroupAction - specific user group can access the requested action
+     * @return void
+     */
     public function testAllowGroupAction(){
         
         $this->component->actions(['index'=>['user']]);
@@ -127,6 +128,10 @@ class YummyAclComponentTest extends TestCase
         $this->assertEquals(true, $this->component->startup($event));
     }
     
+    /**
+     * testDenyGroupAction - specific user group is denied from the requested action
+     * @return void
+     */
     public function testDenyGroupAction(){
         
         $this->component->actions(['index'=>['admin']]);
@@ -137,7 +142,8 @@ class YummyAclComponentTest extends TestCase
     }
     
     /**
-     * Test that Flash Component is loaded
+     * testFlash - throws exception if Flash component is not loaded
+     * @return void
      */
     public function testFlash(){
         
@@ -166,7 +172,8 @@ class YummyAclComponentTest extends TestCase
     }
     
     /**
-     * Test that Auth Component is loaded
+     * testAuth - throws exception if Auth Component is not loaded
+     * @return void
      */
     public function testAuth(){
         
@@ -193,7 +200,11 @@ class YummyAclComponentTest extends TestCase
             $this->assertEquals(500, $e->getCode());
         }
     }
-
+    
+    /**
+     * testConfigFileAllowGroupAction - specific user group can access requested action using file config
+     * @return void
+     */
     public function testConfigFileAllowGroupAction(){
         $request = new Request();
         $response = new Response();
@@ -235,6 +246,10 @@ class YummyAclComponentTest extends TestCase
         $this->assertEquals(true, $YummyAclComponent->startup($event));
     }
     
+    /**
+     * testConfigFileDenyGroupAction - specific user group is denied from the requested action using config file
+     * @return void
+     */
     public function testConfigFileDenyGroupAction(){
         $request = new Request();
         $response = new Response();
@@ -277,8 +292,7 @@ class YummyAclComponentTest extends TestCase
     }
     
     /**
-     * Test allow method
-     *
+     * testMethodAllow - throws exceptions on bad arguments
      * @return void
      */
     public function testMethodAllow()
@@ -307,8 +321,7 @@ class YummyAclComponentTest extends TestCase
     }
 
     /**
-     * Test actions method
-     *
+     * testMethodActions - throws exceptions on bad arguments
      * @return void
      */
     public function testMethodActions()
