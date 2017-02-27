@@ -137,20 +137,33 @@ class YummyAclComponent extends Component
     }
     
     /**
-     * allow - set controller level acl
-     * @param mixed $config
+     * allow - set allowed groups for a controller
+     * @param string|array $config
+     * @return bool true on succes
+     * @throws InternalErrorException
      */
     public function allow($config)
     {
+        if( (is_string($config) && $config != '*') || ( is_array($config) && empty($config) ) ){
+            throw new InternalErrorException('YummyAcl::allow argument must be either a string value of "*" or an array of groups');
+        }
+        
         $this->_config['allow'] = $config;
+        return true;
     }
     
     /**
-     * actions - set action level acl
-     * @param mixed $config
+     * actions - set ACLs for a controllers actions
+     * @param string|array $config
+     * @return bool true on succes
+     * @throws InternalErrorException
      */
     public function actions($config)
     {
+        if( !is_array($config) || empty($config) ){
+            throw new InternalErrorException('YummyAcl::allow argument must be an array. Check documentation for array structure');
+        }
         $this->_config['actions'] = $config;
+        return true;
     }
 }
