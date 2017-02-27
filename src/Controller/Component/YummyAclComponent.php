@@ -105,9 +105,8 @@ class YummyAclComponent extends Component
 
             if( $this->config('redirect') == 403 ){
                 throw new ForbiddenException();
-            } else {
-                return false;
             }
+            return false;
         }
         return true;
     }
@@ -141,9 +140,8 @@ class YummyAclComponent extends Component
             ]);
             if( $config['redirect'] == 403 ){
                 throw new ForbiddenException();
-            } else {
-                return false;
             }
+            return false;
         }
         return true;
     }
@@ -178,9 +176,8 @@ class YummyAclComponent extends Component
                 
                 if( $this->config('redirect') == 403 ){
                     throw new ForbiddenException();
-                } else {
-                    return false;
                 }
+                return false;
             }            
         }
     }
@@ -243,9 +240,8 @@ class YummyAclComponent extends Component
             } else if( $authConfig['unauthorizedRedirect'] == false ){
                 $this->setConfig('redirect', 403);
             }
-            else{
-                throw new InternalErrorException(__('YummyAcl requires the "redirect" option in config or Auth.loginAction or Auth.unauthorizedRedirect'));
-            }
+            
+            throw new InternalErrorException(__('YummyAcl requires the "redirect" option in config or Auth.loginAction or Auth.unauthorizedRedirect'));
         }    
     }
 }
