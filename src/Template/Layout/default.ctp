@@ -31,23 +31,23 @@
 <!--    <link href="assets/css/themify-icons.css" rel="stylesheet">-->
     <?//= $this->Html->meta('icon') ?>
 
-    <?= $this->Html->css('/yummy/css/bootstrap.min.css') ?>
+    <?= $this->Html->css('/css/bootstrap.min.css') ?>
 
-    <?= $this->Html->css('/yummy/css/animate.min.css') ?>
+    <?= $this->Html->css('/css/animate.min.css') ?>
 
-    <?= $this->Html->css('/yummy/css/paper-dashboard.css') ?>
+    <?= $this->Html->css('/css/paper-dashboard.css') ?>
 
-    <?= $this->Html->css('/yummy/css/themify-icons.css') ?>
+    <?= $this->Html->css('/css/themify-icons.css') ?>
 
     <?= $this->fetch('meta') ?>
 
     <?php
-        $this->Html->script('/yummy/js/jquery-1.10.2.js', array('inline' => false, 'block' => 'script_top'));
-        $this->Html->script('/yummy/js/bootstrap.min.js', array('inline' => false, 'block' => 'script_bottom'));
-        $this->Html->script('/yummy/js/bootstrap-checkbox-radio.js', array('inline' => false, 'block' => 'script_bottom'));
-        $this->Html->script('/yummy/js/chartist.min.js', array('inline' => false, 'block' => 'script_bottom'));
-        $this->Html->script('/yummy/js/bootstrap-notify.js', array('inline' => false, 'block' => 'script_bottom'));
-        $this->Html->script('/yummy/js/paper-dashboard.js', array('inline' => false, 'block' => 'script_bottom'));
+        $this->Html->script('/js/jquery-1.10.2.js', array('inline' => false, 'block' => 'script_top'));
+        $this->Html->script('/js/bootstrap.min.js', array('inline' => false, 'block' => 'script_bottom'));
+        $this->Html->script('/js/bootstrap-checkbox-radio.js', array('inline' => false, 'block' => 'script_bottom'));
+        $this->Html->script('/js/chartist.min.js', array('inline' => false, 'block' => 'script_bottom'));
+        $this->Html->script('/js/bootstrap-notify.js', array('inline' => false, 'block' => 'script_bottom'));
+        $this->Html->script('/js/paper-dashboard.js', array('inline' => false, 'block' => 'script_bottom'));
         //$this->Html->script('https://maps.googleapis.com/maps/api/js', array('inline' => false, 'block' => 'script_bottom'));
         echo $this->fetch('script_top');
     ?>
