@@ -85,6 +85,7 @@ class YummyAclComponent extends Component
             throw new InternalErrorException('YummyAcl::actions argument must be an array. Check documentation for '
                     . 'array structure');
         }
+        
         $this->setConfig('actions', $config);
         return true;
     }
@@ -97,7 +98,9 @@ class YummyAclComponent extends Component
     private function denyAccess()
     {
         $this->Flash->warn(__('You are not authorized to view this section'),[
-            'params'=>['title'=>'Access denied']
+            'params' => [
+                'title' => 'Access denied'
+            ]
         ]);
         
         if( $this->config('redirect') == 403 ){
