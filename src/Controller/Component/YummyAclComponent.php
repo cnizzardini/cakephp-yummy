@@ -13,10 +13,10 @@ class YummyAclComponent extends Component
 {	
     public $components = ['Flash','Auth'];
     
-    protected $_defaultConfig = [
-        //'redirect' => '/',
-        //'allow' => '*'
-    ];
+//    protected $_defaultConfig = [
+//        'redirect' => '/',
+//        'allow' => '*'
+//    ];
     
     /**
      * startup - this is a magic method that gets called by cake
