@@ -4,7 +4,6 @@ namespace Yummy\Controller\Component;
 use Cake\Controller\Component;
 use Cake\Network\Exception\InternalErrorException;
 use Cake\Network\Exception\ForbiddenException;
-use Cake\Http\ServerRequest;
 use Cake\Core\Configure;
 
 /**
