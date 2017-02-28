@@ -10,9 +10,9 @@ use Cake\Utility\Inflector;
  */
 class YummySearchComponent extends Component
 {	
-    protected $_defaultConfig = [
-        'operators' => [],
-    ];
+//    protected $_defaultConfig = [
+//        'operators' => [],
+//    ];
     
     /**
      * beforeRender - sets fields for use by YummySearchHelper
