@@ -66,11 +66,11 @@ class YummySearchComponent extends Component
                 
                 if( $skip == false ){
                     
+                    $opt = $field;
+                    
                     if( strstr($field, '.') ){
                         $tmp = explode('.', $field);
                         $opt = end($tmp);
-                    } else{
-                        $opt = $field;
                     }
                     
                     $yummy['fields'][$field] = Inflector::humanize($opt);
