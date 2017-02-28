@@ -8,6 +8,9 @@ use Cake\Core\Configure;
 
 /**
  * This component is a rudimentary ACL system for applying group level access to controllers and methods
+ * @todo this may need to operate differently for parsed extensions such as json and xml
+ * @todo should be able to mix controller level and action level in same config
+ * @todo allow top level configuration for a "SuperUser" type group
  */
 class YummyAclComponent extends Component
 {	
@@ -20,7 +23,6 @@ class YummyAclComponent extends Component
     
     /**
      * startup - this is a magic method that gets called by cake
-     * @todo this may need to operate differently for parsed extensions such as json and xml
      * @return bool|\Cake\Network\Response| returns true if the acl passes, network response redirect if fails
      * @throws InternalErrorException
      */
@@ -227,25 +229,26 @@ class YummyAclComponent extends Component
      */
     private function setRedirect()
     {
-        if( $this->config('redirect') == null ){
-            $authConfig = $this->Auth->config();
-            
-            if( $authConfig['unauthorizedRedirect'] == true ){
-                $this->setConfig('redirect', $this->request->referer(true));
-                return true;
-                
-            } else if( is_string($authConfig['unauthorizedRedirect']) ){
-                $this->setConfig('redirect', $authConfig['unauthorizedRedirect']);
-                return true;
-                
-            } else if( $authConfig['unauthorizedRedirect'] == false ){
-                $this->setConfig('redirect', 403);
-                return true;
-            }
-            
-            throw new InternalErrorException(__('YummyAcl requires the "redirect" option in config or '
-                    . 'Auth.loginAction or Auth.unauthorizedRedirect'));
+        if( $this->config('redirect') != null ){
+            return true;
         }
-        return true;
+        
+        $authConfig = $this->Auth->config();
+
+        if( $authConfig['unauthorizedRedirect'] == true ){
+            $this->setConfig('redirect', $this->request->referer(true));
+            return true;
+
+        } else if( is_string($authConfig['unauthorizedRedirect']) ){
+            $this->setConfig('redirect', $authConfig['unauthorizedRedirect']);
+            return true;
+
+        } else if( $authConfig['unauthorizedRedirect'] == false ){
+            $this->setConfig('redirect', 403);
+            return true;
+        }
+
+        throw new InternalErrorException(__('YummyAcl requires the "redirect" option in config or Auth.loginAction or '
+                . 'Auth.unauthorizedRedirect'));
     }
 }
