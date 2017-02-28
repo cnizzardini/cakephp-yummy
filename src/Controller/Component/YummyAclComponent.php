@@ -11,49 +11,49 @@ use Cake\Core\Configure;
  * @todo this may need to operate differently for parsed extensions such as json and xml
  */
 class YummyAclComponent extends Component
-{	
+{
     public $components = ['Flash','Auth'];
-    
+
 //    protected $_defaultConfig = [
 //        'redirect' => '/',
 //        'allow' => '*'
 //    ];
-    
+
     /**
      * startup - this is a magic method that gets called by cake
      * @return bool|\Cake\Network\Response| returns true if the acl passes, network response redirect if fails
      * @throws InternalErrorException
      */
-    public function startup() 
+    public function startup()
     {
         $this->controller = $this->_registry->getController();
         $this->controllerName = $this->controller->name . 'Controller';
         $this->actionName = $this->controller->request->action;
-        
+
         // check for required components
         $this->checkComponents();
-        
+
         // determine the redirect url
         $this->setRedirect();
-        
+
         // determine if we are using a flat file config
         $this->whichConfig();
-        
+
         // perform sanity check
         $this->sanityCheck();
-        
-        if( $this->checkControllerAccess() == true ){
+
+        if ($this->checkControllerAccess() == true) {
             return true;
         }
-        
+
         // check for controller level acl
-        if( $this->checkActionAccess() == false ){
+        if ($this->checkActionAccess() == false) {
             return $this->denyAccess();
         }
-        
+
         return true;
     }
-    
+
     /**
      * allow - set allowed groups for a controller
      * @param string|array $config
@@ -62,15 +62,15 @@ class YummyAclComponent extends Component
      */
     public function allow($config)
     {
-        if( (is_string($config) && $config != '*') || ( is_array($config) && empty($config) ) ){
+        if ((is_string($config) && $config != '*') || ( is_array($config) && empty($config) )) {
             throw new InternalErrorException('YummyAcl::allow argument must be either a string value of "*" or an '
-                    . 'array of groups');
+            . 'array of groups');
         }
-        
+
         $this->setConfig('allow', $config);
         return true;
     }
-    
+
     /**
      * actions - set ACLs for a controllers actions
      * @param array $config
@@ -79,26 +79,27 @@ class YummyAclComponent extends Component
      */
     public function actions(array $config)
     {
-        if( !is_array($config) || empty($config) ){
+        if (!is_array($config) || empty($config)) {
             throw new InternalErrorException('YummyAcl::actions argument must be an array. Check documentation for '
-                    . 'array structure');
+            . 'array structure');
         }
-        
+
         $this->setConfig('actions', $config);
         return true;
     }
-    
+
     /**
      * sanityCheck - ensures component was configured correctly
      * @return void
      * @throws InternalErrorException
      */
-    private function sanityCheck(){
-        if( $this->Auth->user() && $this->config('group') == null ){
+    private function sanityCheck()
+    {
+        if ($this->Auth->user() && $this->config('group') == null) {
             throw new InternalErrorException(__('The "group" option is required in YummyAcl config'));
         }
     }
-    
+
     /**
      * denyAccess - sets flash message and if redirect is not set throws a 403 exception
      * @return boolean - on false issue deny access
@@ -106,21 +107,21 @@ class YummyAclComponent extends Component
      */
     private function denyAccess()
     {
-        $this->Flash->warn(__('You are not authorized to view this section'),[
+        $this->Flash->warn(__('You are not authorized to view this section'), [
             'params' => [
                 'title' => 'Access denied'
             ]
         ]);
-        
+
         $redirect = $this->config('redirect');
-        
-        if( $redirect == 403 ){
+
+        if ($redirect == 403) {
             throw new ForbiddenException();
         }
-        
+
         return $this->controller->redirect($redirect);
     }
-    
+
     /**
      * checkActionAccess - check if user has access to the requested action
      * @return boolean
@@ -128,38 +129,38 @@ class YummyAclComponent extends Component
      * @throws ForbiddenException
      */
     private function checkActionAccess()
-    {   
+    {
         $config = $this->config();
-        
-        if( isset($config['actions'][$this->actionName]) ){
+
+        if (isset($config['actions'][$this->actionName])) {
             // check for allow all
-            if( $config['actions'][ $this->actionName ] == '*'){ 
+            if ($config['actions'][$this->actionName] == '*') {
                 return true;
 
-            // check for defined group access
-            } else if( in_array($config['group'], $config['actions'][$this->actionName]) ){
+                // check for defined group access
+            } else if (in_array($config['group'], $config['actions'][$this->actionName])) {
                 return true;
             }
         }
-        
+
         // actions are not configured? 
-        if( !isset($config['actions']) ){
+        if (!isset($config['actions'])) {
             return false;
-            
-        // actions must be an array at this point
-        } else if ( !is_array($config['actions']) ){
+
+            // actions must be an array at this point
+        } else if (!is_array($config['actions'])) {
             throw new InternalErrorException(__($this->controllerName . ' YummyAcl config "actions" should be an array '
                     . 'of [action => [groups]]'));
 
-        // $this->actionName must be a key in the actions array at this point
-        } else if ( !isset($config['actions'][ $this->actionName ]) ){
+            // $this->actionName must be a key in the actions array at this point
+        } else if (!isset($config['actions'][$this->actionName])) {
             throw new InternalErrorException(__($this->controllerName . ' YummyAcl config is missing the action '
                     . '"' . $this->actionName . '" as a key in the "actions" array'));
         }
-        
+
         return false;
     }
-    
+
     /**
      * checkControllerAccess - check if user has access to the requested controller
      * @return boolean|void - passes on true, redirect on false, do nothing on void
@@ -168,71 +169,71 @@ class YummyAclComponent extends Component
      */
     private function checkControllerAccess()
     {
-        if( $this->config('allow') == null ){
+        if ($this->config('allow') == null) {
             return false;
         }
-            
+
         // allow access to all actions in this controller
-        if( $this->config('allow') == '*' ){
+        if ($this->config('allow') == '*') {
             return true;
         }
-        
-        if( is_array( $this->config('allow')) && in_array($this->config('group'), $this->config('allow')) ){
+
+        if (is_array($this->config('allow')) && in_array($this->config('group'), $this->config('allow'))) {
             return true;
         }
-        
+
         // must be an array at this point, throw exception
-        if( !is_array($this->config('allow')) ){
+        if (!is_array($this->config('allow'))) {
             throw new InternalErrorException(__($this->controllerName . ' YummyAcl config "allow" option must be '
                     . '(1) not set, (2) an array of groups, or (3) equal to wildcard (*)'));
         }
-        
+
         return false;
     }
-    
+
     /**
      * checkComponents - throws exception if missing a required component
      * @throws InternalErrorException
      */
     private function checkComponents()
     {
-        if( !isset($this->controller->Auth) ){
+        if (!isset($this->controller->Auth)) {
             throw new InternalErrorException(__('YummyAcl requires the AuthComponent'));
         }
-        
-        if( !isset($this->controller->Flash) ){
+
+        if (!isset($this->controller->Flash)) {
             throw new InternalErrorException(__('YummyAcl requires the FlashComponent'));
         }
     }
-    
+
     /**
      * whichConfig - whether to use the flat file config or not
      * @return boolean true on success
      * @throws InternalErrorException
      */
     private function whichConfig()
-    {   
-        if( $this->config('config') !== true ){
+    {
+        if ($this->config('config') !== true) {
             return true;
         }
-        
+
         $config = Configure::read('YummyAcl');
 
-        if( !$config ){
+        if (!$config) {
             throw new InternalErrorException(__('YummyAcl config file does not exist. Have you created it: '
                     . 'YummyCake/config/acl_config.php?'));
         }
 
-        if( !isset($config[ $this->controller->name ]) ){
+        if (!isset($config[$this->controller->name])) {
             throw new InternalErrorException(__('The controller "' . $this->controller->name . '" is missing from '
                     . 'the YummyAcl config file'));
         }
 
-        $this->configShallow($config[ $this->controller->name ]);
-        
+        $this->configShallow($config[$this->controller->name]);
+
         return true;
     }
-    
+
     /**
      * setRedirect - sets the redirect url or throws an exception if unable to determine redirect url
      * @return boolean
@@ -240,21 +241,19 @@ class YummyAclComponent extends Component
      */
     private function setRedirect()
     {
-        if( $this->config('redirect') != null ){
+        if ($this->config('redirect') != null) {
             return true;
         }
-        
+
         $authConfig = $this->Auth->config();
 
-        if( $authConfig['unauthorizedRedirect'] == true ){
+        if ($authConfig['unauthorizedRedirect'] == true) {
             $this->setConfig('redirect', $this->request->referer(true));
             return true;
-
-        } else if( is_string($authConfig['unauthorizedRedirect']) ){
+        } else if (is_string($authConfig['unauthorizedRedirect'])) {
             $this->setConfig('redirect', $authConfig['unauthorizedRedirect']);
             return true;
-
-        } else if( $authConfig['unauthorizedRedirect'] == false ){
+        } else if ($authConfig['unauthorizedRedirect'] == false) {
             $this->setConfig('redirect', 403);
             return true;
         }
@@ -262,4 +261,5 @@ class YummyAclComponent extends Component
         throw new InternalErrorException(__('YummyAcl requires the "redirect" option in config or Auth.loginAction or '
                 . 'Auth.unauthorizedRedirect'));
     }
+
 }
