@@ -9,8 +9,6 @@ use Cake\Core\Configure;
 /**
  * This component is a rudimentary ACL system for applying group level access to controllers and methods
  * @todo this may need to operate differently for parsed extensions such as json and xml
- * @todo should be able to mix controller level and action level in same config
- * @todo allow top level configuration for a "SuperUser" type group
  */
 class YummyAclComponent extends Component
 {	
@@ -44,20 +42,15 @@ class YummyAclComponent extends Component
         // perform sanity check
         $this->sanityCheck();
         
-        // check for controller level acl
-        $hasControllerAccess = $this->checkControllerAccess();
-        
-        if( $hasControllerAccess === true ){
+        if( $this->checkControllerAccess() == true ){
             return true;
-        } else if( $hasControllerAccess === false ){
-            return $this->controller->redirect($this->config('redirect'));
         }
         
-        // check for action level acl
+        // check for controller level acl
         if( $this->checkActionAccess() == false ){
-            return $this->controller->redirect($this->config('redirect'));
+            return $this->denyAccess();
         }
-
+        
         return true;
     }
     
@@ -119,11 +112,13 @@ class YummyAclComponent extends Component
             ]
         ]);
         
-        if( $this->config('redirect') == 403 ){
+        $redirect = $this->config('redirect');
+        
+        if( $redirect == 403 ){
             throw new ForbiddenException();
         }
         
-        return false;
+        return $this->controller->redirect($redirect);
     }
     
     /**
@@ -149,9 +144,8 @@ class YummyAclComponent extends Component
         
         // actions are not configured? 
         if( !isset($config['actions']) ){
-            throw new InternalErrorException(__($this->controllerName . ' YummyAcl config is missing "actions". To '
-                    . 'enable access to all actions set "allow" equal to wildcard (*)'));
-        
+            return false;
+            
         // actions must be an array at this point
         } else if ( !is_array($config['actions']) ){
             throw new InternalErrorException(__($this->controllerName . ' YummyAcl config "actions" should be an array '
@@ -163,7 +157,7 @@ class YummyAclComponent extends Component
                     . '"' . $this->actionName . '" as a key in the "actions" array'));
         }
         
-        return $this->denyAccess();
+        //return $this->denyAccess();
     }
     
     /**
@@ -174,24 +168,26 @@ class YummyAclComponent extends Component
      */
     private function checkControllerAccess()
     {
-        if( $this->config('allow') != null ){
-            
-            // allow access to all actions in this controller
-            if( $this->config('allow') == '*' ){
-                return true;
-            
-            // must be an array at this point, throw exception
-            } else if( !is_array($this->config('allow')) ){
-                throw new InternalErrorException(__($this->controllerName . ' YummyAcl config "allow" option must be '
-                        . '(1) not set, (2) an array of groups, or (3) equal to wildcard (*)'));
-                
-            // check for group level access to this controller    
-            } else if( in_array($this->config('group'), $this->config('allow')) ){
-                return true;
-            }
-            
-            return $this->denyAccess();
+        if( $this->config('allow') == null ){
+            return false;
         }
+            
+        // allow access to all actions in this controller
+        if( $this->config('allow') == '*' ){
+            return true;
+        }
+        
+        if( is_array( $this->config('allow')) && in_array($this->config('group'), $this->config('allow')) ){
+            return true;
+        }
+        
+        // must be an array at this point, throw exception
+        if( !is_array($this->config('allow')) ){
+            throw new InternalErrorException(__($this->controllerName . ' YummyAcl config "allow" option must be '
+                    . '(1) not set, (2) an array of groups, or (3) equal to wildcard (*)'));
+        }
+        
+        return false;
     }
     
     /**
