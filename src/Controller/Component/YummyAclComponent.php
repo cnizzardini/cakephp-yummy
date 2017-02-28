@@ -157,7 +157,7 @@ class YummyAclComponent extends Component
                     . '"' . $this->actionName . '" as a key in the "actions" array'));
         }
         
-        //return $this->denyAccess();
+        return false;
     }
     
     /**
