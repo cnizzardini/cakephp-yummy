@@ -8,10 +8,11 @@ return [
             'allow' => '*',
         ],
         'User' => [
+            'allow' => ['Root'],
             'actions' => [
-                'index' => ['admin','manager'],
-                'edit' => ['admin','manager'],
-                'add' => ['admin'],
+                'index' => ['Admin','Manager'],
+                'edit' => ['Admin','Manager'],
+                'add' => ['Admin','Manager'],
                 'login' => '*',
                 'logout' => '*',
             ]
