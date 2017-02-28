@@ -41,6 +41,9 @@ class YummyAclComponent extends Component
         // determine if we are using a flat file config
         $this->whichConfig();
         
+        // perform sanity check
+        $this->sanityCheck();
+        
         // check for controller level acl
         $hasControllerAccess = $this->checkControllerAccess();
         
@@ -90,6 +93,17 @@ class YummyAclComponent extends Component
         
         $this->setConfig('actions', $config);
         return true;
+    }
+    
+    /**
+     * sanityCheck - ensures component was configured correctly
+     * @return void
+     * @throws InternalErrorException
+     */
+    private function sanityCheck(){
+        if( $this->Auth->user() && $this->config('group') == null ){
+            throw new InternalErrorException(__('The "group" option is required in YummyAcl config'));
+        }
     }
     
     /**
@@ -197,29 +211,30 @@ class YummyAclComponent extends Component
     
     /**
      * whichConfig - whether to use the flat file config or not
+     * @return boolean true on success
      * @throws InternalErrorException
      */
     private function whichConfig()
     {   
-        if( $this->config('config') == true ){
-            $config = Configure::read('YummyAcl');
-            
-            if( !$config ){
-                throw new InternalErrorException(__('YummyAcl config file does not exist. Have you created it: '
-                        . 'YummyCake/config/acl_config.php?'));
-            }
-            
-            if( !isset($config[ $this->controller->name ]) ){
-                throw new InternalErrorException(__('The controller "' . $this->controller->name . '" is missing from '
-                        . 'the YummyAcl config file'));
-            }
-            
-            $this->configShallow($config[ $this->controller->name ]);
+        if( $this->config('config') !== true ){
+            return true;
         }
         
-        if( $this->Auth->user() && $this->config('group') == null ){
-            throw new InternalErrorException(__('The "group" option is required in YummyAcl config'));
+        $config = Configure::read('YummyAcl');
+
+        if( !$config ){
+            throw new InternalErrorException(__('YummyAcl config file does not exist. Have you created it: '
+                    . 'YummyCake/config/acl_config.php?'));
         }
+
+        if( !isset($config[ $this->controller->name ]) ){
+            throw new InternalErrorException(__('The controller "' . $this->controller->name . '" is missing from '
+                    . 'the YummyAcl config file'));
+        }
+
+        $this->configShallow($config[ $this->controller->name ]);
+        
+        return true;
     }
     
     /**
