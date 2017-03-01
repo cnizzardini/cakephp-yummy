@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1488330419">
-  <project timestamp="1488330419">
+<coverage generated="1488331083">
+  <project timestamp="1488331083">
     <package name="Yummy\Controller">
       <file name="/var/www/personal/cakephp/plugins/Yummy/src/Controller/AppController.php">
         <class name="AppController" namespace="Yummy\Controller">
