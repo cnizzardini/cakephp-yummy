@@ -2,6 +2,7 @@
     "name": "cnizzardini/cakephp-yummy",
     "description": "Yummy plugin for CakePHP",
     "type": "cakephp-plugin",
+    "license": "MIT",
     "require": {
         "php": ">=5.5.9",
         "cakephp/cakephp": ">=3.3.2 <4.0.0"
