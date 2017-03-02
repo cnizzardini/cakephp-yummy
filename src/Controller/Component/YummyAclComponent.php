@@ -42,11 +42,12 @@ class YummyAclComponent extends Component
         // determine the redirect url
         $this->setRedirect();
 
+        // has controller access?
         if ($this->checkControllerAccess() == true) {
             return true;
         }
 
-        // check for controller level acl
+        // has action access?
         if ($this->checkActionAccess() == false) {
             return $this->denyAccess();
         }
