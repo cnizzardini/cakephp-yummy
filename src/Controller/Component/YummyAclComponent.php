@@ -33,14 +33,14 @@ class YummyAclComponent extends Component
         // check for required components
         $this->checkComponents();
 
-        // determine the redirect url
-        $this->setRedirect();
-
         // determine if we are using a flat file config
         $this->whichConfig();
 
         // perform sanity check
         $this->sanityCheck();
+        
+        // determine the redirect url
+        $this->setRedirect();
 
         if ($this->checkControllerAccess() == true) {
             return true;
