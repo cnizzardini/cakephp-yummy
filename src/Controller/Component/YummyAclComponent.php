@@ -152,12 +152,6 @@ class YummyAclComponent extends Component
         if (!isset($config['actions'])) {
             return false;
         }
-        
-        // actions must be an array at this point
-        if (!isset($config['actions'][$this->actionName])) {
-            throw new InternalErrorException(__($this->controllerName . ' YummyAcl config is missing the action '
-                    . '"' . $this->actionName . '" as a key in the "actions" array'));
-        }
 
         // check for allow all
         if ($config['actions'][$this->actionName] == '*') {
