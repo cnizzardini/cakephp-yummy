@@ -161,14 +161,20 @@ class YummySearchComponent extends Component
             $search = $data['search'][ $i ];
             
             $skip = false;
-            if( isset($config['deny']) && in_array($field, $config['deny'])){
+            
+            // skip setting condition if field is denied
+            if( isset($config['deny']) && in_array($field, $config['deny']) ){
                 $skip = true;
+            // skip setting condition if field is not allowed
             } else if( isset($config['allow']) && !in_array($field, $config['allow']) ){
                 $skip = true;
             }
             
             if( $skip == false && in_array($field, $controller->paginate['fields']) ){
-                $controller->paginate['conditions'] = array_merge($controller->paginate['conditions'], $this->getSqlCondition($field,$operator,$search));
+                $controller->paginate['conditions'] = array_merge(
+                    $controller->paginate['conditions'], 
+                    $this->getSqlCondition($field,$operator,$search)
+                );
             }
         }
         return true;
