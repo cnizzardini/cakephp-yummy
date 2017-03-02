@@ -144,9 +144,8 @@ class YummySearchComponent extends Component
     {
         $controller = $this->_registry->getController();
         
-        if( $controller->request->query('YummySearch') == null ){
-            return false;
-        } else if( $controller->request->query('YummySearch_clear') != null ){
+        // exit if no search was performed or user cleared search paramaters
+        if( $controller->request->query('YummySearch') == null || $controller->request->query('YummySearch_clear') != null ){
             return false;
         }
         
