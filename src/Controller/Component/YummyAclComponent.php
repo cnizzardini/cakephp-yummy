@@ -220,8 +220,7 @@ class YummyAclComponent extends Component
         $config = Configure::read('YummyAcl');
 
         if (!$config) {
-            throw new InternalErrorException(__('YummyAcl config file does not exist. Have you created it: '
-                    . 'YummyCake/config/acl_config.php?'));
+            throw new InternalErrorException(__('YummyAcl config is missing. Please create config/yummy_acl.php'));
         }
 
         if (!isset($config[$this->controller->name])) {
