@@ -245,10 +245,14 @@ class YummyAclComponent extends Component
         if ($authConfig['unauthorizedRedirect'] == true) {
             $this->setConfig('redirect', $this->request->referer(true));
             return true;
-        } else if (is_string($authConfig['unauthorizedRedirect'])) {
+        } 
+        
+        if (is_string($authConfig['unauthorizedRedirect'])) {
             $this->setConfig('redirect', $authConfig['unauthorizedRedirect']);
             return true;
-        } else if ($authConfig['unauthorizedRedirect'] == false) {
+        } 
+        
+        if ($authConfig['unauthorizedRedirect'] == false) {
             $this->setConfig('redirect', 403);
             return true;
         }
