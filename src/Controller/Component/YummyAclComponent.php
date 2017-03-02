@@ -147,17 +147,6 @@ class YummyAclComponent extends Component
     {
         $config = $this->config();
 
-        if (isset($config['actions'][$this->actionName])) {
-            // check for allow all
-            if ($config['actions'][$this->actionName] == '*') {
-                return true;
-
-            // check for defined group access
-            } else if (in_array($config['group'], $config['actions'][$this->actionName])) {
-                return true;
-            }
-        }
-
         // actions are not configured? 
         if (!isset($config['actions'])) {
             return false;
@@ -169,6 +158,15 @@ class YummyAclComponent extends Component
                     . '"' . $this->actionName . '" as a key in the "actions" array'));
         }
 
+        // check for allow all
+        if ($config['actions'][$this->actionName] == '*') {
+            return true;
+
+        // check for defined group access
+        } else if (in_array($config['group'], $config['actions'][$this->actionName])) {
+            return true;
+        }
+        
         return false;
     }
 
