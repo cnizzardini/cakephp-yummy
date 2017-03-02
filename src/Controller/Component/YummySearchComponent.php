@@ -27,6 +27,7 @@ class YummySearchComponent extends Component
         // set array for use by YummySearchHelper
         $yummy = $this->getYummyHelperData();
         
+        // make yummy search data available to view
         $this->controller->set('YummySearch', $yummy);
     }
     
@@ -115,7 +116,7 @@ class YummySearchComponent extends Component
      * @param string $field
      * @param string $operator
      * @param string $value
-     * @return array|bool returns an array on success, false if operator is not found
+     * @return array|bool: array on success, false if operator is not found
      */
     private function getSqlCondition($field, $operator, $value)
     {
@@ -138,29 +139,28 @@ class YummySearchComponent extends Component
     
     /**
      * search - appends cakephp orm conditions to PaginatorComponent
-     * @return bool
+     * @return bool: true if search query was requested, false if not
      */
     public function search()
     {
-        $controller = $this->_registry->getController();
+        $this->controller = $this->_registry->getController();
         
         // exit if no search was performed or user cleared search paramaters
-        if( $controller->request->query('YummySearch') == null || $controller->request->query('YummySearch_clear') != null ){
+        $request = $this->controller->request;
+        if( $request->query('YummySearch') == null || $request->query('YummySearch_clear') != null ){
             return false;
         }
         
-        $data = $controller->request->query('YummySearch');
-
-        $length = count($data['field']);
+        $data = $request->query('YummySearch');     // get query parameters
+        $config = $this->config();                  // get config
+        $length = count($data['field']);            // get array length
         
-        $config = $this->config();
-        
+        // loop through available fields and set conditions
         for($i=0; $i<$length; $i++){
-            $field = $data['field'][ $i ];
-            $operator = $data['operator'][ $i ];
-            $search = $data['search'][ $i ];
-            
-            $skip = false;
+            $field = $data['field'][ $i ];          // get field name
+            $operator = $data['operator'][ $i ];    // get operator type
+            $search = $data['search'][ $i ];        // get search paramter
+            $skip = false;                          // default to skip adding condition
             
             // skip setting condition if field is denied
             if( isset($config['deny']) && in_array($field, $config['deny']) ){
@@ -170,9 +170,10 @@ class YummySearchComponent extends Component
                 $skip = true;
             }
             
-            if( $skip == false && in_array($field, $controller->paginate['fields']) ){
-                $controller->paginate['conditions'] = array_merge(
-                    $controller->paginate['conditions'], 
+            // add conditions that have not been skipped by allow/deny settings 
+            if( $skip == false && in_array($field, $this->controller->paginate['fields']) ){
+                $this->controller->paginate['conditions'] = array_merge(
+                    $this->controller->paginate['conditions'], 
                     $this->getSqlCondition($field,$operator,$search)
                 );
             }
