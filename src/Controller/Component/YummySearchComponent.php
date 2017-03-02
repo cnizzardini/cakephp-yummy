@@ -19,8 +19,57 @@ class YummySearchComponent extends Component
      */
     public function beforeRender() 
     {
-        $controller = $this->_registry->getController();
+        $this->controller = $this->_registry->getController();
 
+        // merge configurations
+        $this->mergeConfig();
+        
+        // set array for use by YummySearchHelper
+        $yummy = $this->getYummyHelperData();
+        
+        $this->controller->set('YummySearch', $yummy);
+    }
+    
+    /**
+     * mergeConfig - merges user supplied configuration with defaults
+     * @return void
+     */
+    private function mergeConfig()
+    {
+        
+        if( $this->config('operators') == null ){
+            return;
+        }
+        
+        $config = [
+            'operators' => [
+                'containing' => 'Containing',
+                'not_containing' => 'Not Containing',
+                'greater_than' => 'Greater than',
+                'less_than' => 'Less than',
+                'matching' => 'Exact Match',
+                'not_matching' => 'Not Exact Match',
+            ]
+        ];
+        
+        $this->configShallow($config);
+    }
+    
+    /**
+     * getYummyHelperData - retrieves an array used by YummySearchHelper
+     * @return array
+     */
+    private function getYummyHelperData()
+    {
+        $yummy = [
+            'base_url' => $this->controller->request->here,
+            'rows' => $this->controller->request->query('YummySearch')
+        ];
+        
+        if( !isset($this->controller->paginate['fields']) ){
+            return $yummy;
+        }
+   
         $config = $this->config();
         
         /*
@@ -36,49 +85,29 @@ class YummySearchComponent extends Component
             $tableSchema = $collection->describe($config['table']);
         }
         */
+        
+        foreach($this->controller->paginate['fields'] as $field){
+            $skip = false;
+            if( isset($config['deny']) && in_array($field, $config['deny'])){
+                $skip = true;
+            } else if( isset($config['allow']) && !in_array($field, $config['allow']) ){
+                $skip = true;
+            }
 
-        if( empty($config['operators']) ){
-            $config['operators'] = [
-                'containing' => 'Containing',
-                'not_containing' => 'Not Containing',
-                'greater_than' => 'Greater than',
-                'less_than' => 'Less than',
-                'matching' => 'Exact Match',
-                'not_matching' => 'Not Exact Match',
-            ];
-        }
-        
-        $yummy = [
-            'base_url' => $controller->request->here,
-            'operators' => $config['operators'],
-            'rows' => $controller->request->query('YummySearch')
-        ];
-        
-        if( isset($controller->paginate['fields']) ){
-            
-            foreach($controller->paginate['fields'] as $field){
-                $skip = false;
-                if( isset($config['deny']) && in_array($field, $config['deny'])){
-                    $skip = true;
-                } else if( isset($config['allow']) && !in_array($field, $config['allow']) ){
-                    $skip = true;
+            if( $skip == false ){
+
+                $opt = $field;
+
+                if( strstr($field, '.') ){
+                    $tmp = explode('.', $field);
+                    $opt = end($tmp);
                 }
-                
-                if( $skip == false ){
-                    
-                    $opt = $field;
-                    
-                    if( strstr($field, '.') ){
-                        $tmp = explode('.', $field);
-                        $opt = end($tmp);
-                    }
-                    
-                    $yummy['fields'][$field] = Inflector::humanize($opt);
-                }
+
+                $yummy['fields'][$field] = Inflector::humanize($opt);
             }
         }
         
-        $controller->set('YummySearch', $yummy);
+        return $yummy;
     }
     
     /**
