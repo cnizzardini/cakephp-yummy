@@ -21,7 +21,7 @@ class YummyAclComponent extends Component
 
     /**
      * startup - this is a magic method that gets called by cake
-     * @return bool|\Cake\Network\Response| returns true if the acl passes, network response redirect if fails
+     * @return bool|\Cake\Network\Response returns true if the acl passes, network response redirect if fails
      * @throws InternalErrorException
      */
     public function startup()
@@ -33,15 +33,15 @@ class YummyAclComponent extends Component
         // check for required components
         $this->checkComponents();
 
+        // determine the redirect url
+        $this->setRedirect();
+
         // determine if we are using a flat file config
         $this->whichConfig();
 
         // perform sanity check
         $this->sanityCheck();
 
-        // set the redirect url
-        $this->setRedirect();
-        
         if ($this->checkControllerAccess() == true) {
             return true;
         }
@@ -95,13 +95,23 @@ class YummyAclComponent extends Component
      */
     private function sanityCheck()
     {
-        if ($this->Auth->user() && $this->config('group') == null) {
+        $config = $this->config();
+        
+        // group required
+        if ($this->Auth->user() && $config['group'] == null) {
             throw new InternalErrorException(__('The "group" option is required in YummyAcl config'));
         }
         
-        if (!isset($config[$this->controller->name])) {
-            throw new InternalErrorException(__('The controller "' . $this->controller->name . '" is missing from '
-                    . 'the YummyAcl config file'));
+        // if allow is set must be "*" or (array)
+        if (isset($config['allow']) && !is_string($config['allow']) && !is_array($config['allow'])) {
+            throw new InternalErrorException(__($this->controllerName . ' YummyAcl config "allow" option must be '
+                    . '(1) not set, (2) an array of groups, or (3) equal to wildcard (*)'));
+        }
+        
+        // if actions is set must be (array)
+        if (isset($config['actions']) && !is_array($config['actions'])) {
+            throw new InternalErrorException(__($this->controllerName . ' YummyAcl config "actions" should be an array '
+                    . 'of [action => [groups]]'));
         }
     }
 
@@ -151,14 +161,10 @@ class YummyAclComponent extends Component
         // actions are not configured? 
         if (!isset($config['actions'])) {
             return false;
-
-            // actions must be an array at this point
-        } else if (!is_array($config['actions'])) {
-            throw new InternalErrorException(__($this->controllerName . ' YummyAcl config "actions" should be an array '
-                    . 'of [action => [groups]]'));
-
-            // $this->actionName must be a key in the actions array at this point
-        } else if (!isset($config['actions'][$this->actionName])) {
+        }
+        
+        // actions must be an array at this point
+        if (!isset($config['actions'][$this->actionName])) {
             throw new InternalErrorException(__($this->controllerName . ' YummyAcl config is missing the action '
                     . '"' . $this->actionName . '" as a key in the "actions" array'));
         }
@@ -174,25 +180,16 @@ class YummyAclComponent extends Component
      */
     private function checkControllerAccess()
     {
-        if ($this->config('allow') == null) {
-            return false;
-        }
-
-        // allow access to all actions in this controller
+        // allow all
         if ($this->config('allow') == '*') {
             return true;
         }
-
+        
+        // allow group
         if (is_array($this->config('allow')) && in_array($this->config('group'), $this->config('allow'))) {
             return true;
         }
-
-        // must be an array at this point, throw exception
-        if (!is_array($this->config('allow'))) {
-            throw new InternalErrorException(__($this->controllerName . ' YummyAcl config "allow" option must be '
-                    . '(1) not set, (2) an array of groups, or (3) equal to wildcard (*)'));
-        }
-
+        
         return false;
     }
 
