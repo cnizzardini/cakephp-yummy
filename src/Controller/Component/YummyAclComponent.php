@@ -98,6 +98,11 @@ class YummyAclComponent extends Component
         if ($this->Auth->user() && $this->config('group') == null) {
             throw new InternalErrorException(__('The "group" option is required in YummyAcl config'));
         }
+        
+        if (!isset($config[$this->controller->name])) {
+            throw new InternalErrorException(__('The controller "' . $this->controller->name . '" is missing from '
+                    . 'the YummyAcl config file'));
+        }
     }
 
     /**
@@ -221,11 +226,6 @@ class YummyAclComponent extends Component
 
         if (!$config) {
             throw new InternalErrorException(__('YummyAcl config is missing. Please create config/yummy_acl.php'));
-        }
-
-        if (!isset($config[$this->controller->name])) {
-            throw new InternalErrorException(__('The controller "' . $this->controller->name . '" is missing from '
-                    . 'the YummyAcl config file'));
         }
 
         $this->configShallow($config[$this->controller->name]);
