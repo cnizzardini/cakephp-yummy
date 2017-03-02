@@ -6,7 +6,7 @@ use Cake\Controller\Component;
 use Cake\Utility\Inflector;
 
 /**
- * This component is a should be used in conjunction with the YummySearchHelper for building rudimentary search filters in your application
+ * This component is a should be used in conjunction with the YummySearchHelper for building rudimentary search filters
  */
 class YummySearchComponent extends Component
 {	
