@@ -161,9 +161,10 @@ class YummyAclComponent extends Component
         // check for allow all
         if ($config['actions'][$this->actionName] == '*') {
             return true;
+        }
 
         // check for defined group access
-        } else if (in_array($config['group'], $config['actions'][$this->actionName])) {
+        if (in_array($config['group'], $config['actions'][$this->actionName])) {
             return true;
         }
         
