@@ -8,6 +8,7 @@ use Cake\Utility\Inflector;
 
 /**
  * This component is a should be used in conjunction with the YummySearchHelper for building rudimentary search filters
+ * @todo deep relations are not implemented
  */
 class YummySearchComponent extends Component
 {
