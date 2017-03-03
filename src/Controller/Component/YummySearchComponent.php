@@ -86,22 +86,10 @@ class YummySearchComponent extends Component
         $tableName = Inflector::underscore($name);
         $schema = $this->collection->describe($tableName);
         $columns = $schema->columns();
-
-        $config = $this->config();
         
         foreach($columns as $column){
             
-            $allow = true;
-            
-            if( isset($config['deny'][$name][$column]) ){
-                $allow = false;
-            } else if( isset($config['deny'][$name]) && $config['deny'][$name] == '*' ){
-                $allow = false;
-            } else if( isset($config['allow'][$name]) && !in_array($column, $config['allow'][$name]) ) {
-                $allow = false;
-            }
-            
-            if( $allow == true ){
+            if( $this->isColumnAllowed($name, $column) == true ){
                 $data["$name.$column"] = Inflector::humanize($column);
             }
         }
@@ -118,11 +106,13 @@ class YummySearchComponent extends Component
         
         $models = ["$thisModel" => $this->getColumns($thisModel)];
         
+        $allowedAssociations = [' Cake\ORM\Association\HasOne', ' Cake\ORM\Association\BelongsTo'];
+        
         foreach($associations as $object){
             
             $name = $object->getName();
             
-            if( !isset($models[ $name ]) ){
+            if( !isset($models[ $name ]) && in_array(get_class($object), $allowedAssociations) ){
                 $columns = $this->getColumns($name);
                 if( !empty($columns) ){
                     $models[ Inflector::humanize(Inflector::tableize($name)) ] = $this->getColumns($name);
@@ -134,6 +124,20 @@ class YummySearchComponent extends Component
     }
 
 
+    private function isColumnAllowed($model, $column){
+        
+        $config = $this->config();
+
+        if( isset($config['deny'][$model][$column]) ){
+            return false;
+        } else if( isset($config['deny'][$model]) && $config['deny'][$model] == '*' ){
+            return false;
+        } else if( isset($config['allow'][$model]) && !in_array($column, $config['allow'][$model]) ) {
+            return false;
+        }
+        return true;
+    }
+    
     /**
      * getSqlCondition - returns cakephp orm compatible condition based on $operator type
      * @param string $field
@@ -175,27 +179,23 @@ class YummySearchComponent extends Component
         }
 
         $data = $request->query('YummySearch');     // get query parameters
-        $config = $this->config();                  // get config
         $length = count($data['field']);            // get array length
-        
+
+        if( !isset($this->controller->paginate['conditions']) ){
+            $this->controller->paginate['conditions'] = [];
+        }
+
         // loop through available fields and set conditions
         for ($i = 0; $i < $length; $i++) {
             $field = $data['field'][$i];            // get field name
             $operator = $data['operator'][$i];      // get operator type
             $search = $data['search'][$i];          // get search paramter
-            $skip = false;                          // default to skip adding condition
-            // skip setting condition if field is denied
-            if (isset($config['deny']) && in_array($field, $config['deny'])) {
-                $skip = true;
-            // skip setting condition if field is not allowed
-            } else if (isset($config['allow']) && !in_array($field, $config['allow'])) {
-                $skip = true;
-            }
-
-            // add conditions that have not been skipped by allow/deny settings 
-            if ($skip == false && in_array($field, $this->controller->paginate['fields'])) {
+            
+            list($model, $column) = explode('.', $field);
+            
+            if( $this->isColumnAllowed($model, $column) == true ){
                 $this->controller->paginate['conditions'] = array_merge(
-                        $this->controller->paginate['conditions'], $this->getSqlCondition($field, $operator, $search)
+                    $this->controller->paginate['conditions'], $this->getSqlCondition($field, $operator, $search)
                 );
             }
         }
