@@ -24,7 +24,7 @@ do{
     <div class="col-lg-2 col-md-1 col-xs-6">
         <div class="input text">
             <?php 
-                echo $this->Form->select('YummySearch.field[]',  $YummySearch['fields'], [
+                echo $this->Form->select('YummySearch.field[]',  $YummySearch['models'], [
                     'class' => 'form-control border-input',
                     'label' => false,
                     'escape' => false,
