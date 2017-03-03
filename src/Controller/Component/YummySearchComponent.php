@@ -69,27 +69,28 @@ class YummySearchComponent extends Component
             'base_url' => $this->controller->request->here,
             'rows' => $this->controller->request->query('YummySearch'),
             'operators' => $this->config('operators'),
-            'models' => []
+            'models' => $this->getSearchFields()
         ];
+        
+        return $yummy;
+    }
 
-        if (!isset($this->controller->paginate['fields'])) {
-            return $yummy;
-        }
-
+    private function getSearchFields()
+    {
+        
+        $models[''] = $this->getModelFields();
+        $models = array_merge($models, $this->getAssociatedFields());
+        
+        return $models;        
+    }
+    
+    private function getModelFields()
+    {
+        
+        $model = [];
+        
         $config = $this->config();
-
-        $db = ConnectionManager::get('default');
-
-        // Create a schema collection.
-        $collection = $db->schemaCollection();
-
-          // Get a single table (instance of Schema\TableSchema)
-//          if( !isset($config['table']) ){
-//            $tableSchema = $collection->describe(Inflector::tableize($controller->name));
-//          } else {
-//            $tableSchema = $collection->describe($config['table']);
-//          }
-
+        
         foreach ($this->controller->paginate['fields'] as $field) {
             $skip = false;
             if (isset($config['deny']) && in_array($field, $config['deny'])) {
@@ -107,30 +108,41 @@ class YummySearchComponent extends Component
                     $opt = end($tmp);
                 }
 
-                $yummy['models'][''][$opt] = Inflector::humanize($opt);
+                $model[$opt] = Inflector::humanize($opt);
             }
         }
+        return $model;
+    }
+    
+    private function getAssociatedFields()
+    {
+        $db = ConnectionManager::get('default');
+
+        // Create a schema collection.
+        $collection = $db->schemaCollection();
 
         // gets array of Cake\ORM\Association objects
         $associations = $this->controller->Organization->associations();
 
+        $models = [];
+        
         foreach($associations as $object){
             
             $name = $object->getName();
             
-            if( !isset($yummy['models'][ $name ]) ){
+            if( !isset($models[ $name ]) ){
                 $tableName = Inflector::underscore($name);
                 $schema = $collection->describe($tableName);
                 $columns = $schema->columns();
                 foreach($columns as $column){
-                    $yummy['models'][ Inflector::humanize($tableName) ]["$name.$column"] = Inflector::humanize($column);
+                    $models[ Inflector::humanize($tableName) ]["$name.$column"] = Inflector::humanize($column);
                 }
                 
             }
         }
-
-        return $yummy;
+        return $models;
     }
+
 
     /**
      * getSqlCondition - returns cakephp orm compatible condition based on $operator type
