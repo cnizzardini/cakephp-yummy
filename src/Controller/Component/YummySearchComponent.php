@@ -3,7 +3,7 @@
 namespace Yummy\Controller\Component;
 
 use Cake\Controller\Component;
-//use Cake\Datasource\ConnectionManager;
+use Cake\Datasource\ConnectionManager;
 use Cake\Utility\Inflector;
 
 /**
@@ -68,7 +68,9 @@ class YummySearchComponent extends Component
         $yummy = [
             'base_url' => $this->controller->request->here,
             'rows' => $this->controller->request->query('YummySearch'),
-            'operators' => $this->config('operators')
+            'operators' => $this->config('operators'),
+            'fields' => [],
+            'models' => []
         ];
 
         if (!isset($this->controller->paginate['fields'])) {
@@ -77,19 +79,17 @@ class YummySearchComponent extends Component
 
         $config = $this->config();
 
-        /*
-          $db = ConnectionManager::get('default');
+        $db = ConnectionManager::get('default');
 
-          // Create a schema collection.
-          $collection = $db->schemaCollection();
+        // Create a schema collection.
+        $collection = $db->schemaCollection();
 
           // Get a single table (instance of Schema\TableSchema)
-          if( !isset($config['table']) ){
-          $tableSchema = $collection->describe(Inflector::tableize($controller->name));
-          } else {
-          $tableSchema = $collection->describe($config['table']);
-          }
-         */
+//          if( !isset($config['table']) ){
+//            $tableSchema = $collection->describe(Inflector::tableize($controller->name));
+//          } else {
+//            $tableSchema = $collection->describe($config['table']);
+//          }
 
         foreach ($this->controller->paginate['fields'] as $field) {
             $skip = false;
@@ -109,6 +109,20 @@ class YummySearchComponent extends Component
                 }
 
                 $yummy['fields'][$field] = Inflector::humanize($opt);
+            }
+        }
+        
+        // gets array of Cake\ORM\Association objects
+        $associations = $this->controller->Organization->associations();
+
+        foreach($associations as $object){
+            
+            $name = $object->getName();
+            
+            if( !isset($yummy['models'][ $name ]) ){
+                $tableName = Inflector::underscore($name);
+                $schema = $collection->describe($tableName);
+                $yummy['models'][ $name ]['fields'] = $schema->columns();
             }
         }
 
