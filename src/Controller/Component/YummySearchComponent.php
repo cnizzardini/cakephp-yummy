@@ -41,7 +41,7 @@ class YummySearchComponent extends Component
     private function mergeConfig()
     {
 
-        if ($this->config('operators') == null) {
+        if ($this->config('operators') != null) {
             return;
         }
 
@@ -67,7 +67,8 @@ class YummySearchComponent extends Component
     {
         $yummy = [
             'base_url' => $this->controller->request->here,
-            'rows' => $this->controller->request->query('YummySearch')
+            'rows' => $this->controller->request->query('YummySearch'),
+            'operators' => $this->config('operators')
         ];
 
         if (!isset($this->controller->paginate['fields'])) {
