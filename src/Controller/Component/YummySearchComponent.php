@@ -69,7 +69,6 @@ class YummySearchComponent extends Component
             'base_url' => $this->controller->request->here,
             'rows' => $this->controller->request->query('YummySearch'),
             'operators' => $this->config('operators'),
-            'fields' => [],
             'models' => []
         ];
 
@@ -108,10 +107,10 @@ class YummySearchComponent extends Component
                     $opt = end($tmp);
                 }
 
-                $yummy['fields'][$field] = Inflector::humanize($opt);
+                $yummy['models'][''][$opt] = Inflector::humanize($opt);
             }
         }
-        
+
         // gets array of Cake\ORM\Association objects
         $associations = $this->controller->Organization->associations();
 
@@ -122,7 +121,11 @@ class YummySearchComponent extends Component
             if( !isset($yummy['models'][ $name ]) ){
                 $tableName = Inflector::underscore($name);
                 $schema = $collection->describe($tableName);
-                $yummy['models'][ $name ]['fields'] = $schema->columns();
+                $columns = $schema->columns();
+                foreach($columns as $column){
+                    $yummy['models'][ Inflector::humanize($tableName) ]["$name.$column"] = Inflector::humanize($column);
+                }
+                
             }
         }
 
