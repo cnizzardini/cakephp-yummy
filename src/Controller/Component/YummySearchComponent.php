@@ -16,12 +16,17 @@ class YummySearchComponent extends Component
 //    protected $_defaultConfig = [
 //        'operators' => [],
 //    ];
-
+    
     /**
      * beforeRender - sets fields for use by YummySearchHelper
      */
     public function beforeRender()
     {
+        $db = ConnectionManager::get('default');
+
+        // Create a schema collection.
+        $this->collection = $db->schemaCollection();
+        
         $this->controller = $this->_registry->getController();
 
         // merge configurations
@@ -69,77 +74,62 @@ class YummySearchComponent extends Component
             'base_url' => $this->controller->request->here,
             'rows' => $this->controller->request->query('YummySearch'),
             'operators' => $this->config('operators'),
-            'models' => $this->getSearchFields()
+            'models' => $this->getModels()
         ];
         
         return $yummy;
     }
-
-    private function getSearchFields()
-    {
-        
-        $models[''] = $this->getModelFields();
-        $models = array_merge($models, $this->getAssociatedFields());
-        
-        return $models;        
-    }
     
-    private function getModelFields()
+    private function getColumns($name)
     {
-        
-        $model = [];
-        
+        $data = [];
+        $tableName = Inflector::underscore($name);
+        $schema = $this->collection->describe($tableName);
+        $columns = $schema->columns();
+
         $config = $this->config();
         
-        foreach ($this->controller->paginate['fields'] as $field) {
-            $skip = false;
-            if (isset($config['deny']) && in_array($field, $config['deny'])) {
-                $skip = true;
-            } else if (isset($config['allow']) && !in_array($field, $config['allow'])) {
-                $skip = true;
+        foreach($columns as $column){
+            
+            $allow = true;
+            
+            if( isset($config['deny'][$name][$column]) ){
+                $allow = false;
+            } else if( isset($config['deny'][$name]) && $config['deny'][$name] == '*' ){
+                $allow = false;
+            } else if( isset($config['allow'][$name]) && !in_array($column, $config['allow'][$name]) ) {
+                $allow = false;
             }
-
-            if ($skip == false) {
-
-                $opt = $field;
-
-                if (strstr($field, '.')) {
-                    $tmp = explode('.', $field);
-                    $opt = end($tmp);
-                }
-
-                $model[$opt] = Inflector::humanize($opt);
+            
+            if( $allow == true ){
+                $data["$name.$column"] = Inflector::humanize($column);
             }
         }
-        return $model;
+        
+        return $data;
     }
     
-    private function getAssociatedFields()
+    private function getModels()
     {
-        $db = ConnectionManager::get('default');
-
-        // Create a schema collection.
-        $collection = $db->schemaCollection();
-
         // gets array of Cake\ORM\Association objects
         $associations = $this->controller->Organization->associations();
-
-        $models = [];
+        
+        $thisModel = $this->config('model');
+        
+        $models = ["$thisModel" => $this->getColumns($thisModel)];
         
         foreach($associations as $object){
             
             $name = $object->getName();
             
             if( !isset($models[ $name ]) ){
-                $tableName = Inflector::underscore($name);
-                $schema = $collection->describe($tableName);
-                $columns = $schema->columns();
-                foreach($columns as $column){
-                    $models[ Inflector::humanize($tableName) ]["$name.$column"] = Inflector::humanize($column);
+                $columns = $this->getColumns($name);
+                if( !empty($columns) ){
+                    $models[ Inflector::humanize(Inflector::tableize($name)) ] = $this->getColumns($name);
                 }
-                
             }
         }
+        
         return $models;
     }
 
@@ -190,9 +180,9 @@ class YummySearchComponent extends Component
         
         // loop through available fields and set conditions
         for ($i = 0; $i < $length; $i++) {
-            $field = $data['field'][$i];          // get field name
-            $operator = $data['operator'][$i];    // get operator type
-            $search = $data['search'][$i];        // get search paramter
+            $field = $data['field'][$i];            // get field name
+            $operator = $data['operator'][$i];      // get operator type
+            $search = $data['search'][$i];          // get search paramter
             $skip = false;                          // default to skip adding condition
             // skip setting condition if field is denied
             if (isset($config['deny']) && in_array($field, $config['deny'])) {
