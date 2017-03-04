@@ -84,12 +84,13 @@ class YummySearchComponent extends Component
     {
         $data = [];
         $tableName = Inflector::underscore($name);
+        $modelName = Inflector::classify($tableName);
         $schema = $this->collection->describe($tableName);
         $columns = $schema->columns();
         
         foreach($columns as $column){
             
-            if( $this->isColumnAllowed($name, $column) == true ){
+            if( $this->isColumnAllowed($modelName, $column) == true ){
                 $data["$name.$column"] = Inflector::humanize($column);
             }
         }
@@ -100,22 +101,24 @@ class YummySearchComponent extends Component
     private function getModels()
     {
         // gets array of Cake\ORM\Association objects
-        $associations = $this->controller->Organization->associations();
         
         $thisModel = $this->config('model');
         
+        $associations = $this->controller->{$thisModel}->associations();
+
         $models = ["$thisModel" => $this->getColumns($thisModel)];
         
-        $allowedAssociations = [' Cake\ORM\Association\HasOne', ' Cake\ORM\Association\BelongsTo'];
+        $allowedAssociations = ['Cake\ORM\Association\HasOne', 'Cake\ORM\Association\BelongsTo'];
         
         foreach($associations as $object){
             
-            $name = $object->getName();
-            
+            $name = Inflector::humanize(Inflector::tableize($object->getName()));
+            $table = $object->getTable();
+
             if( !isset($models[ $name ]) && in_array(get_class($object), $allowedAssociations) ){
-                $columns = $this->getColumns($name);
+                $columns = $this->getColumns($table);
                 if( !empty($columns) ){
-                    $models[ Inflector::humanize(Inflector::tableize($name)) ] = $this->getColumns($name);
+                    $models[ $name ] = $columns;
                 }
             }
         }
@@ -127,7 +130,7 @@ class YummySearchComponent extends Component
     private function isColumnAllowed($model, $column){
         
         $config = $this->config();
-
+        
         if( isset($config['deny'][$model][$column]) ){
             return false;
         } else if( isset($config['deny'][$model]) && $config['deny'][$model] == '*' ){
