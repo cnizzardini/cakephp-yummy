@@ -14,11 +14,6 @@ class YummyAclComponent extends Component
 {
     public $components = ['Flash','Auth'];
 
-//    protected $_defaultConfig = [
-//        'redirect' => '/',
-//        'allow' => '*'
-//    ];
-
     /**
      * startup - this is a magic method that gets called by cake
      * @return bool|\Cake\Network\Response returns true if the acl passes, network response redirect if fails
@@ -151,12 +146,6 @@ class YummyAclComponent extends Component
         // actions are not configured? 
         if (!isset($config['actions'])) {
             return false;
-        }
-        
-        // actions must be an array at this point
-        if (!isset($config['actions'][$this->actionName])) {
-            throw new InternalErrorException(__($this->controllerName . ' YummyAcl config is missing the action '
-                    . '"' . $this->actionName . '" as a key in the "actions" array'));
         }
 
         // check for allow all
