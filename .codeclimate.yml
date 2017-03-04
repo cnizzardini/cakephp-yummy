@@ -4,9 +4,7 @@ engines:
     enabled: true
     config:
       languages:
-      - ruby
       - javascript
-      - python
       - php
   eslint:
     enabled: true
@@ -14,6 +12,9 @@ engines:
     enabled: true
   phpmd:
     enabled: true
+    checks:
+      CleanCode/StaticAccess:
+        enabled: false
 ratings:
   paths:
   - "**.inc"
@@ -21,8 +22,6 @@ ratings:
   - "**.jsx"
   - "**.module"
   - "**.php"
-  - "**.py"
-  - "**.rb"
 exclude_paths:
 - config/
 - tests/
