@@ -16,6 +16,10 @@ class YummySearchComponent extends Component
 //        'operators' => [],
 //    ];
     
+    public function startup(){
+        $this->controller = $this->_registry->getController();
+    }
+    
     /**
      * beforeRender - sets fields for use by YummySearchHelper
      */
@@ -25,8 +29,6 @@ class YummySearchComponent extends Component
 
         // Create a schema collection.
         $this->collection = $db->schemaCollection();
-        
-        $this->controller = $this->_registry->getController();
 
         // merge configurations
         $this->mergeConfig();
@@ -172,8 +174,6 @@ class YummySearchComponent extends Component
      */
     public function search()
     {
-        $this->controller = $this->_registry->getController();
-
         // exit if no search was performed or user cleared search paramaters
         $request = $this->controller->request;
         if ($request->query('YummySearch') == null || $request->query('YummySearch_clear') != null) {
