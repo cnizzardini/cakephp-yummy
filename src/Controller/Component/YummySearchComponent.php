@@ -25,10 +25,10 @@ class YummySearchComponent extends Component
      */
     public function beforeRender()
     {
-        $db = ConnectionManager::get('default');
+        $database = ConnectionManager::get('default');
 
         // Create a schema collection.
-        $this->collection = $db->schemaCollection();
+        $this->collection = $database->schemaCollection();
 
         // merge configurations
         $this->mergeConfig();
