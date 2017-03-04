@@ -1,5 +1,4 @@
 <?php
-
 namespace Yummy\Controller\Component;
 
 use Cake\Controller\Component;
@@ -91,7 +90,7 @@ class YummySearchComponent extends Component
         foreach($columns as $column){
             
             if( $this->isColumnAllowed($modelName, $column) == true ){
-                $data["$name.$column"] = Inflector::humanize($column);
+                $data["$modelName.$column"] = Inflector::humanize($column);
             }
         }
         
