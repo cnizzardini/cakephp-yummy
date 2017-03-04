@@ -7,15 +7,10 @@ use Cake\Utility\Inflector;
 
 /**
  * This component is a should be used in conjunction with the YummySearchHelper for building rudimentary search filters
- * @todo deep relations are not implemented
  */
 class YummySearchComponent extends Component
 {
 
-//    protected $_defaultConfig = [
-//        'operators' => [],
-//    ];
-    
     public function startup(){
         $this->controller = $this->_registry->getController();
     }
@@ -81,6 +76,12 @@ class YummySearchComponent extends Component
         return $yummy;
     }
     
+    /**
+     * getColumns - returns array of columns after checking allow/deny rules
+     * @param string $name
+     * @return array
+     * [ModelName.column_name => Column Name]
+     */
     private function getColumns($name)
     {
         $data = [];
@@ -90,7 +91,6 @@ class YummySearchComponent extends Component
         $columns = $schema->columns();
         
         foreach($columns as $column){
-            
             if( $this->isColumnAllowed($modelName, $column) == true ){
                 $data["$modelName.$column"] = Inflector::humanize($column);
             }
@@ -99,6 +99,11 @@ class YummySearchComponent extends Component
         return $data;
     }
     
+    /**
+     * getModels - returns an array of models and their columns
+     * @return array
+     * [ModelName => [ModelName.column_name => Column Name]]
+     */
     private function getModels()
     {
         // gets array of Cake\ORM\Association objects
@@ -127,7 +132,12 @@ class YummySearchComponent extends Component
         return $models;
     }
 
-
+    /**
+     * isColumnAllowed - checks allow/deny rules to see if column is allowed
+     * @param string $model
+     * @param string $column
+     * @return boolean
+     */
     private function isColumnAllowed($model, $column){
         
         $config = $this->config();
@@ -143,27 +153,32 @@ class YummySearchComponent extends Component
     }
     
     /**
-     * getSqlCondition - returns cakephp orm compatible condition based on $operator type
-     * @param string $field
+     * getSqlCondition - returns cakephp orm compatible condition after checking allow/deny rules
+     * @param string $model
+     * @param string $column
      * @param string $operator
      * @param string $value
      * @return array|bool: array on success, false if operator is not found
      */
-    private function getSqlCondition($field, $operator, $value)
+    private function getSqlCondition($model, $column, $operator, $value)
     {
+        if ($this->isColumnAllowed($model, $column) == false) {
+            return false;
+        }
+        
         switch ($operator) {
             case 'matching':
-                return [$field => $value];
+                return [$model.$column => $value];
             case 'not_matching';
-                return ["$field != " => $value];
+                return ["$model.$column != " => $value];
             case 'containing';
-                return ["$field LIKE " => "%$value%"];
+                return ["$model.$column LIKE " => "%$value%"];
             case 'not_containing';
-                return ["$field NOT LIKE " => "%$value%"];
+                return ["$model.$column NOT LIKE " => "%$value%"];
             case 'greater_than';
-                return ["$field > " => "%$value%"];
+                return ["$model.$column > " => "%$value%"];
             case 'less_than';
-                return ["$field < " => "%$value%"];
+                return ["$model.$column < " => "%$value%"];
         }
         return false;
     }
@@ -175,6 +190,7 @@ class YummySearchComponent extends Component
     public function search()
     {
         // exit if no search was performed or user cleared search paramaters
+        $this->controller = $this->_registry->getController();
         $request = $this->controller->request;
         if ($request->query('YummySearch') == null || $request->query('YummySearch_clear') != null) {
             return false;
@@ -195,13 +211,16 @@ class YummySearchComponent extends Component
             
             list($model, $column) = explode('.', $field);
             
-            if( $this->isColumnAllowed($model, $column) == true ){
+            $conditions = $this->getSqlCondition($model, $column, $operator, $search);
+
+            if( is_array($conditions) ){
                 $this->controller->paginate['conditions'] = array_merge(
-                    $this->controller->paginate['conditions'], $this->getSqlCondition($field, $operator, $search)
+                    $this->controller->paginate['conditions'], 
+                    $conditions
                 );
             }
         }
+        
         return true;
     }
-
 }
