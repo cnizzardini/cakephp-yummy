@@ -19,7 +19,7 @@ YummyTemplate
 A series of bootstrap admin themes for your admin portal.
 
 ```
-bin/cake bake template <ModelName> -p Yummy
+bin/cake bake template <ModelName> -t Yummy
 ```
 
 ## Installation
