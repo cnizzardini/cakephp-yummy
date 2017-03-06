@@ -6,7 +6,7 @@
 
 Delightfully tasty tools for your cakephp project. 
 
-[YummyAcl](https://github.com/cnizzardini/cakephp-yummy/wiki/YummyACL)
+[YummyAcl](https://github.com/cnizzardini/cakephp-yummy/wiki/Yummy-ACL)
 
 A component that works with Auth to add basic access controls to your site. 
 
