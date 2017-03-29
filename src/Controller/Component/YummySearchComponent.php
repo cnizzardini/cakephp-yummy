@@ -68,7 +68,8 @@ class YummySearchComponent extends Component
                 'less_than' => 'Less than',
                 'matching' => 'Exact Match',
                 'not_matching' => 'Not Exact Match',
-            ]
+            ],
+            'singular_models' => false
         ];
 
         $this->configShallow($config);
@@ -100,7 +101,13 @@ class YummySearchComponent extends Component
     {
         $data = [];
         $tableName = Inflector::underscore($name);
-        $modelName = Inflector::classify($tableName);
+        
+        if( $this->config('singular_names') == false ){
+            $modelName = Inflector::camelize(Inflector::pluralize($tableName));
+        } else {
+            $modelName = Inflector::classify($tableName);
+        }
+        
         $schema = $this->collection->describe($tableName);
         $columns = $schema->columns();
         
@@ -109,7 +116,7 @@ class YummySearchComponent extends Component
                 $data["$modelName.$column"] = Inflector::humanize($column);
             }
         }
-        
+                
         return $data;
     }
     
@@ -156,13 +163,19 @@ class YummySearchComponent extends Component
         
         $config = $this->config();
         
-        if( isset($config['deny'][$model][$column]) ){
+        // check deny all
+        if( isset($config['deny'][$model]) && $config['deny'][$model] == '*' ){
             return false;
-        } else if( isset($config['deny'][$model]) && $config['deny'][$model] == '*' ){
+            
+        // check deny column
+        } else if( isset($config['deny'][$model]) && in_array($column, $config['deny'][$model]) ){
             return false;
+            
+        // check if in allow columns (if allow isset)
         } else if( isset($config['allow'][$model]) && !in_array($column, $config['allow'][$model]) ) {
             return false;
         }
+        
         return true;
     }
     
