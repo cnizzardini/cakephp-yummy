@@ -22,6 +22,9 @@ class YummySearchComponent extends Component
     {
         $database = ConnectionManager::get('default');
 
+        // check components
+        $this->checkComponents();
+        
         // Create a schema collection.
         $this->collection = $database->schemaCollection();
 
@@ -35,6 +38,17 @@ class YummySearchComponent extends Component
         $this->controller->set('YummySearch', $yummy);
     }
 
+    /**
+     * checkComponents - throws exception if missing a required component
+     * @throws InternalErrorException
+     */
+    private function checkComponents()
+    {
+        if (!isset($this->controller->Paginator)) {
+            throw new InternalErrorException(__('YummySearch requires the Paginator Component'));
+        }
+    }
+    
     /**
      * mergeConfig - merges user supplied configuration with defaults
      * @return void
