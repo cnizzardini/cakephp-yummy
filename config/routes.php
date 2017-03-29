@@ -5,7 +5,5 @@ use Cake\Routing\Route\DashedRoute;
 
 Router::plugin('Yummy', ['path' => '/yummy'], function (RouteBuilder $routes) {
     
-    $routes->connect('/', ['plugin' => 'Yummy', 'controller' => 'Pages', 'action' => 'index']);
-    
     $routes->fallbacks(DashedRoute::class);
 });
