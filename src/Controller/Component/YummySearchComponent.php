@@ -127,23 +127,29 @@ class YummySearchComponent extends Component
      */
     private function getModels()
     {
-        // gets array of Cake\ORM\Association objects
-        
         $thisModel = $this->config('model');
         
-        $associations = $this->controller->{$thisModel}->associations();
-
-        $models = ["$thisModel" => $this->getColumns($thisModel)];
-        
+        // only supporting HasOne and BelongsTo for now
         $allowedAssociations = ['Cake\ORM\Association\HasOne', 'Cake\ORM\Association\BelongsTo'];
         
+        // gets array of Cake\ORM\Association objects
+        $associations = $this->controller->{$thisModel}->associations();
+
+        // build an array of models and their associations
+        $models = ["$thisModel" => $this->getColumns($thisModel)];
+
         foreach($associations as $object){
             
+            // get proper form of models name
             $name = Inflector::humanize(Inflector::tableize($object->getName()));
+            
+            // get the table objects name
             $table = $object->getTable();
-
+            
+            // add to $models if does not exist in $models and is an $allowedAssociation
             if( !isset($models[ $name ]) && in_array(get_class($object), $allowedAssociations) ){
                 $columns = $this->getColumns($table);
+                // set columns if columns is not empty
                 if( !empty($columns) ){
                     $models[ $name ] = $columns;
                 }
