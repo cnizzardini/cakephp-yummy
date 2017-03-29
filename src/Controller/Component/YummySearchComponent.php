@@ -122,8 +122,9 @@ class YummySearchComponent extends Component
     
     /**
      * getModels - returns an array of models and their columns
+     * @param void
      * @return array
-     * [ModelName => [ModelName.column_name => Column Name]]
+     * @example [ModelName => [ModelName.column_name => Column Name]]
      */
     private function getModels()
     {
