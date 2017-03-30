@@ -114,7 +114,7 @@ class YummySearchComponent extends Component
         
         foreach($columns as $column){
             if( $this->isColumnAllowed($modelName, $column) == true ){
-                $data["$modelName.$column"] = Inflector::humanize($column);
+                $data["$modelName.$column"] = Inflector::singularize($modelName) . ' ' . Inflector::humanize($column);
             }
         }
                 
