@@ -216,7 +216,7 @@ class YummySearchComponent extends Component
         
         switch ($operator) {
             case 'matching':
-                return [$model.$column => $value];
+                return ["$model.$column" => $value];
             case 'not_matching';
                 return ["$model.$column != " => $value];
             case 'containing';
