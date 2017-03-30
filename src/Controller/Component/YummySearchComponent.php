@@ -69,7 +69,8 @@ class YummySearchComponent extends Component
                 'matching' => 'Exact Match',
                 'not_matching' => 'Not Exact Match',
             ],
-            'singular_models' => false
+            'singular_models' => false,
+            'max_recursion' => 3
         ];
 
         $this->configShallow($config);
@@ -122,38 +123,51 @@ class YummySearchComponent extends Component
     
     /**
      * getModels - returns an array of models and their columns
-     * @param void
+     * @param object $object (Default: empty)
+     * @param integer $currentDepth (Default: 0)
      * @return array
      * @example [ModelName => [ModelName.column_name => Column Name]]
      */
-    private function getModels()
+    private function getModels($object='', $currentDepth = 0)
     {
-        $thisModel = $this->config('model');
+        $currentDepth++;
         
+        if (empty($object)) {
+            $thisModel = $this->config('model');
+            $object = $this->controller->{$thisModel};
+        } else {
+            $thisModel = $object->getName();
+        }
+                
         // only supporting HasOne and BelongsTo for now
         $allowedAssociations = ['Cake\ORM\Association\HasOne', 'Cake\ORM\Association\BelongsTo'];
         
         // gets array of Cake\ORM\Association objects
-        $associations = $this->controller->{$thisModel}->associations();
+        $associations = $object->associations();
 
         // build an array of models and their associations
-        $models = ["$thisModel" => $this->getColumns($thisModel)];
-
+        $models = [
+            "$thisModel" => $this->getColumns($thisModel)
+        ];
+        
+        // return if no associtions are found or $currentDepth is greater than $maxDepth
+        if (empty($associations) || $currentDepth > $this->config('max_recursion') ) {
+            return $models;
+        }
+        
+        // get associations
         foreach($associations as $object){
             
             // get proper form of models name
             $name = Inflector::humanize(Inflector::tableize($object->getName()));
-            
+
             // get the table objects name
             $table = $object->getTable();
             
             // add to $models if does not exist in $models and is an $allowedAssociation
             if( !isset($models[ $name ]) && in_array(get_class($object), $allowedAssociations) ){
-                $columns = $this->getColumns($table);
-                // set columns if columns is not empty
-                if( !empty($columns) ){
-                    $models[ $name ] = $columns;
-                }
+                $models[ $name ] = $this->getColumns($table);
+                $models = array_merge($models, $this->getModels($object, $currentDepth));
             }
         }
         
