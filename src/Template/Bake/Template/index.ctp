@@ -41,7 +41,7 @@ if (!empty($indexColumns)) {
 $this->start('sidebar');
 ?>
 <li>
-    <a href="/admin/<%= $singularVar %>/add">
+    <a href="<%= $pluarVar %>/add">
         <i class="ti-plus"></i>
         <p>Add <%= ucfirst($singularVar) %></p>
     </a>
