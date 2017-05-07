@@ -6,13 +6,19 @@
 
 Delightfully tasty tools for your cakephp project. 
 
+## Demo
+
+Checkout the [Yummy Demo](http://cake3.cnizz.com/yummy-demo)
+
+## Features
+
 [YummyAcl](https://github.com/cnizzardini/cakephp-yummy/wiki/Yummy-ACL)
 
 A component that works with Auth to add basic access controls to your site. 
 
 [YummySearch](https://github.com/cnizzardini/cakephp-yummy/wiki/Yummy-Search)
 
-A component that works with PaginatorComponent to add search functionality to tables.
+A component that works with PaginatorComponent to add search functionality to tables [(demo)](http://cake3.cnizz.com/yummy-demo/teams)
 
 YummyTemplate
 
@@ -21,10 +27,6 @@ A series of bootstrap admin themes for your admin portal.
 ```
 bin/cake bake template <ModelName> -t Yummy
 ```
-
-## Demo
-
-Checkout the [Yummy Demo](http://cake3.cnizz.com/yummy-demo)
 
 ## Installation
 
