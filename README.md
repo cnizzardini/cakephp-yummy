@@ -49,3 +49,7 @@ Plugin::load('Yummy', ['bootstrap' => false, 'routes' => true]);
 ## Documentation
 
 Checkout the [Wiki](https://github.com/cnizzardini/cakephp-yummy/wiki/).
+
+You can also view the source code for demo project on github:
+
+[https://github.com/cnizzardini/cakephp-yummy-demo](https://github.com/cnizzardini/cakephp-yummy-demo)
