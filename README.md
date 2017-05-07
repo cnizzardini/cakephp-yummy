@@ -22,6 +22,10 @@ A series of bootstrap admin themes for your admin portal.
 bin/cake bake template <ModelName> -t Yummy
 ```
 
+## Demo
+
+Checkout the [Yummy Demo](http://cake3.cnizz.com/yummy-demo)
+
 ## Installation
 
 You can install this plugin into your CakePHP application using [composer](http://getcomposer.org).
