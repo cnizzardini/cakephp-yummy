@@ -22,10 +22,10 @@ A component that works with PaginatorComponent to add search functionality to ta
 
 YummyTemplate
 
-A series of bootstrap admin themes for your admin portal.
+A series of bootstrap admin themes for your admin portal [(demo)](http://cake3.cnizz.com/yummy-demo/teams)
 
 ```
-bin/cake bake template <ModelName> -t Yummy
+bin/cake bake template <ControllerName> -t Yummy
 ```
 
 ## Installation
