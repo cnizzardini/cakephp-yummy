@@ -52,9 +52,7 @@ The recommended way to install composer packages is:
 composer require cnizzardini/cakephp-yummy
 ```
 
-## Configuration
-
-Edit File: config/bootstrap.php
+Load the plugin in: config/bootstrap.php
 
 ```
 Plugin::load('Yummy', ['bootstrap' => false, 'routes' => true]);
