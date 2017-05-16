@@ -12,6 +12,12 @@ Checkout the [Yummy Demo](http://cake3.cnizz.com/yummy-demo)
 
 ## Features
 
+[YummySearch](https://github.com/cnizzardini/cakephp-yummy/wiki/Yummy-Search)
+
+A component that works with PaginatorComponent to add search functionality to tables [(demo)](http://cake3.cnizz.com/yummy-demo/teams)
+
+![yummy search screenshot](https://www.cnizz.com/media/cakephp-yummy-search-screenshot.png)
+
 [YummyAcl](https://github.com/cnizzardini/cakephp-yummy/wiki/Yummy-ACL)
 
 A component that works with Auth to add basic access controls to your site 
@@ -27,12 +33,6 @@ A component that works with Auth to add basic access controls to your site
 	    'edit' => ['Admin'], // allow Admin
 	]);
 ```
-
-[YummySearch](https://github.com/cnizzardini/cakephp-yummy/wiki/Yummy-Search)
-
-A component that works with PaginatorComponent to add search functionality to tables [(demo)](http://cake3.cnizz.com/yummy-demo/teams)
-
-![yummy search screenshot](https://www.cnizz.com/media/cakephp-yummy-search-screenshot.png)
 
 YummyTemplate
 
