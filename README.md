@@ -20,6 +20,8 @@ A component that works with Auth to add basic access controls to your site.
 
 A component that works with PaginatorComponent to add search functionality to tables [(demo)](http://cake3.cnizz.com/yummy-demo/teams)
 
+![yummy search screenshot](https://www.cnizz.com/media/cakephp-yummy-search-screenshot.png)
+
 YummyTemplate
 
 A series of bootstrap admin themes for your admin portal [(demo)](http://cake3.cnizz.com/yummy-demo/teams)
