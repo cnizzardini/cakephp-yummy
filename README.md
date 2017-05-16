@@ -14,7 +14,19 @@ Checkout the [Yummy Demo](http://cake3.cnizz.com/yummy-demo)
 
 [YummyAcl](https://github.com/cnizzardini/cakephp-yummy/wiki/Yummy-ACL)
 
-A component that works with Auth to add basic access controls to your site. 
+A component that works with Auth to add basic access controls to your site 
+[(documentation)](https://github.com/cnizzardini/cakephp-yummy/wiki/Yummy-ACL). 
+
+```php
+	$this->loadComponent('Yummy.YummyAcl',[
+	    'group' => $this->Auth->user('group'),
+	]);
+	$this->YummyAcl->actions([
+	    'login' => '*', // allow all 
+	    'view' => ['Admin','Manager'], // allow Admin + Manager
+	    'edit' => ['Admin'], // allow Admin
+	]);
+```
 
 [YummySearch](https://github.com/cnizzardini/cakephp-yummy/wiki/Yummy-Search)
 
