@@ -11,8 +11,28 @@ use Cake\Utility\Inflector;
 class YummySearchComponent extends Component
 {
 
+    protected $_defaultConfig = [
+        'singular_names' => false,
+        'max_recursion' => 3
+    ];
+    
     public function startup(){
         $this->controller = $this->_registry->getController();
+    }
+    
+    public function initialize(array $config)
+    {
+        parent::initialize($config);
+        if (!$this->config('operators')) {
+            $this->config('operators', [
+                'containing' => 'Containing',
+                'not_containing' => 'Not Containing',
+                'greater_than' => 'Greater than',
+                'less_than' => 'Less than',
+                'matching' => 'Exact Match',
+                'not_matching' => 'Not Exact Match',
+            ]);
+        }
     }
     
     /**
@@ -27,9 +47,6 @@ class YummySearchComponent extends Component
         
         // Create a schema collection.
         $this->collection = $database->schemaCollection();
-
-        // merge configurations
-        $this->mergeConfig();
 
         // set array for use by YummySearchHelper
         $yummy = $this->getYummyHelperData();
@@ -48,33 +65,6 @@ class YummySearchComponent extends Component
             throw new InternalErrorException(__('YummySearch requires the Paginator Component'));
         }
     }
-    
-    /**
-     * mergeConfig - merges user supplied configuration with defaults
-     * @return void
-     */
-    private function mergeConfig()
-    {
-
-        if ($this->config('operators') != null) {
-            return;
-        }
-
-        $config = [
-            'operators' => [
-                'containing' => 'Containing',
-                'not_containing' => 'Not Containing',
-                'greater_than' => 'Greater than',
-                'less_than' => 'Less than',
-                'matching' => 'Exact Match',
-                'not_matching' => 'Not Exact Match',
-            ],
-            'singular_names' => false,
-            'max_recursion' => 3
-        ];
-
-        $this->configShallow($this->_config, $config);
-    }
 
     /**
      * getYummyHelperData - retrieves an array used by YummySearchHelper
@@ -88,7 +78,7 @@ class YummySearchComponent extends Component
             'operators' => $this->config('operators'),
             'models' => $this->getModels()
         ];
-        
+
         return $yummy;
     }
     
