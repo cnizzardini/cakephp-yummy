@@ -69,11 +69,11 @@ class YummySearchComponent extends Component
                 'matching' => 'Exact Match',
                 'not_matching' => 'Not Exact Match',
             ],
-            'singular_models' => false,
+            'singular_names' => false,
             'max_recursion' => 3
         ];
 
-        $this->configShallow($config);
+        $this->configShallow($this->_config, $config);
     }
 
     /**
