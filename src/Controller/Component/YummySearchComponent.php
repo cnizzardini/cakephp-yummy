@@ -72,13 +72,20 @@ class YummySearchComponent extends Component
      */
     private function getYummyHelperData()
     {
+        $models = $this->getModels();
+        foreach($models as $model => $columns) {
+            if (empty($columns)) {
+                unset($models[ $model ]);
+            }
+        }
+        
         $yummy = [
             'base_url' => $this->controller->request->here,
             'rows' => $this->controller->request->query('YummySearch'),
             'operators' => $this->config('operators'),
-            'models' => $this->getModels()
+            'models' => $models
         ];
-
+        
         return $yummy;
     }
     
@@ -107,7 +114,7 @@ class YummySearchComponent extends Component
                 $data["$modelName.$column"] = Inflector::singularize($modelName) . ' ' . Inflector::humanize($column);
             }
         }
-                
+        
         return $data;
     }
     
@@ -136,8 +143,9 @@ class YummySearchComponent extends Component
         $associations = $object->associations();
 
         // build an array of models and their associations
+        $theName = Inflector::humanize(strtolower($thisModel));
         $models = [
-            "$thisModel" => $this->getColumns($thisModel)
+            "$theName" => $this->getColumns($thisModel)
         ];
         
         // return if no associtions are found or $currentDepth is greater than $maxDepth
@@ -149,8 +157,8 @@ class YummySearchComponent extends Component
         foreach($associations as $object){
             
             // get proper form of models name
-            $name = Inflector::humanize(Inflector::tableize($object->getName()));
-
+            $name = Inflector::humanize(strtolower($object->getTable()));
+            
             // get the table objects name
             $table = $object->getTable();
             
