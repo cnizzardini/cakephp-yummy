@@ -126,7 +126,7 @@ class YummySearchComponent extends Component
             $thisModel = $this->config('model');
             $object = $this->controller->{$thisModel};
         } else {
-            $thisModel = $object->getName();
+            $thisModel = $object->getTable();
         }
                 
         // only supporting HasOne and BelongsTo for now
