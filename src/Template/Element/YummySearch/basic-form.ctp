@@ -21,7 +21,7 @@ do{
     $search = isset($YummySearch['rows']['search'][ $i ]) ? $YummySearch['rows']['search'][ $i ] : '';
 ?>
 <div class="row yummy-search-row">
-    <div class="col-lg-2 col-md-1 col-xs-6">
+    <div class="col-lg-3 col-md-3 col-xs-6">
         <div class="input text">
             <?php 
                 echo $this->Form->select('YummySearch.field[]',  $YummySearch['models'], [
@@ -33,7 +33,7 @@ do{
             ?>
         </div>
     </div>
-    <div class="col-lg-2 col-md-1 col-xs-6">
+    <div class="col-lg-3 col-md-3 col-xs-6">
         <div class="input text">
             <?php
                 echo $this->Form->select('YummySearch.operator[]', $YummySearch['operators'],[
@@ -45,7 +45,7 @@ do{
             ?>
         </div>
     </div>
-    <div class="col-lg-2 col-md-2 col-xs-9">
+    <div class="col-lg-3 col-md-3 col-xs-9">
         <div class="input text">
             <?php
                 echo $this->Form->input('YummySearch.search[]',[
@@ -57,7 +57,7 @@ do{
             ?>
         </div>
     </div>
-    <div class="col-lg-1 col-md-2 col-xs-3">
+    <div class="col-lg-1 col-md-1 col-xs-3">
         <div class="input text">
         <?php 
         echo $this->Form->button('&#10133;', [
