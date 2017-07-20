@@ -1,8 +1,6 @@
-var YummySearch = document.getElementById('yummy-search-form');
+if( document.getElementById('yummy-search-form') != null ){
 
-if( YummySearch.length > 0 ){
-
-    YummySearch.addEventListener('click', function(e){
+    document.getElementById('yummy-search-form').addEventListener('click', function(e){
         e = e || window.event;
         var target = e.target || e.srcElement;
         
