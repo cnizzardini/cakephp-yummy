@@ -1,63 +1,29 @@
-$(function(){
-	if( $('#yummy-search-form').length > 0){
-		
-		$('#yummy-search-form select').change(function(){
-			$(this).next('input[name="search"]').focus();
-		});
+var YummySearch = document.getElementById('yummy-search-form');
 
-		$('#yummy-search-form select').change(function(){
-			$(this).next('input[name="search"]').focus();
-		});
+if( YummySearch.length > 0 ){
 
-		$('#yummy-search-form button.minus-button').click(function(){
-			$(this).closest('.yummy-search-row').remove();
-		});
+    YummySearch.addEventListener('click', function(e){
+        e = e || window.event;
+        var target = e.target || e.srcElement;
+        
+        /* remove row */
+        if( target.type == 'button' && target.className.match('minus-button') ){
+            target.parentElement.parentElement.parentElement.remove();
+        }
+        
+        /* add row */
+        if( target.type == 'button' && target.className.match('plus-button') ){
+            var rows = document.getElementsByClassName("yummy-search-row");
+            var createRow = rows[0].cloneNode(true);
+            
+            createRow.getElementsByTagName('select')[0].options[0].defaultSelected = true;
+            createRow.getElementsByTagName('select')[1].options[0].defaultSelected = true;
+            createRow.getElementsByTagName('input')[0].value = '';
+            createRow.getElementsByClassName('plus-button')[0].remove();
+            createRow.getElementsByClassName('minus-button')[0].setAttribute('style','display:inline');
+            
+            rows[ rows.length - 1].after(createRow);
+        }
 
-		$('#yummy-search-form button.plus-button').click(function(){
-			var row = $('.yummy-search-row').first().clone();
-			
-			$(row).find('input[name="YummySearch[field][]"] option:eq(0)').prop('selected', true);
-			$(row).find('input[name="YummySearch[operator][]"] option:eq(0)').prop('selected', true);
-			$(row).find('input[name="YummySearch[search][]"]').val('');
-
-			$(row).find('button.plus-button').hide();
-
-			$(row).find('button.minus-button').show().click(function(){
-				$(this).closest('.yummy-search-row').remove();
-			});
-
-			$(row).insertAfter($('.yummy-search-row').last());
-		});
-	}
-});
-/**
- * I looked at rewriting this into generic JS for mass-appeal, but then realized just how easy jQuery makes things. If you rewrite I'll accept into master
-document.addEventListener('DOMContentLoaded', function() {
-	
-	var YummySearch = document.getElementById('yummy-search-form');
-	console.log(YummySearch);
-	if( YummySearch.length > 0 ){
-		
-		YummySearch.addEventListener('click', function(e){
-			e = e || window.event;
-			var target = e.target || e.srcElement;
-			var type
-			console.log(target.type)
-			console.log(target.className)
-			
-			if( target.type == 'select' ){
-				
-			}
-
-			if( target.type == 'button' && target.className.match('minus-button') ){
-				
-			}
-			
-			//var type = target.type;
-			//var class = target.class;
-			
-		},false);
-	}
-});
-
- */
+    },false);
+}
