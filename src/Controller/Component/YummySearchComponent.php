@@ -16,13 +16,13 @@ class YummySearchComponent extends Component
         'max_recursion' => 3
     ];
     
-    public function startup(){
-        $this->controller = $this->_registry->getController();
-    }
     
     public function initialize(array $config)
     {
         parent::initialize($config);
+        
+        $this->controller = $this->_registry->getController();
+        
         if (!$this->config('operators')) {
             $this->config('operators', [
                 'containing' => 'Containing',
