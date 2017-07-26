@@ -230,7 +230,7 @@ class YummyAclComponentTest extends TestCase
         $registry = new ComponentRegistry($controller);
         $YummyAclComponent = new YummyAclComponent($registry,[
             'group' =>  $controller->Auth->user('group'),
-            'config' => true
+            'use_config_file' => true
         ]);
         
         \Cake\Core\Configure::write('YummyAcl', [
