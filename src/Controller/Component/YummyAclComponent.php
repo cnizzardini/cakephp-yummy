@@ -25,7 +25,12 @@ class YummyAclComponent extends Component
         if (!$this->config('use_config_file')) {
             $this->config('use_config_file', false);
         }
-        
+
+        return true;
+    }
+
+    public function startup()
+    {
         // check for required components
         $this->checkComponents();
 
@@ -47,10 +52,10 @@ class YummyAclComponent extends Component
         if ($this->checkActionAccess() == false) {
             return $this->denyAccess();
         }
-
+        
         return true;
     }
-
+    
     /**
      * Set allowed groups for a controller
 
@@ -148,7 +153,7 @@ class YummyAclComponent extends Component
     private function checkActionAccess()
     {
         $config = $this->config();
-
+        
         // actions are not configured? 
         if (!isset($config['actions'])) {
             return false;
@@ -158,7 +163,7 @@ class YummyAclComponent extends Component
         if ($config['actions'][$this->actionName] == '*') {
             return true;
         }
-
+        
         // check for defined group access
         if (in_array($config['group'], $config['actions'][$this->actionName])) {
             return true;
