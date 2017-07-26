@@ -225,6 +225,10 @@ class YummyAclComponent extends Component
             throw new InternalErrorException(__('YummyAcl config is missing. Please create config/yummy_acl.php'));
         }
 
+        if (!isset($config[$this->controller->name])) {
+            throw new InternalErrorException(__('Controller is missing from config/yummy_acl.php'));
+        }
+        
         $this->configShallow($config[$this->controller->name]);
 
         return true;
