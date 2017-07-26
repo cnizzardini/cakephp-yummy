@@ -79,11 +79,32 @@ class YummySearchComponent extends Component
             }
         }
         
+        $selectOptions = [];
+        
+        foreach($models as $model => $columns){
+            foreach($columns as $column => $field){
+
+                $element = [
+                    'text' => $field['text'], 
+                    'value'=> $column, 
+                    'data-type'=> $field['type'], 
+                    'data-length' => $field['length']
+                ];
+
+                if ($field['sort-order'] !== false) {
+                    $key = $field['sort-order'];
+                    $selectOptions[ $model ][ $key ] = $element;
+                } else {
+                    $selectOptions[ $model ][] = $element;
+                }
+            }
+        }
+        
         $yummy = [
             'base_url' => $this->controller->request->here,
             'rows' => $this->controller->request->query('YummySearch'),
             'operators' => $this->config('operators'),
-            'models' => $models
+            'models' => $selectOptions
         ];
         
         return $yummy;
@@ -110,8 +131,19 @@ class YummySearchComponent extends Component
         $columns = $schema->columns();
         
         foreach($columns as $column){
-            if( $this->isColumnAllowed($modelName, $column) == true ){
-                $data["$modelName.$column"] = Inflector::singularize($modelName) . ' ' . Inflector::humanize($column);
+            
+            $allowed = $this->isColumnAllowed($modelName, $column);
+            
+            if( $allowed !== false ){
+                
+                $columnMeta = $schema->column($column);
+                
+                $data["$modelName.$column"] = [
+                    'text' => Inflector::humanize($column),
+                    'type' => $columnMeta['type'],
+                    'length' => $columnMeta['length'],
+                    'sort-order' => $allowed >=0 ? $allowed : false
+                ];
             }
         }
         
@@ -176,7 +208,7 @@ class YummySearchComponent extends Component
      * isColumnAllowed - checks allow/deny rules to see if column is allowed
      * @param string $model
      * @param string $column
-     * @return boolean
+     * @return boolean|int
      */
     private function isColumnAllowed($model, $column){
         
@@ -190,9 +222,19 @@ class YummySearchComponent extends Component
         } else if( isset($config['deny'][$model]) && in_array($column, $config['deny'][$model]) ){
             return false;
             
-        // check if in allow columns (if allow isset)
-        } else if( isset($config['allow'][$model]) && !in_array($column, $config['allow'][$model]) ) {
-            return false;
+        // check if in allow columns
+        } else if( isset($config['allow'][$model]) ) {
+            
+            // not in allowed columns
+            if (!in_array($column, $config['allow'][$model])) {
+                return false;
+            }
+            
+            // in allowed columns, return the key so we can apply ordering
+            $key = array_search($column, $config['allow'][$model]);
+            if ($key >= 0) {
+                return $key;
+            }
         }
         
         return true;
@@ -208,7 +250,7 @@ class YummySearchComponent extends Component
      */
     private function getSqlCondition($model, $column, $operator, $value)
     {
-        if ($this->isColumnAllowed($model, $column) == false) {
+        if ($this->isColumnAllowed($model, $column) === false) {
             return false;
         }
         
