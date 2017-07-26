@@ -14,17 +14,18 @@ class YummyAclComponent extends Component
 {
     public $components = ['Flash','Auth'];
 
-    /**
-     * startup - this is a magic method that gets called by cake
-     * @return bool|\Cake\Network\Response returns true if the acl passes, network response redirect if fails
-     * @throws InternalErrorException
-     */
-    public function startup()
+    public function initialize(array $config)
     {
+        parent::initialize($config);
+        
         $this->controller = $this->_registry->getController();
         $this->controllerName = $this->controller->name . 'Controller';
         $this->actionName = $this->controller->request->action;
-
+        
+        if (!$this->config('use_config_file')) {
+            $this->config('use_config_file', false);
+        }
+        
         // check for required components
         $this->checkComponents();
 
@@ -51,7 +52,8 @@ class YummyAclComponent extends Component
     }
 
     /**
-     * allow - set allowed groups for a controller
+     * Set allowed groups for a controller
+
      * @param string|array $config
      * @return bool true on succes
      * @throws InternalErrorException
@@ -68,7 +70,8 @@ class YummyAclComponent extends Component
     }
 
     /**
-     * actions - set ACLs for a controllers actions
+     * Set ACLs for a controllers actions
+     * 
      * @param array $config
      * @return bool true on succes
      * @throws InternalErrorException
@@ -85,7 +88,8 @@ class YummyAclComponent extends Component
     }
 
     /**
-     * sanityCheck - ensures component was configured correctly
+     * Ensures component was configured correctly
+     * 
      * @return void
      * @throws InternalErrorException
      */
@@ -112,7 +116,8 @@ class YummyAclComponent extends Component
     }
 
     /**
-     * denyAccess - sets flash message and if redirect is not set throws a 403 exception
+     * Sets flash message and if redirect is not set throws a 403 exception
+     * 
      * @return boolean - on false issue deny access
      * @throws ForbiddenException
      */
@@ -134,7 +139,8 @@ class YummyAclComponent extends Component
     }
 
     /**
-     * checkActionAccess - check if user has access to the requested action
+     * Check if user has access to the requested action
+     * 
      * @return boolean
      * @throws InternalErrorException
      * @throws ForbiddenException
@@ -162,7 +168,8 @@ class YummyAclComponent extends Component
     }
 
     /**
-     * checkControllerAccess - check if user has access to the requested controller
+     * Check if user has access to the requested controller
+     * 
      * @return boolean|void - passes on true, redirect on false, do nothing on void
      * @throws InternalErrorException
      * @throws ForbiddenException
@@ -183,7 +190,8 @@ class YummyAclComponent extends Component
     }
 
     /**
-     * checkComponents - throws exception if missing a required component
+     * Throws exception if missing a required component
+     * 
      * @throws InternalErrorException
      */
     private function checkComponents()
@@ -198,16 +206,19 @@ class YummyAclComponent extends Component
     }
 
     /**
-     * whichConfig - whether to use the flat file config or not
-     * @return boolean true on success
+     * Whether to use the flat file config or not
+     * 
+     * @return boolean
      * @throws InternalErrorException
      */
     private function whichConfig()
     {
-        if ($this->config('config') !== true) {
+        // check if we are using a config file or not, if not then exit
+        if ($this->config('use_config_file') !== true) {
             return true;
         }
 
+        // attempt loading config/yummy_acl.php
         $config = Configure::read('YummyAcl');
 
         if (!$config) {
@@ -220,7 +231,8 @@ class YummyAclComponent extends Component
     }
 
     /**
-     * setRedirect - sets the redirect url or throws an exception if unable to determine redirect url
+     * Sets the redirect url or throws an exception if unable to determine redirect url
+     * 
      * @return boolean
      * @throws InternalErrorException
      */
