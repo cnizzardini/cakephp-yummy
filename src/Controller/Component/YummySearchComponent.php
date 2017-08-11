@@ -93,7 +93,12 @@ class YummySearchComponent extends Component
 
                 if ($field['sort-order'] !== false) {
                     $key = $field['sort-order'];
-                    $selectOptions[ $model ][ $key ] = $element;
+                    if ($key !== null) {
+                        $selectOptions[ $model ][ $key ] = $element;
+                    } else {
+                        $selectOptions[ $model ][] = $element;
+                    }
+                    
                 } else {
                     $selectOptions[ $model ][] = $element;
                 }
@@ -142,7 +147,7 @@ class YummySearchComponent extends Component
                     'text' => Inflector::humanize($column),
                     'type' => $columnMeta['type'],
                     'length' => $columnMeta['length'],
-                    'sort-order' => $allowed >=0 ? $allowed : false
+                    'sort-order' => $allowed === true ? null : $allowed
                 ];
             }
         }
