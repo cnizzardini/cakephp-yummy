@@ -129,7 +129,7 @@ class YummySearchComponent extends Component
         if( $this->config('singular_names') == false ){
             $modelName = Inflector::camelize(Inflector::pluralize($tableName));
         } else {
-            $modelName = Inflector::classify($tableName);
+            $modelName = Inflector::camelize($tableName);
         }
         
         $schema = $this->collection->describe($tableName);
