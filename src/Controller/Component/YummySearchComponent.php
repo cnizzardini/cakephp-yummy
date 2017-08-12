@@ -269,9 +269,9 @@ class YummySearchComponent extends Component
             case 'not_containing';
                 return ["$model.$column NOT LIKE " => "%$value%"];
             case 'greater_than';
-                return ["$model.$column > " => "%$value%"];
+                return ["$model.$column > " => "$value"];
             case 'less_than';
-                return ["$model.$column < " => "%$value%"];
+                return ["$model.$column < " => "$value"];
         }
         return false;
     }
