@@ -25,6 +25,8 @@ if (document.getElementById('yummy-search-form') != null) {
         
     },false);
     
+    // @todo this needs to fire onload for each yummy element
+    
     document.getElementById('yummy-search-form').addEventListener('change', function(e){
         e = e || window.event;
         var target = e.target || e.srcElement;
