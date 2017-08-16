@@ -1,16 +1,16 @@
-if( document.getElementById('yummy-search-form') != null ){
+if (document.getElementById('yummy-search-form') != null) {
 
     document.getElementById('yummy-search-form').addEventListener('click', function(e){
         e = e || window.event;
         var target = e.target || e.srcElement;
         
         /* remove row */
-        if( target.type == 'button' && target.className.match('minus-button') ){
+        if (target.type == 'button' && target.className.match('minus-button')) {
             target.parentElement.parentElement.parentElement.remove();
         }
         
         /* add row */
-        if( target.type == 'button' && target.className.match('plus-button') ){
+        if (target.type == 'button' && target.className.match('plus-button')) {
             var rows = document.getElementsByClassName("yummy-search-row");
             var createRow = rows[0].cloneNode(true);
             
@@ -22,6 +22,36 @@ if( document.getElementById('yummy-search-form') != null ){
             
             rows[ rows.length - 1].after(createRow);
         }
-
+        
+    },false);
+    
+    document.getElementById('yummy-search-form').addEventListener('change', function(e){
+        e = e || window.event;
+        var target = e.target || e.srcElement;
+        if (target.tagName.toLowerCase() =='select' && target.className.match('yummy-field')) {
+            var option = target.options[ target.selectedIndex ];
+            var dataType = option.getAttribute('data-type').toLowerCase();
+            
+            var row = target.parentElement.parentElement.parentElement.parentElement;
+            
+            var operator = row.getElementsByClassName('yummy-operator');
+            var input = row.getElementsByClassName('yummy-input');
+            
+            var event = new CustomEvent(
+                "yummySearchFieldChange", 
+                {
+                    detail: {
+                        field: target,
+                        operator: operator[0],
+                        input: input[0],
+                        dataType: dataType
+                    },
+                    bubbles: true,
+                    cancelable: true
+                }
+            );
+            e.currentTarget.dispatchEvent(event);
+        }
+        
     },false);
 }

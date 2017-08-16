@@ -25,10 +25,11 @@ do{
         <div class="input text">
             <?php 
                 echo $this->Form->select('YummySearch.field[]',  $YummySearch['models'], [
-                    'class' => 'form-control border-input',
+                    'class' => 'form-control border-input yummy-field',
                     'label' => false,
                     'escape' => false,
-                    'default' => $column
+                    'default' => $column,
+                    'empty' => true
                 ]); 
             ?>
         </div>
@@ -37,7 +38,7 @@ do{
         <div class="input text">
             <?php
                 echo $this->Form->select('YummySearch.operator[]', $YummySearch['operators'],[
-                    'class' => 'form-control border-input operator',
+                    'class' => 'form-control border-input yummy-operator',
                     'label' => false,
                     'escape' => false,
                     'default' => $operator
@@ -49,7 +50,7 @@ do{
         <div class="input text">
             <?php
                 echo $this->Form->input('YummySearch.search[]',[
-                    'class' => 'form-control border-input',
+                    'class' => 'form-control border-input yummy-input',
                     'placeholder' => 'Search',
                     'label' => false,
                     'default' => $search
