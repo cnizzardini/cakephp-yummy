@@ -2,332 +2,274 @@
 namespace Yummy\Controller\Component;
 
 use Cake\Controller\Component;
-use Cake\Datasource\ConnectionManager;
-use Cake\Utility\Inflector;
+use Cake\Network\Exception\InternalErrorException;
+use Cake\Network\Exception\ForbiddenException;
+use Cake\Core\Configure;
 
 /**
- * This component is a should be used in conjunction with the YummySearchHelper for building rudimentary search filters
+ * This component is a rudimentary ACL system for applying group level access to controllers and methods
+ * @todo this may need to operate differently for parsed extensions such as json and xml
  */
-class YummySearchComponent extends Component
+class YummyAclComponent extends Component
 {
+    public $components = ['Flash','Auth'];
 
-    protected $_defaultConfig = [
-        'singular_names' => false,
-        'max_recursion' => 3,
-        'associations'
-    ];
-    
-    
     public function initialize(array $config)
     {
         parent::initialize($config);
         
         $this->controller = $this->_registry->getController();
+        $this->controllerName = $this->controller->name . 'Controller';
+        $this->actionName = $this->controller->request->action;
         
-        if (!$this->getConfig('operators')) {
-            $this->getConfig('operators', [
-                'containing' => 'Containing',
-                'not_containing' => 'Not Containing',
-                'greater_than' => 'Greater than',
-                'less_than' => 'Less than',
-                'matching' => 'Exact Match',
-                'not_matching' => 'Not Exact Match',
-            ]);
+        if (!$this->config('use_config_file')) {
+            $this->config('use_config_file', false);
         }
-        
-        if (!$this->getConfig('associations')) {
-            $this->setConfig('associations',[
-                'HasOne','BelongsTo'
-            ]);
-        }
-    }
-    
-    /**
-     * beforeRender - sets fields for use by YummySearchHelper
-     */
-    public function beforeRender()
-    {
-        $database = ConnectionManager::get('default');
 
-        // check components
+        return true;
+    }
+
+    public function startup()
+    {
+        // check for required components
         $this->checkComponents();
-        
-        // Create a schema collection.
-        $this->collection = $database->schemaCollection();
 
-        // set array for use by YummySearchHelper
-        $yummy = $this->getYummyHelperData();
+        // determine if we are using a flat file config
+        $this->whichConfig();
 
-        // make yummy search data available to view
-        $this->controller->set('YummySearch', $yummy);
-    }
+        // perform sanity check
+        $this->sanityCheck();
+        
+        // determine the redirect url
+        $this->setRedirect();
 
-    /**
-     * checkComponents - throws exception if missing a required component
-     * @throws InternalErrorException
-     */
-    private function checkComponents()
-    {
-        if (!isset($this->controller->Paginator)) {
-            throw new \Cake\Network\Exception\InternalErrorException(__('YummySearch requires the Paginator Component'));
+        // has controller access?
+        if ($this->checkControllerAccess() == true) {
+            return true;
         }
-    }
 
-    /**
-     * getYummyHelperData - retrieves an array used by YummySearchHelper
-     * @return array
-     */
-    private function getYummyHelperData()
-    {
-        $models = $this->getModels();
-        foreach($models as $model => $columns) {
-            if (empty($columns)) {
-                unset($models[ $model ]);
-            }
-        }
-        
-        $selectOptions = [];
-        
-        foreach($models as $model => $columns){
-            foreach($columns as $column => $field){
-
-                $element = [
-                    'text' => $field['text'], 
-                    'value'=> $column, 
-                    'data-type'=> $field['type'], 
-                    'data-length' => $field['length']
-                ];
-
-                if ($field['sort-order'] !== false) {
-                    $key = $field['sort-order'];
-                    if ($key !== null) {
-                        $selectOptions[ $model ][ $key ] = $element;
-                    } else {
-                        $selectOptions[ $model ][] = $element;
-                    }
-                    
-                } else {
-                    $selectOptions[ $model ][] = $element;
-                }
-            }
-        }
-        
-        $yummy = [
-            'base_url' => $this->controller->request->here,
-            'rows' => $this->controller->request->query('YummySearch'),
-            'operators' => $this->config('operators'),
-            'models' => $selectOptions
-        ];
-        
-        return $yummy;
-    }
-    
-    /**
-     * getColumns - returns array of columns after checking allow/deny rules
-     * @param string $name
-     * @return array
-     * [ModelName.column_name => Column Name]
-     */
-    private function getColumns($name)
-    {
-        $data = [];
-        $tableName = Inflector::underscore($name);
-        
-        if( $this->config('singular_names') == false ){
-            $modelName = Inflector::camelize(Inflector::pluralize($tableName));
-        } else {
-            $modelName = Inflector::camelize($tableName);
-        }
-        
-        $schema = $this->collection->describe($tableName);
-        $columns = $schema->columns();
-        
-        foreach($columns as $column){
-            
-            $allowed = $this->isColumnAllowed($modelName, $column);
-            
-            if( $allowed !== false ){
-                
-                $columnMeta = $schema->column($column);
-                
-                $data["$modelName.$column"] = [
-                    'text' => Inflector::humanize($column),
-                    'type' => $columnMeta['type'],
-                    'length' => $columnMeta['length'],
-                    'sort-order' => $allowed === true ? null : $allowed
-                ];
-            }
-        }
-        
-        return $data;
-    }
-    
-    /**
-     * getModels - returns an array of models and their columns
-     * @param object $object (Default: empty)
-     * @param integer $currentDepth (Default: 0)
-     * @return array
-     * @example [ModelName => [ModelName.column_name => Column Name]]
-     */
-    private function getModels($object='', $currentDepth = 0)
-    {
-        $currentDepth++;
-        
-        if (empty($object)) {
-            $thisModel = $this->config('model');
-            $object = $this->controller->{$thisModel};
-        } else {
-            $thisModel = $object->getTable();
-        }
-        
-        $allowedAssociations = [];
-        $configAssociations = $this->getConfig('associations');
-        foreach($configAssociations as $assoc){
-            $allowedAssociations[] = 'Cake\ORM\Association\\' . $assoc;
-        }
-        
-        // gets array of Cake\ORM\Association objects
-        $associations = $object->associations();
-
-        // build an array of models and their associations
-        $theName = Inflector::humanize(strtolower($thisModel));
-        $models = [
-            "$theName" => $this->getColumns($thisModel)
-        ];
-        
-        // return if no associtions are found or $currentDepth is greater than $maxDepth
-        if (empty($associations) || $currentDepth > $this->config('max_recursion') ) {
-            return $models;
-        }
-        
-        // get associations
-        foreach($associations as $object){
-            
-            // get proper form of models name
-            $name = Inflector::humanize(strtolower($object->getTable()));
-            
-            // get the table objects name
-            $table = $object->getTable();
-            
-            // add to $models if does not exist in $models and is an $allowedAssociation
-            if( !isset($models[ $name ]) && in_array(get_class($object), $allowedAssociations) ){
-                $models[ $name ] = $this->getColumns($table);
-                $models = array_merge($models, $this->getModels($object, $currentDepth));
-            }
-        }
-        
-        return $models;
-    }
-
-    /**
-     * isColumnAllowed - checks allow/deny rules to see if column is allowed
-     * @param string $model
-     * @param string $column
-     * @return boolean|int
-     */
-    private function isColumnAllowed($model, $column){
-        
-        $config = $this->config();
-        
-
-        // check if in allow columns
-        if( isset($config['allow'][$model]) ) {
-            
-            // not in allowed columns
-            if (!in_array($column, $config['allow'][$model])) {
-                return false;
-            }
-            
-            // in allowed columns, return the key so we can apply ordering
-            $key = array_search($column, $config['allow'][$model]);
-            if ($key >= 0) {
-                return $key;
-            }
-        // check deny all models
-        } else if($config['deny'] == '*'){
-            return false;
-        }
-        // check deny specific model
-        else if( isset($config['deny'][$model]) && $config['deny'][$model] == '*' ){
-            return false;
-            
-        // check deny specific model.column
-        } else if( isset($config['deny'][$model]) && in_array($column, $config['deny'][$model]) ){
-            return false;
+        // has action access?
+        if ($this->checkActionAccess() == false) {
+            return $this->denyAccess();
         }
         
         return true;
     }
     
     /**
-     * getSqlCondition - returns cakephp orm compatible condition after checking allow/deny rules
-     * @param string $model
-     * @param string $column
-     * @param string $operator
-     * @param string $value
-     * @return array|bool: array on success, false if operator is not found
+     * Set allowed groups for a controller
+
+     * @param string|array $config
+     * @return bool true on succes
+     * @throws InternalErrorException
      */
-    private function getSqlCondition($model, $column, $operator, $value)
+    public function allow($config)
     {
-        if ($this->isColumnAllowed($model, $column) === false) {
-            return false;
+        if ((is_string($config) && $config != '*') || ( is_array($config) && empty($config) )) {
+            throw new InternalErrorException('YummyAcl::allow argument must be either a string value of "*" or an '
+            . 'array of groups');
+        }
+
+        $this->setConfig('allow', $config);
+        return true;
+    }
+
+    /**
+     * Set ACLs for a controllers actions
+     * 
+     * @param array $config
+     * @return bool true on succes
+     * @throws InternalErrorException
+     */
+    public function actions(array $config)
+    {
+        if (!is_array($config) || empty($config)) {
+            throw new InternalErrorException('YummyAcl::actions argument must be an array. Check documentation for '
+            . 'array structure');
+        }
+
+        $this->setConfig('actions', $config);
+        return true;
+    }
+
+    /**
+     * Ensures component was configured correctly
+     * 
+     * @return void
+     * @throws InternalErrorException
+     */
+    private function sanityCheck()
+    {
+        $config = $this->config();
+        
+        // group required
+        if ($this->Auth->user() && $config['group'] == null) {
+            throw new InternalErrorException(__('The "group" option is required in YummyAcl config'));
         }
         
-        switch ($operator) {
-            case 'matching':
-                return ["$model.$column" => $value];
-            case 'not_matching';
-                return ["$model.$column != " => $value];
-            case 'containing';
-                return ["$model.$column LIKE " => "%$value%"];
-            case 'not_containing';
-                return ["$model.$column NOT LIKE " => "%$value%"];
-            case 'greater_than';
-                return ["$model.$column > " => "$value"];
-            case 'less_than';
-                return ["$model.$column < " => "$value"];
+        // if allow is set must be "*" or (array)
+        if (isset($config['allow']) && !is_string($config['allow']) && !is_array($config['allow'])) {
+            throw new InternalErrorException(__($this->controllerName . ' YummyAcl config "allow" option must be '
+                    . '(1) not set, (2) an array of groups, or (3) equal to wildcard (*)'));
         }
+        
+        // if actions is set must be (array)
+        if (isset($config['actions']) && !is_array($config['actions'])) {
+            throw new InternalErrorException(__($this->controllerName . ' YummyAcl config "actions" should be an array '
+                    . 'of [action => [groups]]'));
+        }
+    }
+
+    /**
+     * Sets flash message and if redirect is not set throws a 403 exception
+     * 
+     * @return boolean - on false issue deny access
+     * @throws ForbiddenException
+     */
+    private function denyAccess()
+    {
+        $this->Flash->warn(__('You are not authorized to view this section'), [
+            'params' => [
+                'title' => 'Access denied'
+            ]
+        ]);
+
+        $redirect = $this->config('redirect');
+
+        if ($redirect == 403) {
+            throw new ForbiddenException();
+        }
+
+        return $this->controller->redirect($redirect);
+    }
+
+    /**
+     * Check if user has access to the requested action
+     * 
+     * @return boolean
+     * @throws InternalErrorException
+     * @throws ForbiddenException
+     */
+    private function checkActionAccess()
+    {
+        $config = $this->config();
+        
+        // actions are not configured? 
+        if (!isset($config['actions'])) {
+            return false;
+        }
+
+        // check for allow all
+        if ($config['actions'][$this->actionName] == '*') {
+            return true;
+        }
+        
+        // check for defined group access
+        if (in_array($config['group'], $config['actions'][$this->actionName])) {
+            return true;
+        }
+        
         return false;
     }
 
     /**
-     * search - appends cakephp orm conditions to PaginatorComponent
-     * @return bool: true if search query was requested, false if not
+     * Check if user has access to the requested controller
+     * 
+     * @return boolean|void - passes on true, redirect on false, do nothing on void
+     * @throws InternalErrorException
+     * @throws ForbiddenException
      */
-    public function search()
+    private function checkControllerAccess()
     {
-        // exit if no search was performed or user cleared search paramaters
-        $this->controller = $this->_registry->getController();
-        $request = $this->controller->request;
-        if ($request->query('YummySearch') == null || $request->query('YummySearch_clear') != null) {
-            return false;
-        }
-
-        $data = $request->query('YummySearch');     // get query parameters
-        $length = count($data['field']);            // get array length
-
-        if( !isset($this->controller->paginate['conditions']) ){
-            $this->controller->paginate['conditions'] = [];
-        }
-
-        // loop through available fields and set conditions
-        for ($i = 0; $i < $length; $i++) {
-            $field = $data['field'][$i];            // get field name
-            $operator = $data['operator'][$i];      // get operator type
-            $search = $data['search'][$i];          // get search paramter
-            
-            list($model, $column) = explode('.', $field);
-            
-            $conditions = $this->getSqlCondition($model, $column, $operator, $search);
-
-            if( is_array($conditions) ){
-                $this->controller->paginate['conditions'] = array_merge(
-                    $this->controller->paginate['conditions'], 
-                    $conditions
-                );
-            }
+        // allow all
+        if ($this->config('allow') == '*') {
+            return true;
         }
         
+        // allow group
+        if (is_array($this->config('allow')) && in_array($this->config('group'), $this->config('allow'))) {
+            return true;
+        }
+        
+        return false;
+    }
+
+    /**
+     * Throws exception if missing a required component
+     * 
+     * @throws InternalErrorException
+     */
+    private function checkComponents()
+    {
+        if (!isset($this->controller->Auth)) {
+            throw new InternalErrorException(__('YummyAcl requires the AuthComponent'));
+        }
+
+        if (!isset($this->controller->Flash)) {
+            throw new InternalErrorException(__('YummyAcl requires the FlashComponent'));
+        }
+    }
+
+    /**
+     * Whether to use the flat file config or not
+     * 
+     * @return boolean
+     * @throws InternalErrorException
+     */
+    private function whichConfig()
+    {
+        // check if we are using a config file or not, if not then exit
+        if ($this->config('use_config_file') !== true) {
+            return true;
+        }
+
+        // attempt loading config/yummy_acl.php
+        $config = Configure::read('YummyAcl');
+
+        if (!$config) {
+            throw new InternalErrorException(__('YummyAcl config is missing. Please create config/yummy_acl.php'));
+        }
+
+        if (!isset($config[$this->controller->name])) {
+            throw new InternalErrorException(__('Controller is missing from config/yummy_acl.php'));
+        }
+        
+        $this->configShallow($config[$this->controller->name]);
+
         return true;
     }
+
+    /**
+     * Sets the redirect url or throws an exception if unable to determine redirect url
+     * 
+     * @return boolean
+     * @throws InternalErrorException
+     */
+    private function setRedirect()
+    {
+        if ($this->config('redirect') != null) {
+            return true;
+        }
+
+        $authConfig = $this->Auth->config();
+
+        if ($authConfig['unauthorizedRedirect'] == true) {
+            $this->setConfig('redirect', $this->request->referer(true));
+            return true;
+        } 
+        
+        if (is_string($authConfig['unauthorizedRedirect'])) {
+            $this->setConfig('redirect', $authConfig['unauthorizedRedirect']);
+            return true;
+        } 
+        
+        if ($authConfig['unauthorizedRedirect'] == false) {
+            $this->setConfig('redirect', 403);
+            return true;
+        }
+
+        throw new InternalErrorException(__('YummyAcl requires the "redirect" option in config or Auth.loginAction or '
+                . 'Auth.unauthorizedRedirect'));
+    }
+
 }
