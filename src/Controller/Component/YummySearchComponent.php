@@ -13,7 +13,8 @@ class YummySearchComponent extends Component
 
     protected $_defaultConfig = [
         'singular_names' => false,
-        'max_recursion' => 3
+        'max_recursion' => 3,
+        'associations'
     ];
     
     
@@ -23,14 +24,20 @@ class YummySearchComponent extends Component
         
         $this->controller = $this->_registry->getController();
         
-        if (!$this->config('operators')) {
-            $this->config('operators', [
+        if (!$this->getConfig('operators')) {
+            $this->getConfig('operators', [
                 'containing' => 'Containing',
                 'not_containing' => 'Not Containing',
                 'greater_than' => 'Greater than',
                 'less_than' => 'Less than',
                 'matching' => 'Exact Match',
                 'not_matching' => 'Not Exact Match',
+            ]);
+        }
+        
+        if (!$this->getConfig('associations')) {
+            $this->setConfig('associations',[
+                'HasOne','BelongsTo'
             ]);
         }
     }
@@ -172,9 +179,12 @@ class YummySearchComponent extends Component
         } else {
             $thisModel = $object->getTable();
         }
-                
-        // only supporting HasOne and BelongsTo for now
-        $allowedAssociations = ['Cake\ORM\Association\HasOne', 'Cake\ORM\Association\BelongsTo'];
+        
+        $allowedAssociations = [];
+        $configAssociations = $this->getConfig('associations');
+        foreach($configAssociations as $assoc){
+            $allowedAssociations[] = 'Cake\ORM\Association\\' . $assoc;
+        }
         
         // gets array of Cake\ORM\Association objects
         $associations = $object->associations();
@@ -219,16 +229,9 @@ class YummySearchComponent extends Component
         
         $config = $this->config();
         
-        // check deny all
-        if( isset($config['deny'][$model]) && $config['deny'][$model] == '*' ){
-            return false;
-            
-        // check deny column
-        } else if( isset($config['deny'][$model]) && in_array($column, $config['deny'][$model]) ){
-            return false;
-            
+
         // check if in allow columns
-        } else if( isset($config['allow'][$model]) ) {
+        if( isset($config['allow'][$model]) ) {
             
             // not in allowed columns
             if (!in_array($column, $config['allow'][$model])) {
@@ -240,6 +243,17 @@ class YummySearchComponent extends Component
             if ($key >= 0) {
                 return $key;
             }
+        // check deny all models
+        } else if($config['deny'] == '*'){
+            return false;
+        }
+        // check deny specific model
+        else if( isset($config['deny'][$model]) && $config['deny'][$model] == '*' ){
+            return false;
+            
+        // check deny specific model.column
+        } else if( isset($config['deny'][$model]) && in_array($column, $config['deny'][$model]) ){
+            return false;
         }
         
         return true;
