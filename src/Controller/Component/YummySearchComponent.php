@@ -244,7 +244,7 @@ class YummySearchComponent extends Component
                 return $key;
             }
         // check deny all models
-        } else if($config['deny'] == '*'){
+        } else if( isset($config['deny']) && $config['deny'] == '*'){
             return false;
         }
         // check deny specific model
