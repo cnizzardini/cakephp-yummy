@@ -10,7 +10,8 @@ use Cake\Utility\Inflector;
  */
 class YummySearchComponent extends Component
 {
-
+    private $models;
+    
     protected $_defaultConfig = [
         'singular_names' => false,
         'max_recursion' => 3,
@@ -79,16 +80,17 @@ class YummySearchComponent extends Component
      */
     private function getYummyHelperData()
     {
-        $models = $this->getModels();
-        foreach($models as $model => $columns) {
+        $this->defineModels();
+        
+        foreach($this->models as $model => $columns) {
             if (empty($columns)) {
-                unset($models[ $model ]);
+                unset($this->models[ $model ]);
             }
         }
         
         $selectOptions = [];
         
-        foreach($models as $model => $columns){
+        foreach($this->models as $model => $columns){
             foreach($columns as $column => $field){
 
                 $element = [
@@ -163,13 +165,13 @@ class YummySearchComponent extends Component
     }
     
     /**
-     * getModels - returns an array of models and their columns
+     * Defines models associated with with the defined yummy model
      * @param object $object (Default: empty)
      * @param integer $currentDepth (Default: 0)
      * @return array
      * @example [ModelName => [ModelName.column_name => Column Name]]
      */
-    private function getModels($object='', $currentDepth = 0)
+    private function defineModels($object='', $currentDepth = 0)
     {
         $currentDepth++;
         
@@ -195,9 +197,11 @@ class YummySearchComponent extends Component
             "$theName" => $this->getColumns($thisModel)
         ];
         
+        //echo "$currentDepth: $theName\r\n";
+        
         // return if no associtions are found or $currentDepth is greater than $maxDepth
-        if (empty($associations) || $currentDepth > $this->config('max_recursion') ) {
-            return $models;
+        if (empty($associations) || $currentDepth > $this->config('max_recursion')) {
+            return false;
         }
         
         // get associations
@@ -211,12 +215,10 @@ class YummySearchComponent extends Component
             
             // add to $models if does not exist in $models and is an $allowedAssociation
             if( !isset($models[ $name ]) && in_array(get_class($object), $allowedAssociations) ){
-                $models[ $name ] = $this->getColumns($table);
-                $models = array_merge($models, $this->getModels($object, $currentDepth));
+                $this->models[ $name ] = $this->getColumns($table);
+                $this->defineModels($object, $currentDepth);
             }
         }
-        
-        return $models;
     }
 
     /**
@@ -244,7 +246,7 @@ class YummySearchComponent extends Component
                 return $key;
             }
         // check deny all models
-        } else if( isset($config['deny']) && $config['deny'] == '*'){
+        } else if($config['deny'] == '*'){
             return false;
         }
         // check deny specific model
