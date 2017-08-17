@@ -26,7 +26,7 @@ class YummySearchComponent extends Component
         $this->controller = $this->_registry->getController();
         
         if (!$this->getConfig('operators')) {
-            $this->getConfig('operators', [
+            $this->setConfig('operators', [
                 'containing' => 'Containing',
                 'not_containing' => 'Not Containing',
                 'greater_than' => 'Greater than',
