@@ -359,15 +359,19 @@ class YummySearchComponent extends Component
      * @return Cake\Database\Query
      */
     private function getSqlCondition($model, $column, $operator, $value, $query)
-    {   
-        // remove first item from the model path
-        $pieces = explode('.', $model);
-        $slices = array_slice($pieces, 1);
-        $path = implode('.', $slices);
-        
+    {
+        // for base model searches
         if ($model == $this->getConfig('model')) {
             return $this->getWhere($query, $model . '.' . $column, $operator, $value);
+            
+        // for searches on associations
         } else {
+            
+            // remove first item from the model path
+            $pieces = explode('.', $model);
+            $slices = array_slice($pieces, 1);
+            $path = implode('.', $slices);
+            
             return $query->matching($path, function($q) use($column, $operator, $value) {
                 return $this->getWhere($q, $column, $operator, $value);
             });
@@ -392,9 +396,9 @@ class YummySearchComponent extends Component
             case 'not_matching';
                 return $query->where(["$column !=" => $value]);
             case 'containing';
-                return $query->where(["$column LIKE" => $value]);
+                return $query->where(["$column LIKE" => "%$value%"]);
             case 'not_containing';
-                return $query->where(["$column NOT LIKE" => $value]);
+                return $query->where(["$column NOT LIKE" => "%$value%"]);
             case 'greater_than';
                 return $query->where(["$column >" => $value]);
             case 'less_than';
