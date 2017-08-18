@@ -417,10 +417,6 @@ class YummySearchComponent extends Component
             return $query;
         }
         
-        if( !isset($this->controller->paginate['conditions']) ){
-            //$this->controller->paginate['conditions'] = [];
-        }
-        
         $data = $request->query('YummySearch');     // get query parameters
         $length = count($data['field']);            // get array length
         
