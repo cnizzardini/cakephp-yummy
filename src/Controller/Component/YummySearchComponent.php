@@ -9,13 +9,23 @@ use Cake\Utility\Inflector;
  * This component is a should be used in conjunction with the YummySearchHelper for building rudimentary search filters
  */
 class YummySearchComponent extends Component
-{
-    private $models;
+{    
+    private $models = false;
     
     protected $_defaultConfig = [
         'singular_names' => false,
         'max_recursion' => 3,
-        'associations'
+        'associations' => [
+            'HasOne','BelongsTo'
+        ],
+        'operators' => [
+            'containing' => 'Containing',
+            'not_containing' => 'Not Containing',
+            'greater_than' => 'Greater than',
+            'less_than' => 'Less than',
+            'matching' => 'Exact Match',
+            'not_matching' => 'Not Exact Match',
+        ]
     ];
     
     
@@ -23,24 +33,29 @@ class YummySearchComponent extends Component
     {
         parent::initialize($config);
         
+        if (isset($config['operators'])) {
+            $this->setConfig('operators',$config['operators']);
+        }
+        
+        if (isset($config['associations'])) {
+            $this->setConfig('associations',$config['associations']);
+        }
+        
+        if (isset($config['max_recursion'])) {
+            $this->setConfig('max_recursion',$config['max_recursion']);
+        }
+        
+        if (isset($config['singular_names'])) {
+            $this->setConfig('singular_names',$config['singular_names']);
+        }
+        
         $this->controller = $this->_registry->getController();
         
-        if (!$this->getConfig('operators')) {
-            $this->setConfig('operators', [
-                'containing' => 'Containing',
-                'not_containing' => 'Not Containing',
-                'greater_than' => 'Greater than',
-                'less_than' => 'Less than',
-                'matching' => 'Exact Match',
-                'not_matching' => 'Not Exact Match',
-            ]);
-        }
+        // Create a schema collection.
+        $database = ConnectionManager::get('default');
+        $this->collection = $database->schemaCollection();
         
-        if (!$this->getConfig('associations')) {
-            $this->setConfig('associations',[
-                'HasOne','BelongsTo'
-            ]);
-        }
+        $this->defineModels();
     }
     
     /**
@@ -48,14 +63,9 @@ class YummySearchComponent extends Component
      */
     public function beforeRender()
     {
-        $database = ConnectionManager::get('default');
-
         // check components
         $this->checkComponents();
         
-        // Create a schema collection.
-        $this->collection = $database->schemaCollection();
-
         // set array for use by YummySearchHelper
         $yummy = $this->getYummyHelperData();
 
@@ -90,12 +100,13 @@ class YummySearchComponent extends Component
         
         $selectOptions = [];
         
-        foreach($this->models as $model => $columns){
-            foreach($columns as $column => $field){
+        foreach($this->models as $modelName => $model){
+            foreach($model['columns'] as $column => $field){
 
                 $element = [
                     'text' => $field['text'], 
-                    'value'=> $column, 
+                    'path' => $model['path'],
+                    'value' => $column, 
                     'data-type'=> $field['type'], 
                     'data-length' => $field['length']
                 ];
@@ -103,14 +114,17 @@ class YummySearchComponent extends Component
                 if ($field['sort-order'] !== false) {
                     $key = $field['sort-order'];
                     if ($key !== null) {
-                        $selectOptions[ $model ][ $key ] = $element;
+                        $selectOptions[ $modelName ][ $key ] = $element;
                     } else {
-                        $selectOptions[ $model ][] = $element;
+                        $selectOptions[ $modelName ][] = $element;
                     }
                     
                 } else {
-                    $selectOptions[ $model ][] = $element;
+                    $selectOptions[ $modelName ][] = $element;
                 }
+            }
+            if (isset($selectOptions[ $modelName ])) {
+                ksort($selectOptions[ $modelName ]);
             }
         }
         
@@ -171,12 +185,12 @@ class YummySearchComponent extends Component
      * @return array
      * @example [ModelName => [ModelName.column_name => Column Name]]
      */
-    private function defineModels($object='', $currentDepth = 0)
+    private function defineModels($object='', $currentDepth = 0, $parent = false)
     {
         $currentDepth++;
         
         if (empty($object)) {
-            $thisModel = $this->config('model');
+            $thisModel = $this->getConfig('model');
             $object = $this->controller->{$thisModel};
         } else {
             $thisModel = $object->getTable();
@@ -193,45 +207,120 @@ class YummySearchComponent extends Component
 
         // build an array of models and their associations
         $theName = Inflector::humanize(strtolower($thisModel));
-        $models = [
-            "$theName" => $this->getColumns($thisModel)
-        ];
+        $camelName = Inflector::camelize(strtolower($thisModel));
         
-        //echo "$currentDepth: $theName\r\n";
+        if ($this->models === false) {
+            $this->models = [
+                "$theName" => [
+                    'path' => false,
+                    'columns' => $this->getColumns($thisModel),
+                ]
+            ];
+        }
         
         // return if no associtions are found or $currentDepth is greater than $maxDepth
-        if (empty($associations) || $currentDepth > $this->config('max_recursion')) {
+        if (empty($associations)) {
             return false;
         }
         
+        //echo "$theName from '$parent' \r\n";
+        
         // get associations
         foreach($associations as $object){
-            
+        
             // get proper form of models name
             $name = Inflector::humanize(strtolower($object->getTable()));
+            //echo "$name\r\n";
             
             // get the table objects name
             $table = $object->getTable();
             
             // add to $models if does not exist in $models and is an $allowedAssociation
-            if( !isset($models[ $name ]) && in_array(get_class($object), $allowedAssociations) ){
-                $this->models[ $name ] = $this->getColumns($table);
-                $this->defineModels($object, $currentDepth);
-            }
-        }
-    }
+            if( !isset($this->models[ $name ]) && in_array(get_class($object), $allowedAssociations) ){
+                                               
+                $parent = $this->getParent($parent, $camelName);
+                    
+                //echo $this->getConfig('max_recursion') . '- ' .count(explode('.', $parent)) . ") $name:: $parent \r\n";
+                if (!isset($this->models[ $name ]['path'])) {
+                    $this->models[ $name ]['path'] = $parent; 
+                } else {
+                    $this->models[ $name ]['path'].= $parent;
+                }
+                
+                //echo "$name: $parent \r\n";
+                
+                $this->models[ $name ]['columns'] = $this->getColumns($table);
 
+                if ($currentDepth <= $this->getConfig('max_recursion')){
+                    $this->defineModels($object, $currentDepth, $parent);
+                }
+            }
+        }        
+    }
+    
     /**
-     * isColumnAllowed - checks allow/deny rules to see if column is allowed
+     * return parent models in dot notation
+     * @param string $parent
+     * @param string $camelName
+     * @return string
+     */
+    private function getParent($parent, $camelName)
+    {
+        if ($parent !== false) {
+            $pieces = explode('.', $parent);
+            $hasParent = false;
+
+            foreach($pieces as $piece){
+                if ($piece == $camelName) {
+                    $hasParent = true;
+                    break;
+                }
+            }
+            if ($hasParent === false) {
+                $parent.= "$camelName.";
+            }
+        } else {
+            $parent = $camelName . '.';
+        }
+        return $parent;
+    }
+    
+    /**
+     * checks allow/deny rules to see if model is allowed
+     * @param string $model
+     * @return boolean
+     */
+    private function isModelAllowed($model)
+    {    
+        $config = $this->config();
+        
+        if( isset($config['allow'][$model]) ) {
+            return true;
+        }
+        else if( isset($config['deny'][$model]) && $config['deny'][$model] == '*' ){
+            return false;
+        }
+        else if( isset($config['deny']) && $config['deny'] == '*' ){
+            return false;
+        }
+        
+        return true;
+    }
+    
+    /**
+     * Checks allow/deny rules to see if column is allowed
      * @param string $model
      * @param string $column
      * @return boolean|int
      */
-    private function isColumnAllowed($model, $column){
+    private function isColumnAllowed($model, $column)
+    {    
+        if( $this->isModelAllowed($model) == false ){
+            return false;
+        }
         
         $config = $this->config();
         
-
         // check if in allow columns
         if( isset($config['allow'][$model]) ) {
             
@@ -262,74 +351,96 @@ class YummySearchComponent extends Component
     }
     
     /**
-     * getSqlCondition - returns cakephp orm compatible condition after checking allow/deny rules
+     * Returns cakephp orm compatible condition
      * @param string $model
      * @param string $column
      * @param string $operator
      * @param string $value
-     * @return array|bool: array on success, false if operator is not found
+     * @return Cake\Database\Query
      */
-    private function getSqlCondition($model, $column, $operator, $value)
-    {
-        if ($this->isColumnAllowed($model, $column) === false) {
-            return false;
+    private function getSqlCondition($model, $column, $operator, $value, $query)
+    {   
+        // remove first item from the model path
+        $pieces = explode('.', $model);
+        $slices = array_slice($pieces, 1);
+        $path = implode('.', $slices);
+        
+        if ($model == $this->getConfig('model')) {
+            return $this->getWhere($query, $model . '.' . $column, $operator, $value);
+        } else {
+            return $query->matching($path, function($q) use($column, $operator, $value) {
+                return $this->getWhere($q, $column, $operator, $value);
+            });
         }
         
-        switch ($operator) {
-            case 'matching':
-                return ["$model.$column" => $value];
-            case 'not_matching';
-                return ["$model.$column != " => $value];
-            case 'containing';
-                return ["$model.$column LIKE " => "%$value%"];
-            case 'not_containing';
-                return ["$model.$column NOT LIKE " => "%$value%"];
-            case 'greater_than';
-                return ["$model.$column > " => "$value"];
-            case 'less_than';
-                return ["$model.$column < " => "$value"];
-        }
-        return false;
+        return $query;
     }
 
     /**
-     * search - appends cakephp orm conditions to PaginatorComponent
-     * @return bool: true if search query was requested, false if not
+     * Returns a where condition
+     * @param string $column
+     * @param string $operator
+     * @param string $value
+     * @return Cake\Database\Query
+     * @throws InternalErrorException
      */
-    public function search()
+    private function getWhere($query, $column, $operator, $value)
+    {
+        switch($operator){
+            case 'matching':
+                return $query->where([$column => $value]);
+            case 'not_matching';
+                return $query->where(["$column !=" => $value]);
+            case 'containing';
+                return $query->where(["$column LIKE" => $value]);
+            case 'not_containing';
+                return $query->where(["$column NOT LIKE" => $value]);
+            case 'greater_than';
+                return $query->where(["$column >" => $value]);
+            case 'less_than';
+                return $query->where(["$column <" => $value]);
+            default:
+                throw new InternalErrorException('Unknown condition encountered');
+        }
+    }
+    
+    /**
+     * Adds conditions to Cake\Database\Query
+     * @param Cake\Database\Query $query
+     * @return Cake\Database\Query
+     */
+    public function search($query=false)
     {
         // exit if no search was performed or user cleared search paramaters
-        $this->controller = $this->_registry->getController();
         $request = $this->controller->request;
         if ($request->query('YummySearch') == null || $request->query('YummySearch_clear') != null) {
-            return false;
+            return $query;
         }
-
+        
+        if( !isset($this->controller->paginate['conditions']) ){
+            //$this->controller->paginate['conditions'] = [];
+        }
+        
         $data = $request->query('YummySearch');     // get query parameters
         $length = count($data['field']);            // get array length
-
-        if( !isset($this->controller->paginate['conditions']) ){
-            $this->controller->paginate['conditions'] = [];
-        }
-
+        
         // loop through available fields and set conditions
         for ($i = 0; $i < $length; $i++) {
             $field = $data['field'][$i];            // get field name
             $operator = $data['operator'][$i];      // get operator type
             $search = $data['search'][$i];          // get search paramter
             
-            list($model, $column) = explode('.', $field);
+            list($camelModel, $column) = explode('.', $field);
+            $humanModel = Inflector::humanize(Inflector::underscore($camelModel));
             
-            $conditions = $this->getSqlCondition($model, $column, $operator, $search);
-
-            if( is_array($conditions) ){
-                $this->controller->paginate['conditions'] = array_merge(
-                    $this->controller->paginate['conditions'], 
-                    $conditions
-                );
+            $modelData = $this->models[$humanModel];
+            
+            $model = $modelData['path'] . $camelModel;
+            
+            if ($this->isColumnAllowed($camelModel, $column) !== false) {
+                $query = $this->getSqlCondition($model, $column, $operator, $search, $query);
             }
         }
-        
-        return true;
+        return $query;
     }
 }
