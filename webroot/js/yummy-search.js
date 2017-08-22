@@ -39,6 +39,12 @@ if (document.getElementById('yummy-search-form') != null) {
             var operator = row.getElementsByClassName('yummy-operator');
             var input = row.getElementsByClassName('yummy-input');
             
+            var items = false;
+            if (dataType == 'list') {
+                var list = option.getAttribute('data-items');
+                items = list.split(',');
+            }
+            
             var event = new CustomEvent(
                 "yummySearchFieldChange", 
                 {
@@ -46,7 +52,8 @@ if (document.getElementById('yummy-search-form') != null) {
                         field: target,
                         operator: operator[0],
                         input: input[0],
-                        dataType: dataType
+                        dataType: dataType,
+                        items: items
                     },
                     bubbles: true,
                     cancelable: true
