@@ -4,6 +4,8 @@ namespace Yummy\Controller\Component;
 use Cake\Controller\Component;
 use Cake\Datasource\ConnectionManager;
 use Cake\Utility\Inflector;
+use Cake\Network\Exception\InternalErrorException;
+
 /**
  * This component is a should be used in conjunction with the YummySearchHelper for building rudimentary search filters
  */
