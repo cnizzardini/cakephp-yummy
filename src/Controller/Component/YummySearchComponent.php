@@ -394,15 +394,11 @@ class YummySearchComponent extends Component
         // for base model searches
         if (empty($model)) {
             return $this->getWhere($query, $baseModel . '.' . $column, $operator, $value);
-            
-        // for searches on associations
-        } else {
-            return $query->matching($model, function($q) use($column, $operator, $value) {
-                return $this->getWhere($q, $column, $operator, $value);
-            });
         }
         
-        return $query;
+        return $query->matching($model, function($q) use($column, $operator, $value) {
+            return $this->getWhere($q, $column, $operator, $value);
+        });
     }
 
     /**
