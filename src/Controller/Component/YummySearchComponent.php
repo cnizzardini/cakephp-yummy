@@ -132,8 +132,6 @@ class YummySearchComponent extends Component
      */
     private function getColumns($name)
     {
-
-        
         $data = [];
         $tableName = Inflector::underscore($name);
         
