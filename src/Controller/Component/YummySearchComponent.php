@@ -111,9 +111,7 @@ class YummySearchComponent extends Component
                     $selectOptions[ $humanName ][] = $element;
                 }
             }
-            if (isset($selectOptions[ $humanName ])) {
-                ksort($selectOptions[ $humanName ]);
-            }
+            ksort($selectOptions);
         }
         
         $yummy = [
