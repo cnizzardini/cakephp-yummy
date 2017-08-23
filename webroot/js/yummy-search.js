@@ -1,5 +1,5 @@
 window.onload = function(){
-    if (document.getElementById('yummy-search-form') != null) {
+    if (document.getElementById('yummy-search-form') !== null) {
 
         var YummySearch = YummySearch || {};
 
