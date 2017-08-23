@@ -20,7 +20,7 @@ window.onload = function(){
             var input = row.getElementsByClassName('yummy-input')[0];
 
             var items = false;
-            if (dataType == 'list') {
+            if (dataType === 'list') {
                 var list = option.getAttribute('data-items');
                 items = list.split(',');
             }
@@ -34,7 +34,8 @@ window.onload = function(){
                         input: input,
                         dataType: dataType,
                         items: items,
-                        value: false
+                        prevValue: input.getAttribute('value'),
+                        prevOperator: operator.getAttribute('value')
                     },
                     bubbles: true,
                     cancelable: true
@@ -53,7 +54,7 @@ window.onload = function(){
             document.getElementById('yummy-search-form').addEventListener('change', function(e){
                 e = e || window.event;
                 var target = e.target || e.srcElement;
-                if (target.tagName.toLowerCase() =='select' && target.className.match('yummy-field')) {
+                if (target.tagName.toLowerCase() ==='select' && target.className.match('yummy-field')) {
                     YummySearch.changeEvent(e,target);
                 }
 
@@ -65,12 +66,12 @@ window.onload = function(){
                 var target = e.target || e.srcElement;
 
                 /* remove row */
-                if (target.type == 'button' && target.className.match('minus-button')) {
+                if (target.type === 'button' && target.className.match('minus-button')) {
                     target.parentElement.parentElement.parentElement.remove();
                 }
 
                 /* add row */
-                if (target.type == 'button' && target.className.match('plus-button')) {
+                if (target.type === 'button' && target.className.match('plus-button')) {
                     var rows = document.getElementsByClassName("yummy-search-row");
                     var createRow = rows[0].cloneNode(true);
 
@@ -103,7 +104,7 @@ window.onload = function(){
                 var operator = row.getElementsByClassName('yummy-operator')[0];
                 var input = row.getElementsByClassName('yummy-input')[0];
                 var items = false;
-                if (dataType == 'list') {
+                if (dataType === 'list') {
                     var list = option.getAttribute('data-items');
                     items = list.split(',');
                 }
@@ -113,11 +114,12 @@ window.onload = function(){
                     {
                         detail: {
                             field: field,
-                            operator:operator,
+                            operator: operator,
                             input: input,
                             dataType: dataType,
                             items: items,
-                            value: input.getAttribute('value')
+                            prevValue: input.getAttribute('value'),
+                            prevOperator: operator.getAttribute('value')
                         },
                         bubbles: true,
                         cancelable: true
