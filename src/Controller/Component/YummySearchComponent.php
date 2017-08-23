@@ -143,7 +143,7 @@ class YummySearchComponent extends Component
         foreach($columns as $column){
             
             $allowed = $this->isColumnAllowed($modelName, $column);
-            
+
             if ($allowed !== false) {
                 
                 $columnMeta = $schema->column($column);
@@ -339,9 +339,14 @@ class YummySearchComponent extends Component
         $config = $this->getConfig();
         
         if (isset($config['allow'][$model][$column])) {
-            $meta['niceName'] = $config['allow'][$model][$column];
+            if (isset($config['allow'][$model][$column]['_options'])) {
+                $meta['options'] = $config['allow'][$model][$column]['_options'];
+            } else if (isset($config['allow'][$model][$column]['_niceName'])){
+                $meta['niceName'] = $config['allow'][$model][$column]['_niceName'];
+            } else {
+                $meta['niceName'] = $config['allow'][$model][$column];
+            }
         }
-        
         if (isset($config['allow'][$model]['columns'][$column])) {
             if (isset($config['allow'][$model]['columns'][$column]['_niceName'])) {
                 $meta['niceName'] = $config['allow'][$model]['columns'][$column]['_niceName'];
