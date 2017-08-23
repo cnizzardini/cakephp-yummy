@@ -329,6 +329,37 @@ class YummySearchComponent extends Component
         return true;
     }
     
+    /**
+     * returns yummy meta data for a column
+     * @param array $element
+     * @return array
+     */
+    private function getColumnYummyMeta($element)
+    {        
+        if (is_array($element)) {
+            if (isset($element['_niceName']) ) {
+                $niceName = $element['_niceName'];
+            }
+            if (isset($element['_options']) ) {
+                $options = $element['_options'];
+            }                
+
+        } else if (is_string($element)) {
+            $niceName = $element;
+        }
+        
+        return [
+            'niceName' => isset($niceName) ? $niceName : false,
+            'options' => isset($options) ? $options : false,
+        ];
+    }
+    
+    /**
+     * returns yummy meta data for a column
+     * @param string $model
+     * @param string $column
+     * @return array
+     */
     private function getYummyMeta($model, $column)
     {
         $meta = [
@@ -339,23 +370,10 @@ class YummySearchComponent extends Component
         $config = $this->getConfig();
         
         if (isset($config['allow'][$model][$column])) {
-            if (isset($config['allow'][$model][$column]['_options'])) {
-                $meta['options'] = $config['allow'][$model][$column]['_options'];
-            } else if (isset($config['allow'][$model][$column]['_niceName'])){
-                $meta['niceName'] = $config['allow'][$model][$column]['_niceName'];
-            } else {
-                $meta['niceName'] = $config['allow'][$model][$column];
-            }
+            $meta = $this->getColumnYummyMeta($config['allow'][$model][$column]);
         }
-        if (isset($config['allow'][$model]['columns'][$column])) {
-            if (isset($config['allow'][$model]['columns'][$column]['_niceName'])) {
-                $meta['niceName'] = $config['allow'][$model]['columns'][$column]['_niceName'];
-            }
-            if (isset($config['allow'][$model]['columns'][$column]['_options'])) {
-                $meta['options'] = $config['allow'][$model]['columns'][$column]['_options'];
-            } else {
-                $meta['niceName'] = $config['allow'][$model]['columns'][$column];
-            }
+        else if (isset($config['allow'][$model]['columns'][$column])) {
+            $meta = $this->getColumnYummyMeta($config['allow'][$model]['columns'][$column]);
         }
         
         return $meta;
