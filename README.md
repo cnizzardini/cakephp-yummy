@@ -6,9 +6,9 @@
 
 Delightfully tasty tools for your cakephp project. 
 
-## Demo
+## Demo & Docs
 
-Checkout the [Yummy Demo](http://cake3.cnizz.com/yummy-demo)
+[Live Demo available](http://cake3.cnizz.com/yummy-demo) and full documented in the [git wiki](https://github.com/cnizzardini/cakephp-yummy/wiki).
 
 ## Features
 
