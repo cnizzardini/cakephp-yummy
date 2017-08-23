@@ -123,11 +123,10 @@ window.onload = function(){
                         cancelable: true
                     }
                 );
-                console.log(field.dispatchEvent(event));
             }
         };
 
         YummySearch.bindEventListeners();
         YummySearch.onLoad();
     }
-}
+};
