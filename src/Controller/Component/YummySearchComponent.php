@@ -16,7 +16,9 @@ class YummySearchComponent extends Component
             'containing' => 'Containing',
             'not_containing' => 'Not Containing',
             'greater_than' => 'Greater than',
+            'greater_than_or_equal' => 'Greater than or equal',
             'less_than' => 'Less than',
+            'less_than_or_equal' => 'Less than or equal',
             'matching' => 'Exact Match',
             'not_matching' => 'Not Exact Match',
         ]
@@ -427,6 +429,10 @@ class YummySearchComponent extends Component
                 return $query->where(["$column >" => $value]);
             case 'less_than';
                 return $query->where(["$column <" => $value]);
+            case 'greater_than_or_equal';
+                return $query->where(["$column >=" => $value]);
+            case 'less_than_or_equal';
+                return $query->where(["$column <=" => $value]);
             default:
                 throw new InternalErrorException('Unknown condition encountered');
         }
