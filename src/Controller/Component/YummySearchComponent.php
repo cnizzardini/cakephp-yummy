@@ -76,13 +76,7 @@ class YummySearchComponent extends Component
      * @return array
      */
     private function getYummyHelperData()
-    {
-        foreach($this->models as $model => $columns) {
-            if (empty($columns)) {
-                unset($this->models[ $model ]);
-            }
-        }
-        
+    {        
         $selectOptions = [];
         
         foreach($this->models as $camelName => $model){
@@ -189,11 +183,16 @@ class YummySearchComponent extends Component
             $humanName = Inflector::humanize(Inflector::underscore($theName));
             
             if ($theName !== 'queryBuilder'){
-                $this->models[$theName] = [
-                    'humanName' => $humanName,
-                    'path' => $path,
-                    'columns' => $this->getColumns($theName),
-                ];
+                
+                $columns = $this->getColumns($theName);
+                
+                if (!empty($columns)) {
+                    $this->models[$theName] = [
+                        'humanName' => $humanName,
+                        'path' => $path,
+                        'columns' => $this->getColumns($theName),
+                    ];
+                }
             }
         }
     }
