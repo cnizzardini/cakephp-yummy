@@ -347,8 +347,8 @@ class YummySearchComponent extends Component
         }
         
         if (isset($config['allow'][$model]['columns'][$column])) {
-            if (isset($config['allow'][$model]['columns'][$column]['niceName'])) {
-                $meta['niceName'] = $config['allow'][$model]['columns'][$column]['niceName'];
+            if (isset($config['allow'][$model]['columns'][$column]['_niceName'])) {
+                $meta['niceName'] = $config['allow'][$model]['columns'][$column]['_niceName'];
             }
             if (isset($config['allow'][$model]['columns'][$column]['_options'])) {
                 $meta['options'] = $config['allow'][$model]['columns'][$column]['_options'];
