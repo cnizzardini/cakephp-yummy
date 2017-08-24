@@ -4,32 +4,35 @@ window.onload = function(){
         var YummySearch = YummySearch || {};
 
         /**
-         * Change event for when search field (column) is changed
-         * @param {type} e
-         * @param {type} target
-         * @returns {undefined}
+         * Creates and dispatches event
+         * @param {dom object} row
+         * @returns {Boolean}|{Void}
          */
-        YummySearch.changeEvent = function(e,target){
-
-            var option = target.options[ target.selectedIndex ];
+        YummySearch.yummySearchFieldChangeEvent = function (row){
+            
+            var fields = row.getElementsByClassName('yummy-field');
+            var field = fields[0];
+            
+            var option = field.options[ field.selectedIndex ];
+            if (option.getAttribute('value') === null || option.getAttribute('value').trim() === '') {
+                return false;
+            }
+            
             var dataType = option.getAttribute('data-type').toLowerCase();
-
-            var row = target.parentElement.parentElement.parentElement.parentElement;
 
             var operator = row.getElementsByClassName('yummy-operator')[0];
             var input = row.getElementsByClassName('yummy-input')[0];
-
             var items = false;
             if (dataType === 'list') {
                 var list = option.getAttribute('data-items');
                 items = list.split(',');
             }
-
+            
             var event = new CustomEvent(
                 "yummySearchFieldChange", 
                 {
                     detail: {
-                        field: target,
+                        field: field,
                         operator: operator,
                         input: input,
                         dataType: dataType,
@@ -41,7 +44,32 @@ window.onload = function(){
                     cancelable: true
                 }
             );
-            e.currentTarget.dispatchEvent(event);
+
+            field.dispatchEvent(event);
+        };
+
+        /**
+         * Change event for when search field (column) is changed
+         * @param {type} e
+         * @param {type} target
+         * @returns {undefined}
+         */
+        YummySearch.changeEvent = function(e,target){
+            var row = target.parentElement.parentElement.parentElement.parentElement;
+            //console.log(row);
+            YummySearch.yummySearchFieldChangeEvent(row);
+        };
+
+        /**
+         * To be called on load
+         * @returns {undefined}
+         */
+        YummySearch.onLoad = function(){
+            var rows = document.getElementsByClassName('yummy-search-row');
+
+            for (var i=0; i<rows.length; i++) {
+                YummySearch.yummySearchFieldChangeEvent(rows[ i ]);
+            }
         };
 
         /**
@@ -86,48 +114,7 @@ window.onload = function(){
 
             },false);
         };
-
-        /**
-         * To be called on load
-         * @returns {undefined}
-         */
-        YummySearch.onLoad = function(){
-            var rows = document.getElementsByClassName('yummy-search-row');
-
-            for (var i=0; i<rows.length; i++) {
-                var row = rows[ i ];
-                var field = row.getElementsByClassName('yummy-field')[0];
-                
-                var option = field.options[ field.selectedIndex ];
-                var dataType = option.getAttribute('data-type').toLowerCase();
-
-                var operator = row.getElementsByClassName('yummy-operator')[0];
-                var input = row.getElementsByClassName('yummy-input')[0];
-                var items = false;
-                if (dataType === 'list') {
-                    var list = option.getAttribute('data-items');
-                    items = list.split(',');
-                }
-                
-                var event = new CustomEvent(
-                    "yummySearchFieldChange", 
-                    {
-                        detail: {
-                            field: field,
-                            operator: operator,
-                            input: input,
-                            dataType: dataType,
-                            items: items,
-                            prevValue: input.getAttribute('value'),
-                            prevOperator: operator.getAttribute('value')
-                        },
-                        bubbles: true,
-                        cancelable: true
-                    }
-                );
-            }
-        };
-
+        
         YummySearch.bindEventListeners();
         YummySearch.onLoad();
     }
