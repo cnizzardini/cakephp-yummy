@@ -102,11 +102,6 @@ class YummyAclComponent extends Component
     {
         $config = $this->config();
         
-        // group required
-        if ($this->Auth->user() && $config['group'] == null) {
-            throw new InternalErrorException(__('The "group" option is required in YummyAcl config'));
-        }
-        
         // if allow is set must be "*" or (array)
         if (isset($config['allow']) && !is_string($config['allow']) && !is_array($config['allow'])) {
             throw new InternalErrorException(__($this->controllerName . ' YummyAcl config "allow" option must be '
