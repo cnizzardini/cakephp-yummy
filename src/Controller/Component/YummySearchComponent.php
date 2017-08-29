@@ -424,7 +424,7 @@ class YummySearchComponent extends Component
                 return $query->where(["$column NOT LIKE" => "%$value%"]);
             case 'gt';
                 return $query->where(["$column >" => $value]);
-            case 'ls';
+            case 'lt';
                 return $query->where(["$column <" => $value]);
             case 'gt_eq';
                 return $query->where(["$column >=" => $value]);
