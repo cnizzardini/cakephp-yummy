@@ -87,19 +87,20 @@ class YummySearchComponent extends Component
                 $humanName = $model['humanName'];
                 
                 $meta = $this->getYummyMeta($camelName, $field['column']);
-
+                
                 $element = [
                     'text' => ($meta['niceName'] !== false) ? $meta['niceName'] : $field['text'], 
                     'path' => $model['path'],
                     'value' => $column, 
                     'data-items' => ($meta['options'] !== false) ? implode(',', $meta['options']) : false,
                     'data-type'=> ($meta['options'] !== false) ? 'list' : $field['type'], 
-                    'data-length' => $field['length']
+                    'data-length' => $field['length'],
+                    'selected' => ($meta['default'] === true) ? true : false
                 ];
 
                 if ($field['sort-order'] !== false) {
                     $key = $field['sort-order'];
-                    if ($key !== null) {
+                    if ($key !== null && !isset($selectOptions[ $humanName ][ $key ])) {
                         $selectOptions[ $humanName ][ $key ] = $element;
                     } else {
                         $selectOptions[ $humanName ][] = $element;
@@ -118,7 +119,7 @@ class YummySearchComponent extends Component
             'operators' => $this->config('operators'),
             'models' => $selectOptions
         ];
-        
+
         return $yummy;
     }
     
@@ -345,7 +346,10 @@ class YummySearchComponent extends Component
             }
             if (isset($element['_options']) ) {
                 $options = $element['_options'];
-            }                
+            }
+            if (isset($element['_default'])) {
+                $default = $element['_default'];
+            }
 
         } else if (is_string($element)) {
             $niceName = $element;
@@ -354,6 +358,7 @@ class YummySearchComponent extends Component
         return [
             'niceName' => isset($niceName) ? $niceName : false,
             'options' => isset($options) ? $options : false,
+            'default' => isset($default) ? $default : false,
         ];
     }
     
@@ -368,6 +373,7 @@ class YummySearchComponent extends Component
         $meta = [
             'options' => false,
             'niceName' => false,
+            'default' => false,
         ];
         
         $config = $this->getConfig();
