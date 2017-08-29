@@ -15,14 +15,14 @@ class YummySearchComponent extends Component
     
     protected $_defaultConfig = [
         'operators' => [
-            'containing' => 'Containing',
-            'not_containing' => 'Not Containing',
-            'greater_than' => 'Greater than',
-            'greater_than_or_equal' => 'Greater than or equal',
-            'less_than' => 'Less than',
-            'less_than_or_equal' => 'Less than or equal',
-            'matching' => 'Exact Match',
-            'not_matching' => 'Not Exact Match',
+            'like' => 'Containing',
+            'not_like' => 'Not Containing',
+            'gt' => 'Greater than',
+            'gt_eq' => 'Greater than or equal',
+            'lt' => 'Less than',
+            'lt_eq' => 'Less than or equal',
+            'eq' => 'Exact Match',
+            'not_eq' => 'Not Exact Match',
         ]
     ];
     
@@ -414,21 +414,21 @@ class YummySearchComponent extends Component
     private function getWhere($query, $column, $operator, $value)
     {
         switch($operator){
-            case 'matching':
+            case 'eq':
                 return $query->where([$column => $value]);
-            case 'not_matching';
+            case 'not_eq';
                 return $query->where(["$column !=" => $value]);
-            case 'containing';
+            case 'like';
                 return $query->where(["$column LIKE" => "%$value%"]);
-            case 'not_containing';
+            case 'not_like';
                 return $query->where(["$column NOT LIKE" => "%$value%"]);
-            case 'greater_than';
+            case 'gt';
                 return $query->where(["$column >" => $value]);
-            case 'less_than';
+            case 'ls';
                 return $query->where(["$column <" => $value]);
-            case 'greater_than_or_equal';
+            case 'gt_eq';
                 return $query->where(["$column >=" => $value]);
-            case 'less_than_or_equal';
+            case 'lt_eq';
                 return $query->where(["$column <=" => $value]);
             default:
                 throw new InternalErrorException('Unknown condition encountered');
