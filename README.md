@@ -65,3 +65,10 @@ Checkout the [Wiki](https://github.com/cnizzardini/cakephp-yummy/wiki/).
 You can also view the source code for demo project on github:
 
 [https://github.com/cnizzardini/cakephp-yummy-demo](https://github.com/cnizzardini/cakephp-yummy-demo)
+
+## Test Cases
+```
+vendor/bin/phpunit plugins/Yummy/tests/TestCase/Controller/Component/YummyAclComponentTest.php
+
+vendor/bin/phpunit plugins/Yummy/tests/TestCase/Controller/Component/YummySearchComponentTest.php
+```
