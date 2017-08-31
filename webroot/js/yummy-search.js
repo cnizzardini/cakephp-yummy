@@ -117,5 +117,6 @@ window.onload = function(){
         
         YummySearch.bindEventListeners();
         YummySearch.onLoad();
+        console.log('yummy-search');
     }
 };
