@@ -195,13 +195,19 @@ class YummySearchComponent extends Component
             ]
         ];
         
+        $allowedModels = $this->getConfig('allow');
+        
         $paths = $this->getPaths();
         
         foreach($paths as $path){
             $pieces = explode('.', $path);
             $theName = end($pieces);
             
-            $humanName = Inflector::humanize(Inflector::underscore($theName));
+            if (isset($allowedModels[$theName]) && isset($allowedModels[$theName]['_niceName'])) {
+                $humanName = $allowedModels[$theName]['_niceName'];
+            } else {
+                $humanName = Inflector::humanize(Inflector::underscore($theName));
+            }
             
             if ($theName !== 'queryBuilder'){
                 
