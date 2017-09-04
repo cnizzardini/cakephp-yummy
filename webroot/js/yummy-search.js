@@ -21,6 +21,16 @@ if (document.getElementById('yummy-search-form') !== null) {
         var dataType = option.getAttribute('data-type').toLowerCase();
 
         var operator = row.getElementsByClassName('yummy-operator')[0];
+        var prevOperator = operator.getAttribute('value');
+        
+        if (operator.tagName.toLowerCase() === 'select') {
+            for (var i=0; i<operator.length; i++) {
+                if (operator[ i ].getAttribute('selected') !== null) {
+                    prevOperator = operator[ i ].getAttribute('value');
+                }
+            }
+        }
+        
         var input = row.getElementsByClassName('yummy-input')[0];
         var items = false;
         if (dataType === 'list') {
@@ -38,7 +48,7 @@ if (document.getElementById('yummy-search-form') !== null) {
                     dataType: dataType,
                     items: items,
                     prevValue: input.getAttribute('value'),
-                    prevOperator: operator.getAttribute('value')
+                    prevOperator: prevOperator
                 },
                 bubbles: true,
                 cancelable: true
