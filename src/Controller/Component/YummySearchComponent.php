@@ -23,7 +23,9 @@ class YummySearchComponent extends Component
             'lt_eq' => 'Less than or equal',
             'eq' => 'Exact Match',
             'not_eq' => 'Not Exact Match',
-        ]
+        ],
+        'dataSource' => 'default',
+        'selectGroups' => true,
     ];
     
     public function initialize(array $config)
@@ -36,12 +38,16 @@ class YummySearchComponent extends Component
         
         $this->controller = $this->_registry->getController();
         
-        if (!$this->getConfig('model')) {
+        if (!isset($config['model'])) {
             $this->setConfig('model', $this->controller->name);
         }
         
-        if (!$this->getConfig('dataSource')) {
+        if (isset($config['dataSource'])) {
             $this->setConfig('dataSource', 'default');
+        }
+        
+        if (isset($config['selectGroups'])) {
+            $this->setConfig('selectGroups', $config['selectGroups']);
         }
         
         // Create a schema collection.
@@ -117,11 +123,18 @@ class YummySearchComponent extends Component
             ksort($selectOptions);
         }
         
+        if ($this->getConfig('selectGroups') === false) {
+            $select = [];
+            foreach ($selectOptions as $options) {
+                $select = array_merge($select, $options);
+            }
+        }
+        
         $yummy = [
             'base_url' => $this->controller->request->here,
             'rows' => $this->controller->request->query('YummySearch'),
             'operators' => $this->config('operators'),
-            'models' => $selectOptions
+            'models' => isset($select) ? $select : $selectOptions
         ];
 
         return $yummy;
