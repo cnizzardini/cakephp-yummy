@@ -91,6 +91,8 @@ class YummySearchComponent extends Component
     {        
         $selectOptions = [];
         
+        $request = $this->controller->request;
+        
         foreach($this->models as $camelName => $model){
             foreach($model['columns'] as $column => $field){
 
@@ -105,7 +107,7 @@ class YummySearchComponent extends Component
                     'data-items' => ($meta['options'] !== false) ? implode(',', $meta['options']) : false,
                     'data-type'=> ($meta['options'] !== false) ? 'list' : $field['type'], 
                     'data-length' => $field['length'],
-                    'selected' => ($meta['default'] === true) ? true : false
+                    'selected' => ($request->query('YummySearch') === null && $meta['default'] === true) ? true : false
                 ];
 
                 if ($field['sort-order'] !== false) {
