@@ -185,7 +185,14 @@ class YummySearchComponent extends Component
     private function defineModels()
     {   
         $baseModel = $this->getConfig('model');
-        $baseHumanName = Inflector::humanize(Inflector::underscore($baseModel));
+        
+        $allowedModels = $this->getConfig('allow');
+        
+        if (isset($allowedModels[$baseModel]['_niceName'])) {
+            $baseHumanName = $allowedModels[$baseModel]['_niceName'];
+        } else {
+            $baseHumanName = Inflector::humanize(Inflector::underscore($baseModel));
+        }
         
         $this->models = [
             $baseHumanName => [
@@ -195,15 +202,13 @@ class YummySearchComponent extends Component
             ]
         ];
         
-        $allowedModels = $this->getConfig('allow');
-        
         $paths = $this->getPaths();
-        
+
         foreach($paths as $path){
             $pieces = explode('.', $path);
             $theName = end($pieces);
             
-            if (isset($allowedModels[$theName]) && isset($allowedModels[$theName]['_niceName'])) {
+            if (isset($allowedModels[$theName]['_niceName'])) {
                 $humanName = $allowedModels[$theName]['_niceName'];
             } else {
                 $humanName = Inflector::humanize(Inflector::underscore($theName));
