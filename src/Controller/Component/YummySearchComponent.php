@@ -207,6 +207,11 @@ class YummySearchComponent extends Component
     private function getPaths()
     {
         $query = $this->getConfig('query');
+        
+        if (method_exists($query, 'contain') === false) {
+            return [];
+        }
+        
         $contains = $query->contain();
         $dots = array_keys($this->dot($contains));
         
@@ -443,7 +448,7 @@ class YummySearchComponent extends Component
     
     /**
      * Adds conditions to Cake\ORM\Query
-     * @param \Cake\ORM\Query
+     * @param object $query
      * @return \Cake\ORM\Query
      */
     public function search(\Cake\ORM\Query $query)
