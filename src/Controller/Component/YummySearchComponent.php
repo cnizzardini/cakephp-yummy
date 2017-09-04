@@ -326,14 +326,14 @@ class YummySearchComponent extends Component
                 $key = array_search($column, $keys, true);
                 $isAllowed = true;
             // look in model columns
-            } else if (isset($config['allow'][$model]['columns'])){
+            } else if (isset($config['allow'][$model]['_columns'])){
                 // check model column elements
-                if (in_array($column, $config['allow'][$model]['columns'])) {
-                    $key = array_search($column, $config['allow'][$model]['columns']);
+                if (in_array($column, $config['allow'][$model]['_columns'])) {
+                    $key = array_search($column, $config['allow'][$model]['_columns']);
                     $isAllowed = true;
                 // check model column keys
-                } else if (isset($config['allow'][$model]['columns'][$column])) {
-                    $keys = array_keys($config['allow'][$model]['columns']);
+                } else if (isset($config['allow'][$model]['_columns'][$column])) {
+                    $keys = array_keys($config['allow'][$model]['_columns']);
                     $key = array_search($column, $keys, true);
                     $isAllowed = true;
                 }
@@ -410,8 +410,8 @@ class YummySearchComponent extends Component
         if (isset($config['allow'][$model][$column])) {
             $meta = $this->getColumnYummyMeta($config['allow'][$model][$column]);
         }
-        else if (isset($config['allow'][$model]['columns'][$column])) {
-            $meta = $this->getColumnYummyMeta($config['allow'][$model]['columns'][$column]);
+        else if (isset($config['allow'][$model]['_columns'][$column])) {
+            $meta = $this->getColumnYummyMeta($config['allow'][$model]['_columns'][$column]);
         }
         
         return $meta;
