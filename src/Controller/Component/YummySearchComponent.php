@@ -122,7 +122,6 @@ class YummySearchComponent extends Component
                     $selectOptions[ $humanName ][] = $element;
                 }
             }
-            ksort($selectOptions);
         }
         
         if ($this->getConfig('selectGroups') === false) {
