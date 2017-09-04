@@ -18,15 +18,35 @@ A component that works with PaginatorComponent to add search functionality to ta
 
 ![yummy search screenshot](https://www.cnizz.com/media/cakephp-yummy-search-screenshot.png)
 
+```php
+    // Basic Usage:
+
+    $query = $this->ModelName->find();
+    
+    // load component
+	$this->loadComponent('Yummy.YummySearch',[
+	    'query' => query,
+	]);
+
+    // call search
+    $q = $this->YummySearch->search($query);
+
+    // call paginate
+    $results = $this->paginate($q);
+```
+
 ### [YummyAcl](https://github.com/cnizzardini/cakephp-yummy/wiki/Yummy-ACL)
 
 A component that works with Auth to add basic access controls to your site 
 [(documentation)](https://github.com/cnizzardini/cakephp-yummy/wiki/Yummy-ACL). 
 
 ```php
+    // Basic Usage
+
 	$this->loadComponent('Yummy.YummyAcl',[
 	    'group' => $this->Auth->user('group'),
 	]);
+
 	$this->YummyAcl->actions([
 	    'login' => '*', // allow all 
 	    'view' => ['Admin','Manager'], // allow Admin + Manager
