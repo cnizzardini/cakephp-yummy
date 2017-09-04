@@ -40,8 +40,12 @@ class YummySearchComponent extends Component
             $this->setConfig('model', $this->controller->name);
         }
         
+        if (!$this->getConfig('dataSource')) {
+            $this->setConfig('dataSource', 'default');
+        }
+        
         // Create a schema collection.
-        $database = ConnectionManager::get('default');
+        $database = ConnectionManager::get($this->getConfig('dataSource'));
         $this->collection = $database->schemaCollection();
         
         $this->defineModels();
