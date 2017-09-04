@@ -14,26 +14,39 @@ Delightfully tasty tools for your cakephp project.  This is beta code, use at ow
 
 ### [YummySearch](https://github.com/cnizzardini/cakephp-yummy/wiki/Yummy-Search)
 
-A search component designed to work with CakePHPs Paginator Component and Cake\ORM\Query. It supports searching 
-the base model and other associations such as HasOne, BelongsTo, and HasMany through an intuitive UI.
+A search component designed to work with CakePHPs Paginator Component and Cake\ORM\Query. It supports searching the 
+base model and other associations such as HasOne, BelongsTo, and HasMany through an intuitive UI in just three easy steps.
 
 ![yummy search screenshot](https://www.cnizz.com/media/cakephp-yummy-search-screenshot.png)
 
 ```php
-    // Basic Usage:
+/**
+ * Step 1. Basic Controller Usage:
+ */
+$query = $this->ModelName->find();
 
-    $query = $this->ModelName->find();
-    
-    // load component
-	$this->loadComponent('Yummy.YummySearch',[
-	    'query' => query,
-	]);
+// load component
+$this->loadComponent('Yummy.YummySearch',[
+    'query' => query,
+]);
 
-    // call search
-    $q = $this->YummySearch->search($query);
+// call search
+$q = $this->YummySearch->search($query);
 
-    // call paginate
-    $results = $this->paginate($q);
+// call paginate
+$results = $this->paginate($q);
+
+/**
+ * Step 2. Basic View Usage:
+ */
+$this->helpers()->load('Yummy.YummySearch');
+echo $this->YummySearch->basicForm();
+
+/**
+ * Step 3. Include agnostic JavaScript
+ */
+<script src="/yummy/js/yummy-search.js"></script>
+ 
 ```
 
 ### [YummyAcl](https://github.com/cnizzardini/cakephp-yummy/wiki/Yummy-ACL)
@@ -42,17 +55,17 @@ A component that works with Auth to add group-based access controls to your admi
 [(documentation)](https://github.com/cnizzardini/cakephp-yummy/wiki/Yummy-ACL). 
 
 ```php
-    // Basic Usage
+// Basic Usage
 
-	$this->loadComponent('Yummy.YummyAcl',[
-	    'group' => $this->Auth->user('group'),
-	]);
+$this->loadComponent('Yummy.YummyAcl',[
+    'group' => $this->Auth->user('group'),
+]);
 
-	$this->YummyAcl->actions([
-	    'login' => '*', // allow all 
-	    'view' => ['Admin','Manager'], // allow Admin + Manager
-	    'edit' => ['Admin'], // allow Admin
-	]);
+$this->YummyAcl->actions([
+    'login' => '*', // allow all 
+    'view' => ['Admin','Manager'], // allow Admin + Manager
+    'edit' => ['Admin'], // allow Admin
+]);
 ```
 
 ### YummyTemplate
