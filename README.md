@@ -14,7 +14,8 @@ Delightfully tasty tools for your cakephp project.  This is beta code, use at ow
 
 ### [YummySearch](https://github.com/cnizzardini/cakephp-yummy/wiki/Yummy-Search)
 
-A component that works with PaginatorComponent to add search functionality to tables [(demo)](http://cake3.cnizz.com/yummy-demo/teams)
+A search component designed to work with CakePHPs Paginator Component and Cake\ORM\Query. It supports searching 
+the base model and other associations such as HasOne, BelongsTo, and HasMany through an intuitive UI.
 
 ![yummy search screenshot](https://www.cnizz.com/media/cakephp-yummy-search-screenshot.png)
 
@@ -37,7 +38,7 @@ A component that works with PaginatorComponent to add search functionality to ta
 
 ### [YummyAcl](https://github.com/cnizzardini/cakephp-yummy/wiki/Yummy-ACL)
 
-A component that works with Auth to add basic access controls to your site 
+A component that works with Auth to add group-based access controls to your admin portal 
 [(documentation)](https://github.com/cnizzardini/cakephp-yummy/wiki/Yummy-ACL). 
 
 ```php
