@@ -64,7 +64,7 @@ if (document.getElementById('yummy-search-form') !== null) {
      * To be called on load
      * @returns {undefined}
      */
-    YummySearch.onLoad = function(){
+    YummySearch.load = function(){
         var rows = document.getElementsByClassName('yummy-search-row');
 
         for (var i=0; i<rows.length; i++) {
@@ -116,6 +116,5 @@ if (document.getElementById('yummy-search-form') !== null) {
     };
 
     YummySearch.bindEventListeners();
-    YummySearch.onLoad();
     console.log('yummy-search');
 }
