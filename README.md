@@ -68,7 +68,7 @@ $this->YummyAcl->actions([
 ]);
 ```
 
-### YummyTemplate
+### YummyBake
 
 A series of bootstrap admin themes for your admin portal [(demo)](http://cake3.cnizz.com/yummy-demo/teams)
 
