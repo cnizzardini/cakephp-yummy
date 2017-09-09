@@ -49,24 +49,30 @@ echo $this->YummySearch->basicForm();
  
 ```
 
+Check out the [documentation](https://github.com/cnizzardini/cakephp-yummy/wiki/Yummy-Search) for advanced 
+usage and customization. 
+
 ### [YummyAcl](https://github.com/cnizzardini/cakephp-yummy/wiki/Yummy-ACL)
 
-A component that works with Auth to add group-based access controls to your admin portal 
-[(documentation)](https://github.com/cnizzardini/cakephp-yummy/wiki/Yummy-ACL). 
+A component that works with Auth to add group-based access controls to your admin portal.
 
 ```php
 // Basic Usage
-
 $this->loadComponent('Yummy.YummyAcl',[
     'group' => $this->Auth->user('group'),
 ]);
 
+// Define ACLs (you can also define ACLs in a single config file)
 $this->YummyAcl->actions([
     'login' => '*', // allow all 
     'view' => ['Admin','Manager'], // allow Admin + Manager
     'edit' => ['Admin'], // allow Admin
 ]);
 ```
+
+Check out the [documentation](https://github.com/cnizzardini/cakephp-yummy/wiki/Yummy-ACL) for advanced 
+usage and customization. 
+
 
 ### YummyBake
 
