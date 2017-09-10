@@ -153,7 +153,12 @@ class YummyAclComponent extends Component
         if (!isset($config['actions'])) {
             return false;
         }
-
+        
+        // action is not defined
+        if (!isset($config['actions'][$this->actionName])) {
+            throw new InternalErrorException("Action: $this->actionName is not defined in the YummyACL configuration.");
+        }
+        
         // check for allow all
         if ($config['actions'][$this->actionName] == '*') {
             return true;
@@ -266,5 +271,4 @@ class YummyAclComponent extends Component
         throw new InternalErrorException(__('YummyAcl requires the "redirect" option in config or Auth.loginAction or '
                 . 'Auth.unauthorizedRedirect'));
     }
-
 }
