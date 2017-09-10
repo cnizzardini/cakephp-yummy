@@ -4,7 +4,8 @@
 [![Code Climate](https://codeclimate.com/github/cnizzardini/cakephp-yummy/badges/gpa.svg)](https://codeclimate.com/github/cnizzardini/cakephp-yummy)
 [![Issue Count](https://codeclimate.com/github/cnizzardini/cakephp-yummy/badges/issue_count.svg)](https://codeclimate.com/github/cnizzardini/cakephp-yummy)
 
-Delightfully tasty tools for your cakephp project.  This is beta code, use at own risk.
+Delightfully tasty tools for your cakephp project. This project is nearing a stable 1.0 release but will probably under 
+go another few minor and revision releases before being considered 1.0.
 
 ## Demo & Docs
 
