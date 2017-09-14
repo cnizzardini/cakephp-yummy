@@ -149,22 +149,22 @@ class YummyAclComponent extends Component
     {
         $config = $this->config();
         
-        // actions are not configured? 
+        // deny if actions are not configured 
         if (!isset($config['actions'])) {
             return false;
         }
         
-        // action is not defined
+        // deny if action is not defined
         if (!isset($config['actions'][$this->actionName])) {
-            throw new InternalErrorException("Action: $this->actionName is not defined in the YummyACL configuration.");
+            return false;
         }
         
-        // check for allow all
+        // allow if wildcard
         if ($config['actions'][$this->actionName] == '*') {
             return true;
         }
         
-        // check for defined group access
+        // allow if group is in allow
         if (in_array($config['group'], $config['actions'][$this->actionName])) {
             return true;
         }
