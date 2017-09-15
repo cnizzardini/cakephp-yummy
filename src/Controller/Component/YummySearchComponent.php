@@ -26,6 +26,10 @@ class YummySearchComponent extends Component
         ],
         'dataSource' => 'default',
         'selectGroups' => true,
+        'htmlClasses' => [
+            'show' => false,
+            'hide' => false
+        ]
     ];
     
     public function initialize(array $config)
@@ -48,6 +52,10 @@ class YummySearchComponent extends Component
         
         if (isset($config['selectGroups'])) {
             $this->setConfig('selectGroups', $config['selectGroups']);
+        }
+        
+        if (isset($config['htmlClasses'])) {
+            $this->setConfig('htmlClasses', $config['htmlClasses']);
         }
         
         // Create a schema collection.
@@ -134,8 +142,9 @@ class YummySearchComponent extends Component
         $yummy = [
             'base_url' => $this->controller->request->here,
             'rows' => $this->controller->request->query('YummySearch'),
-            'operators' => $this->config('operators'),
-            'models' => isset($select) ? $select : $selectOptions
+            'operators' => $this->getConfig('operators'),
+            'models' => isset($select) ? $select : $selectOptions,
+            'htmlClasses' => $this->getConfig('htmlClasses')
         ];
 
         return $yummy;

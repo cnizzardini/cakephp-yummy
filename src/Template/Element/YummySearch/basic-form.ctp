@@ -3,8 +3,22 @@
  * This is the YummySearch basic form. You can use this as a template for creating your own search form elements.
  * @example echo $this->YummySearch->basicForm(['element' => 'my-custom-yummysearch']);
  */
+echo $this->Form->create(null,[
+    'class'=>'form form-custom form-medium','id'=>'yummy-search-form','role'=>'form','type'=>'get'
+]); 
 
-echo $this->Form->create(null,['class'=>'form form-custom form-medium','id'=>'yummy-search-form','role'=>'form','type'=>'get']); 
+if ($YummySearch['htmlClasses']['show'] !== false) {
+    echo $this->Form->hidden('yummy-search-show', [
+        'value' => $YummySearch['htmlClasses']['show'],
+        'id' => 'yummy-search-show',
+    ]);
+}
+if ($YummySearch['htmlClasses']['hide'] !== false) {
+    echo $this->Form->hidden('yummy-search-hide', [
+        'value' => $YummySearch['htmlClasses']['hide'],
+        'id' => 'yummy-search-hide',
+    ]);
+}
 
 $i = 0;
 $length = isset($YummySearch['rows']['field']) ? count($YummySearch['rows']['field']) : 0;
@@ -61,16 +75,32 @@ do{
     <div class="col-lg-1 col-md-1 col-xs-3">
         <div class="input text">
         <?php 
-        echo $this->Form->button('&#10133;', [
+        
+        $plusOptions = [
             'type' => 'button', 
-            'class' => 'btn btn-info plus-button', 
-            'style' => $i >= 1 ? 'display:none':''
-        ]); 
-        echo $this->Form->button('&#10134;', [
+            'class' => 'btn btn-info plus-button ',
+        ]; 
+        
+        $minusOptions = [
             'type' => 'button', 
-            'class' => 'btn btn-info minus-button', 
-            'style' => $i == 0 ? 'display:none':''
-        ]); ?>
+            'class' => 'btn btn-info minus-button ',
+        ];
+        
+        if ($YummySearch['htmlClasses']['show'] !== false) {
+            $plusOptions['class'].= $YummySearch['htmlClasses']['show'];
+        } else {
+            $plusOptions['style'] = $i >= 1 ? 'display:none':'';
+        }
+        
+        if ($YummySearch['htmlClasses']['hide'] !== false) {
+            $minusOptions['class'].= $YummySearch['htmlClasses']['hide'];
+        } else { 
+            $minusOptions['style'] = $i == 0 ? 'display:none':'';            
+        }
+        
+        echo $this->Form->button('&#10133;', $plusOptions); // add row
+        echo $this->Form->button('&#10134;', $minusOptions); // remove row
+        ?>
         </div>
     </div>
 </div>
