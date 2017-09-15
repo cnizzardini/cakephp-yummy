@@ -117,8 +117,10 @@ if (document.getElementById('yummy-search-form') !== null) {
                 createRow.getElementsByTagName('select')[1].options[0].defaultSelected = true;
                 createRow.getElementsByTagName('input')[0].value = '';
                 createRow.getElementsByClassName('plus-button')[0].remove();
-                if (document.getElementById('yummy-search-show').length == 1) {
-                    createRow.getElementsByClassName('minus-button')[0].className += document.getElementById('yummy-search-show').value;
+                
+                if (document.getElementById('yummy-attributes') !== undefined) {
+                    var yummyAttributes = document.getElementById('yummy-attributes');
+                    createRow.getElementsByClassName('minus-button')[0].className += yummyAttributes.getAttribute('show');
                 } else {
                     createRow.getElementsByClassName('minus-button')[0].setAttribute('style','display:inline');
                 }
