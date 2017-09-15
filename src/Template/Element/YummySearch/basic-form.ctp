@@ -7,17 +7,8 @@ echo $this->Form->create(null,[
     'class'=>'form form-custom form-medium','id'=>'yummy-search-form','role'=>'form','type'=>'get'
 ]); 
 
-if ($YummySearch['htmlClasses']['show'] !== false) {
-    echo $this->Form->hidden('yummy-search-show', [
-        'value' => $YummySearch['htmlClasses']['show'],
-        'id' => 'yummy-search-show',
-    ]);
-}
-if ($YummySearch['htmlClasses']['hide'] !== false) {
-    echo $this->Form->hidden('yummy-search-hide', [
-        'value' => $YummySearch['htmlClasses']['hide'],
-        'id' => 'yummy-search-hide',
-    ]);
+if (isset($classes)) {
+    echo '<div id="yummy-attributes" show="' . $classes['show'] . '" hide="' . $classes['hide'] . '">';
 }
 
 $i = 0;
@@ -86,16 +77,19 @@ do{
             'class' => 'btn btn-info minus-button ',
         ];
         
-        if ($YummySearch['htmlClasses']['show'] !== false) {
-            $plusOptions['class'].= $YummySearch['htmlClasses']['show'];
-        } else {
-            $plusOptions['style'] = $i >= 1 ? 'display:none':'';
+        if ($i == 0){
+            if (isset($classes['hide'])) {
+                $minusOptions['class'].= $classes['hide'];
+            } else {
+                $minusOptions['style'] = 'display:none';
+            }
         }
-        
-        if ($YummySearch['htmlClasses']['hide'] !== false) {
-            $minusOptions['class'].= $YummySearch['htmlClasses']['hide'];
-        } else { 
-            $minusOptions['style'] = $i == 0 ? 'display:none':'';            
+        else if ($i >= 1) {
+            if (isset($classes['hide'])) {
+                $plusOptions['class'].= $classes['hide'];
+            } else {
+                $plusOptions['style'] = 'display:none';
+            }
         }
         
         echo $this->Form->button('&#10133;', $plusOptions); // add row
