@@ -110,16 +110,29 @@ if (document.getElementById('yummy-search-form') !== null) {
 
             /* add row */
             if (target.type === 'button' && target.className.match('plus-button')) {
+                
                 var rows = document.getElementsByClassName("yummy-search-row");
                 var createRow = rows[0].cloneNode(true);
+                var yummyAttributes = document.getElementById('yummy-attributes');
 
                 createRow.getElementsByTagName('select')[0].options[0].defaultSelected = true;
                 createRow.getElementsByTagName('select')[1].options[0].defaultSelected = true;
-                createRow.getElementsByTagName('input')[0].value = '';
+                
+                if (createRow.getElementsByTagName('select')[2] !== null) {
+                    createRow.getElementsByTagName('select')[2].remove();
+                    
+                    if (yummyAttributes !== null) {
+                        createRow.getElementsByTagName('input')[0].className += yummyAttributes.getAttribute('show');
+                    } else {
+                        createRow.getElementsByTagName('input')[0].setAttribute('style','display:block');
+                    }
+                    createRow.getElementsByTagName('input')[0].removeAttribute('disabled');
+                    createRow.getElementsByTagName('input')[0].value = '';
+                }
+                
                 createRow.getElementsByClassName('plus-button')[0].remove();
                 
-                if (document.getElementById('yummy-attributes') !== undefined) {
-                    var yummyAttributes = document.getElementById('yummy-attributes');
+                if (yummyAttributes !== null) {
                     createRow.getElementsByClassName('minus-button')[0].className += yummyAttributes.getAttribute('show');
                 } else {
                     createRow.getElementsByClassName('minus-button')[0].setAttribute('style','display:inline');
