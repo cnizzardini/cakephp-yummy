@@ -432,10 +432,9 @@ class YummySearchComponent extends Component
      */
     private function getSqlCondition($model, $column, $operator, $value, $query)
     {
-        $baseModel = $this->getConfig('model');
         // for base model searches
         if (empty($model)) {
-            return $this->getWhere($query, $baseModel . '.' . $column, $operator, $value);
+            return $this->getWhere($query, $column, $operator, $value);
         }
         
         return $query->matching($model, function($q) use($column, $operator, $value) {
