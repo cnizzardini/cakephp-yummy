@@ -506,7 +506,7 @@ class YummySearchComponent extends Component
             }
             
             if ($this->isColumnAllowed($model, $column) !== false) {
-                $query = $this->getSqlCondition($path, $column, $operator, $search, $query);
+                $query = $this->getSqlCondition($path, "$model.$column", $operator, $search, $query);
             }
         }
         
