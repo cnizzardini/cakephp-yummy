@@ -349,15 +349,14 @@ class YummySearchComponent extends Component
             if ($key >= 0) {
                 return $key;
             }
-            // check deny all models
+        // check deny all models
         } elseif (isset($config['deny']) && $config['deny'] == '*') {
             return false;
-        }
         // check deny specific model
-        elseif (isset($config['deny'][$model]) && $config['deny'][$model] == '*') {
+        } elseif (isset($config['deny'][$model]) && $config['deny'][$model] == '*') {
             return false;
 
-            // check deny specific model.column
+        // check deny specific model.column
         } elseif (isset($config['deny'][$model]) && in_array($column, $config['deny'][$model])) {
             return false;
         }
@@ -433,7 +432,7 @@ class YummySearchComponent extends Component
             return $this->getWhere($query, $column, $operator, $value);
         }
 
-        return $query->matching($model, function($q) use($column, $operator, $value) {
+        return $query->matching($model, function ($q) use ($column, $operator, $value) {
             return $this->getWhere($q, $column, $operator, $value);
         });
     }
@@ -506,5 +505,4 @@ class YummySearchComponent extends Component
 
         return $query;
     }
-
 }
