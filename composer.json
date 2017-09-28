@@ -1,8 +1,9 @@
 {
     "name": "cnizzardini/cakephp-yummy",
-    "description": "Yummy plugin for CakePHP",
+    "description": "Yummy plugin for CakePHP including an intuitive search, ACL, and bake theme",
     "type": "cakephp-plugin",
     "license": "MIT",
+    "keywords": ["cakephp3","cakephp3 search","cakephp3 acl","cakephp3 bake"],
     "require": {
         "php": ">=5.5.9",
         "cakephp/cakephp": ">=3.3.2 <4.0.0"
@@ -20,5 +21,17 @@
             "Yummy\\Test\\": "tests",
             "Cake\\Test\\": "./vendor/cakephp/cakephp/tests"
         }
-    }
+    },
+    "support": {
+        "issues": "https://github.com/cnizzardini/cakephp-yummy/issues",
+        "wiki": "https://github.com/cnizzardini/cakephp-yummy/wiki",
+        "source": "https://github.com/cnizzardini/cakephp-yummy"
+    },
+    "authors": [
+        {
+            "name": "Chris Nizzardini",
+            "homepage": "http://www.cnizz.com",
+            "role": "Developer"
+        }
+    ]
 }
