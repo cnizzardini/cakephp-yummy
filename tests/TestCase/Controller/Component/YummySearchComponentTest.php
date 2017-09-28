@@ -27,8 +27,9 @@ class YummySearchComponentTest extends TestCase
     public function setUp()
     {
         parent::setUp();
-        $registry = new ComponentRegistry();
-        $this->YummySearchComponent = new YummySearchComponent($registry);
+        //$registry = new ComponentRegistry();
+        //$this->YummySearchComponent = new YummySearchComponent($registry);
+        $this->markTestIncomplete('Not implemented yet.');
     }
 
     /**
