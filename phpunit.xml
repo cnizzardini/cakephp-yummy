@@ -2,7 +2,7 @@
 <phpunit
     colors="true"
     processIsolation="false"
-    stopOnFailure="true"
+    stopOnFailure="false"
     syntaxCheck="false"
     >
     <php>
