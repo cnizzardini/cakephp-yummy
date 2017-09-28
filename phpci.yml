@@ -1,3 +1,8 @@
+build_settings:
+    ignore:
+        - "vendor"
+        - "bin"
+        - "app"
 setup:
     composer:
         action: "install"
