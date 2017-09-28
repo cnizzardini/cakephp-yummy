@@ -434,8 +434,8 @@ class YummySearchComponent extends Component
         }
 
         return $query->matching($model, function($q) use($column, $operator, $value) {
-                    return $this->getWhere($q, $column, $operator, $value);
-                });
+            return $this->getWhere($q, $column, $operator, $value);
+        });
     }
 
     /**
@@ -451,19 +451,19 @@ class YummySearchComponent extends Component
         switch ($operator) {
             case 'eq':
                 return $query->where([$column => $value]);
-            case 'not_eq';
+            case 'not_eq':
                 return $query->where(["$column !=" => $value]);
-            case 'like';
+            case 'like':
                 return $query->where(["$column LIKE" => "%$value%"]);
-            case 'not_like';
+            case 'not_like':
                 return $query->where(["$column NOT LIKE" => "%$value%"]);
-            case 'gt';
+            case 'gt':
                 return $query->where(["$column >" => $value]);
-            case 'lt';
+            case 'lt':
                 return $query->where(["$column <" => $value]);
-            case 'gt_eq';
+            case 'gt_eq':
                 return $query->where(["$column >=" => $value]);
-            case 'lt_eq';
+            case 'lt_eq':
                 return $query->where(["$column <=" => $value]);
             default:
                 throw new InternalErrorException('Unknown condition encountered');
