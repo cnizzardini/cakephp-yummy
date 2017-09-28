@@ -1,4 +1,5 @@
 <?php
+
 namespace Yummy\Controller\Component;
 
 use Cake\Controller\Component;
@@ -12,16 +13,17 @@ use Cake\Core\Configure;
  */
 class YummyAclComponent extends Component
 {
-    public $components = ['Flash','Auth'];
+
+    public $components = ['Flash', 'Auth'];
 
     public function initialize(array $config)
     {
         parent::initialize($config);
-        
+
         $this->controller = $this->_registry->getController();
         $this->controllerName = $this->controller->name . 'Controller';
         $this->actionName = $this->controller->request->action;
-        
+
         if (!$this->config('use_config_file')) {
             $this->config('use_config_file', false);
         }
@@ -39,7 +41,7 @@ class YummyAclComponent extends Component
 
         // perform sanity check
         $this->sanityCheck();
-        
+
         // determine the redirect url
         $this->setRedirect();
 
@@ -52,10 +54,10 @@ class YummyAclComponent extends Component
         if ($this->checkActionAccess() == false) {
             return $this->denyAccess();
         }
-        
+
         return true;
     }
-    
+
     /**
      * Set allowed groups for a controller
 
@@ -101,13 +103,13 @@ class YummyAclComponent extends Component
     private function sanityCheck()
     {
         $config = $this->config();
-        
+
         // if allow is set must be "*" or (array)
         if (isset($config['allow']) && !is_string($config['allow']) && !is_array($config['allow'])) {
             throw new InternalErrorException(__($this->controllerName . ' YummyAcl config "allow" option must be '
                     . '(1) not set, (2) an array of groups, or (3) equal to wildcard (*)'));
         }
-        
+
         // if actions is set must be (array)
         if (isset($config['actions']) && !is_array($config['actions'])) {
             throw new InternalErrorException(__($this->controllerName . ' YummyAcl config "actions" should be an array '
@@ -148,27 +150,27 @@ class YummyAclComponent extends Component
     private function checkActionAccess()
     {
         $config = $this->config();
-        
+
         // deny if actions are not configured 
         if (!isset($config['actions'])) {
             return false;
         }
-        
+
         // deny if action is not defined
         if (!isset($config['actions'][$this->actionName])) {
             return false;
         }
-        
+
         // allow if wildcard
         if ($config['actions'][$this->actionName] == '*') {
             return true;
         }
-        
+
         // allow if group is in allow
         if (in_array($config['group'], $config['actions'][$this->actionName])) {
             return true;
         }
-        
+
         return false;
     }
 
@@ -185,12 +187,12 @@ class YummyAclComponent extends Component
         if ($this->config('allow') == '*') {
             return true;
         }
-        
+
         // allow group
         if (is_array($this->config('allow')) && in_array($this->config('group'), $this->config('allow'))) {
             return true;
         }
-        
+
         return false;
     }
 
@@ -233,7 +235,7 @@ class YummyAclComponent extends Component
         if (!isset($config[$this->controller->name])) {
             throw new InternalErrorException(__('Controller is missing from config/yummy_acl.php'));
         }
-        
+
         $this->configShallow($config[$this->controller->name]);
 
         return true;
@@ -256,13 +258,13 @@ class YummyAclComponent extends Component
         if ($authConfig['unauthorizedRedirect'] == true) {
             $this->setConfig('redirect', $this->request->referer(true));
             return true;
-        } 
-        
+        }
+
         if (is_string($authConfig['unauthorizedRedirect'])) {
             $this->setConfig('redirect', $authConfig['unauthorizedRedirect']);
             return true;
-        } 
-        
+        }
+
         if ($authConfig['unauthorizedRedirect'] == false) {
             $this->setConfig('redirect', 403);
             return true;
@@ -271,4 +273,5 @@ class YummyAclComponent extends Component
         throw new InternalErrorException(__('YummyAcl requires the "redirect" option in config or Auth.loginAction or '
                 . 'Auth.unauthorizedRedirect'));
     }
+
 }
