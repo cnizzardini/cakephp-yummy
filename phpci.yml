@@ -4,18 +4,5 @@ setup:
 test:
     php_unit:
         config:
-            - "app/phpunit.xml.dist"
+            - "phpunit.xml.dist"
         coverage: "coverage"
-        args: "--stderr"
-    php_code_sniffer:
-        allow_failures: true
-        standard: "PSR2"
-    php_mess_detector:
-        allow_failures: true
-    php_cpd:
-        allow_failures: true
-    php_docblock_checker:
-        allowed_warnings: 10
-        skip_classes: true
-    php_loc:
-        directory: "src"
