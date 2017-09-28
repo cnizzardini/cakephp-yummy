@@ -347,5 +347,4 @@ class YummyAclComponentTest extends TestCase
         // test array
         $this->assertEquals(true, $this->component->actions(['index' => ['admin', 'superuser', 'manager']]));
     }
-
 }

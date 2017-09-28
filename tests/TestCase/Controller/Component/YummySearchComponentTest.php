@@ -62,5 +62,4 @@ class YummySearchComponentTest extends TestCase
     {
         $this->markTestIncomplete('Not implemented yet.');
     }
-
 }
