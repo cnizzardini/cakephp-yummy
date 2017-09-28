@@ -80,7 +80,7 @@ class YummySearchComponent extends Component
     private function checkComponents()
     {
         if (!isset($this->controller->Paginator)) {
-            throw new \Cake\Network\Exception\InternalErrorException(__('YummySearch requires the Paginator Component'));
+            throw new \Cake\Network\Exception\InternalErrorException(__('YummySearch requires Paginator Component'));
         }
     }
 
