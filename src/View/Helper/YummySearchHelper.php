@@ -6,7 +6,11 @@ use Cake\View\Helper;
 
 class YummySearchHelper extends Helper
 {
-
+    /**
+     * Renders YummySearch form
+     * @param array $config
+     * @return string
+     */
     public function basicForm($config = [])
     {
         $element = 'Yummy.YummySearch/basic-form';
@@ -17,5 +21,4 @@ class YummySearchHelper extends Helper
 
         return $this->_View->element($element, $config);
     }
-
 }
