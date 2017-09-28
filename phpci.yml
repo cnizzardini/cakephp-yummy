@@ -10,8 +10,6 @@ test:
     php_unit:
         config:
             - "phpunit.xml"
-        coverage: "--coverage-html"
-        args: "--stderr"
     php_code_sniffer:
         allow_failures: true
         standard: "PSR2"
