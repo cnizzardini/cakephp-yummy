@@ -290,9 +290,9 @@ class YummySearchComponent extends Component
 
         if (isset($config['allow'][$model])) {
             return true;
-        } else if (isset($config['deny'][$model]) && $config['deny'][$model] == '*') {
+        } elseif (isset($config['deny'][$model]) && $config['deny'][$model] == '*') {
             return false;
-        } else if (isset($config['deny']) && $config['deny'] == '*') {
+        } elseif (isset($config['deny']) && $config['deny'] == '*') {
             return false;
         }
 
@@ -324,18 +324,18 @@ class YummySearchComponent extends Component
                 $key = array_search($column, $config['allow'][$model], true);
                 $isAllowed = true;
                 // check model keys
-            } else if (isset($config['allow'][$model][$column])) {
+            } elseif (isset($config['allow'][$model][$column])) {
                 $keys = array_keys($config['allow'][$model]);
                 $key = array_search($column, $keys, true);
                 $isAllowed = true;
                 // look in model columns
-            } else if (isset($config['allow'][$model]['_columns'])) {
+            } elseif (isset($config['allow'][$model]['_columns'])) {
                 // check model column elements
                 if (in_array($column, $config['allow'][$model]['_columns'])) {
                     $key = array_search($column, $config['allow'][$model]['_columns']);
                     $isAllowed = true;
                     // check model column keys
-                } else if (isset($config['allow'][$model]['_columns'][$column])) {
+                } elseif (isset($config['allow'][$model]['_columns'][$column])) {
                     $keys = array_keys($config['allow'][$model]['_columns']);
                     $key = array_search($column, $keys, true);
                     $isAllowed = true;
@@ -350,15 +350,15 @@ class YummySearchComponent extends Component
                 return $key;
             }
             // check deny all models
-        } else if (isset($config['deny']) && $config['deny'] == '*') {
+        } elseif (isset($config['deny']) && $config['deny'] == '*') {
             return false;
         }
         // check deny specific model
-        else if (isset($config['deny'][$model]) && $config['deny'][$model] == '*') {
+        elseif (isset($config['deny'][$model]) && $config['deny'][$model] == '*') {
             return false;
 
             // check deny specific model.column
-        } else if (isset($config['deny'][$model]) && in_array($column, $config['deny'][$model])) {
+        } elseif (isset($config['deny'][$model]) && in_array($column, $config['deny'][$model])) {
             return false;
         }
 
@@ -382,7 +382,7 @@ class YummySearchComponent extends Component
             if (isset($element['_default'])) {
                 $default = $element['_default'];
             }
-        } else if (is_string($element)) {
+        } elseif (is_string($element)) {
             $niceName = $element;
         }
 
@@ -411,7 +411,7 @@ class YummySearchComponent extends Component
 
         if (isset($config['allow'][$model][$column])) {
             $meta = $this->getColumnYummyMeta($config['allow'][$model][$column]);
-        } else if (isset($config['allow'][$model]['_columns'][$column])) {
+        } elseif (isset($config['allow'][$model]['_columns'][$column])) {
             $meta = $this->getColumnYummyMeta($config['allow'][$model]['_columns'][$column]);
         }
 
