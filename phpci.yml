@@ -6,7 +6,7 @@ build_settings:
         - "app"
 setup:
     composer:
-        action: "install"
+        action: "update"
 test:
     php_unit:
         config:
