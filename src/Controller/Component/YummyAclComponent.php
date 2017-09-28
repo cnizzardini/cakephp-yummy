@@ -146,7 +146,7 @@ class YummyAclComponent extends Component
     {
         $config = $this->config();
 
-        // deny if actions are not configured 
+        // deny if actions are not configured
         if (!isset($config['actions'])) {
             return false;
         }
@@ -264,5 +264,4 @@ class YummyAclComponent extends Component
         throw new InternalErrorException(__('YummyAcl requires the "redirect" option in config or Auth.loginAction or '
                 . 'Auth.unauthorizedRedirect'));
     }
-
 }
