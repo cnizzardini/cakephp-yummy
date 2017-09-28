@@ -1,4 +1,5 @@
 <?php
+
 namespace Yummy\Test\TestCase\Controller\Component;
 
 use Cake\Controller\ComponentRegistry;
@@ -61,4 +62,5 @@ class YummySearchComponentTest extends TestCase
     {
         $this->markTestIncomplete('Not implemented yet.');
     }
+
 }
