@@ -493,6 +493,7 @@ class YummySearchComponent extends Component
             $pieces = explode('.', $field);
             $column = array_pop($pieces);
             $model = implode('.', $pieces);
+            $path = '';
 
             if (isset($this->models[$model])) {
                 $path = $this->models[$model]['path'];
