@@ -118,7 +118,7 @@ if (document.getElementById('yummy-search-form') !== null) {
                 createRow.getElementsByTagName('select')[0].options[0].defaultSelected = true;
                 createRow.getElementsByTagName('select')[1].options[0].defaultSelected = true;
                 
-                if (createRow.getElementsByTagName('select')[2] !== null) {
+                if (createRow.getElementsByTagName('select')[2] !== null && createRow.getElementsByTagName('select')[2] !== undefined) {
                     createRow.getElementsByTagName('select')[2].remove();
                     
                     if (yummyAttributes !== null) {
