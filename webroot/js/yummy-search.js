@@ -21,7 +21,7 @@ if (document.getElementById('yummy-search-form') !== null) {
         var dataType = option.getAttribute('data-type').toLowerCase();
 
         var operator = row.getElementsByClassName('yummy-operator')[0];
-        var prevOperator = operator.getAttribute('value');
+        var prevOperator = false;
         
         if (operator.tagName.toLowerCase() === 'select') {
             for (var i=0; i<operator.length; i++) {
@@ -29,9 +29,26 @@ if (document.getElementById('yummy-search-form') !== null) {
                     prevOperator = operator[ i ].getAttribute('value');
                 }
             }
+        } else {
+            prevOperator = operator.getAttribute('value') == 'null' ? 'like' : operator.getAttribute('value');
         }
         
+        var prevValue = false;
+        
         var input = row.getElementsByClassName('yummy-input')[0];
+        
+        if (input !== undefined) {
+            if (input.tagName.toLowerCase() === 'input') {
+                prevValue = input.getAttribute('value');
+            } else if (input.tagName.toLowerCase() === 'select') {
+                for (var i=0; i<input.length; i++) {
+                    if (operator[ i ].getAttribute('selected') !== null) {
+                        prevValue = operator[ i ].getAttribute('value');
+                    }
+                }
+            }
+        }
+        
         var items = false;
         if (dataType === 'list') {
             var list = option.getAttribute('data-items');
@@ -47,7 +64,7 @@ if (document.getElementById('yummy-search-form') !== null) {
                     input: input,
                     dataType: dataType,
                     items: items,
-                    prevValue: input.getAttribute('value'),
+                    prevValue: prevValue,
                     prevOperator: prevOperator
                 },
                 bubbles: true,
@@ -141,7 +158,7 @@ if (document.getElementById('yummy-search-form') !== null) {
                 
                 // make textInput visible
                 if (yummyAttributes !== null) {
-                    textInput.className += yummyAttributes.getAttribute('show');
+                    textInput.classList.remove(yummyAttributes.getAttribute('hide'));
                 } else {
                     textInput.setAttribute('style','display:block');
                 }
@@ -151,7 +168,7 @@ if (document.getElementById('yummy-search-form') !== null) {
                 
                 // show minusBtn
                 if (yummyAttributes !== null) {
-                    minusBtn.className += yummyAttributes.getAttribute('show');
+                    minusBtn.classList.remove(yummyAttributes.getAttribute('hide'));
                 } else {
                     minusBtn.setAttribute('style','display:inline');
                 }
