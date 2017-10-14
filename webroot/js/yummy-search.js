@@ -1,8 +1,32 @@
+/**
+ * YummySearch
+ */
+(function yummySearchModule(factory) {
+	"use strict";
 
-if (document.getElementById('yummy-search-form') !== null) {
+	if (typeof define === "function" && define.amd) {
+		define(factory);
+	}
+	else if (typeof module != "undefined" && typeof module.exports != "undefined") {
+		module.exports = factory();
+	}
+	else {
+		/* jshint sub:true */
+		window.YummySearch = factory();
+	}
+})(function yummySearchFactory() {
+	"use strict";
 
-    var YummySearch = YummySearch || {};
-
+	if (typeof window === "undefined" || !window.document) {
+		return function yummySearchError() {
+			throw new Error("yummy-search.js requires a window with a document");
+		};
+	}
+    
+    function YummySearch(){
+        
+    }
+    
     /**
      * Creates and dispatches event
      * @param {dom object} row
@@ -22,7 +46,7 @@ if (document.getElementById('yummy-search-form') !== null) {
 
         var operator = row.getElementsByClassName('yummy-operator')[0];
         var prevOperator = false;
-        
+
         if (operator.tagName.toLowerCase() === 'select') {
             for (var i=0; i<operator.length; i++) {
                 if (operator[ i ].getAttribute('selected') !== null) {
@@ -32,11 +56,11 @@ if (document.getElementById('yummy-search-form') !== null) {
         } else {
             prevOperator = operator.getAttribute('value') == 'null' ? 'like' : operator.getAttribute('value');
         }
-        
+
         var prevValue = false;
-        
+
         var input = row.getElementsByClassName('yummy-input')[0];
-        
+
         if (input !== undefined) {
             if (input.tagName.toLowerCase() === 'input') {
                 prevValue = input.getAttribute('value');
@@ -48,7 +72,7 @@ if (document.getElementById('yummy-search-form') !== null) {
                 }
             }
         }
-        
+
         var items = false;
         if (dataType === 'list') {
             var list = option.getAttribute('data-items');
@@ -84,7 +108,7 @@ if (document.getElementById('yummy-search-form') !== null) {
     YummySearch.changeEvent = function(e,target){
         var row = target.parentElement.parentElement.parentElement.parentElement;
         //console.log(row);
-        YummySearch.yummySearchFieldChangeEvent(row);
+        this.yummySearchFieldChangeEvent(row);
     };
 
     /**
@@ -92,10 +116,18 @@ if (document.getElementById('yummy-search-form') !== null) {
      * @returns {undefined}
      */
     YummySearch.load = function(){
-        var rows = document.getElementsByClassName('yummy-search-row');
 
-        for (var i=0; i<rows.length; i++) {
-            YummySearch.yummySearchFieldChangeEvent(rows[ i ]);
+        if (document.getElementById('yummy-search-form') !== null) {
+            var rows = document.getElementsByClassName('yummy-search-row');
+
+            for (var i=0; i<rows.length; i++) {
+                this.yummySearchFieldChangeEvent(rows[ i ]);
+            }
+
+            this.bindEventListeners();
+
+        } else {
+            console.log('yummy-search-form not found')
         }
     };
 
@@ -110,7 +142,7 @@ if (document.getElementById('yummy-search-form') !== null) {
             e = e || window.event;
             var target = e.target || e.srcElement;
             if (target.tagName.toLowerCase() ==='select' && target.className.match('yummy-field')) {
-                YummySearch.changeEvent(e,target);
+                this.changeEvent(e,target);
             }
 
         },false);
@@ -127,7 +159,7 @@ if (document.getElementById('yummy-search-form') !== null) {
 
             /* add row */
             if (target.type === 'button' && target.className.match('plus-button')) {
-                
+
                 var rows = document.getElementsByClassName("yummy-search-row");
                 var createRow = rows[0].cloneNode(true);
                 var yummyAttributes = document.getElementById('yummy-attributes');
@@ -141,44 +173,43 @@ if (document.getElementById('yummy-search-form') !== null) {
                 // plus / minus buttons
                 var plusBtn = createRow.getElementsByClassName('plus-button')[0];
                 var minusBtn = createRow.getElementsByClassName('minus-button')[0];
-                
+
                 // reset search-by drop down
                 searchBy.options[0].defaultSelected = true;
                 // reset condition dropdown
                 operator.options[0].defaultSelected = true;
-                
+
                 // hide dropdown
                 if (dropdown !== null && dropdown !== undefined) {
                     dropdown.remove();
                 }
-                
+
                 // reset textInput
                 textInput.removeAttribute('disabled');
                 textInput.value = '';
-                
+
                 // make textInput visible
                 if (yummyAttributes !== null) {
                     textInput.classList.remove(yummyAttributes.getAttribute('hide'));
                 } else {
                     textInput.setAttribute('style','display:block');
                 }
-                
+
                 // remove plusBtn
                 plusBtn.remove();
-                
+
                 // show minusBtn
                 if (yummyAttributes !== null) {
                     minusBtn.classList.remove(yummyAttributes.getAttribute('hide'));
                 } else {
                     minusBtn.setAttribute('style','display:inline');
                 }
-                
+
                 // add the row
                 rows[ rows.length - 1].after(createRow);
             }
 
         },false);
     };
-
-    YummySearch.bindEventListeners();
-}
+    return YummySearch;
+});
