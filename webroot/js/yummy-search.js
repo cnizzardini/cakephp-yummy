@@ -108,7 +108,7 @@
     YummySearch.changeEvent = function(e,target){
         var row = target.parentElement.parentElement.parentElement.parentElement;
         //console.log(row);
-        this.yummySearchFieldChangeEvent(row);
+        YummySearch.yummySearchFieldChangeEvent(row);
     };
 
     /**
@@ -121,10 +121,10 @@
             var rows = document.getElementsByClassName('yummy-search-row');
 
             for (var i=0; i<rows.length; i++) {
-                this.yummySearchFieldChangeEvent(rows[ i ]);
+                YummySearch.yummySearchFieldChangeEvent(rows[ i ]);
             }
 
-            this.bindEventListeners();
+            YummySearch.bindEventListeners();
 
         } else {
             console.log('yummy-search-form not found')
@@ -142,7 +142,7 @@
             e = e || window.event;
             var target = e.target || e.srcElement;
             if (target.tagName.toLowerCase() ==='select' && target.className.match('yummy-field')) {
-                this.changeEvent(e,target);
+                YummySearch.changeEvent(e,target);
             }
 
         },false);
