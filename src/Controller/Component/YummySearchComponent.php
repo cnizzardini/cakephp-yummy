@@ -154,8 +154,15 @@ class YummySearchComponent extends Component
 
         $modelName = Inflector::camelize($tableName);
 
-        $schema = $this->collection->describe($tableName);
-        $columns = $schema->columns();
+        try{
+            $schema = $this->collection->describe($tableName);
+            $columns = $schema->columns();
+        } catch(\Cake\Database\Exception $e) {
+            throw new InternalErrorException("Unable to determine schema. Does this controller have an associated "
+                    . "database schema? Try manually defining the model YummySearch should use.  "
+                    . "\Cake\Database\Exception: " . $e->getMessage());
+        }
+
 
         foreach ($columns as $column) {
 
