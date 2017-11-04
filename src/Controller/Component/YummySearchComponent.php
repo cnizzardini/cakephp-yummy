@@ -129,6 +129,11 @@ class YummySearchComponent extends Component
             foreach ($selectOptions as $options) {
                 $select = array_merge($select, $options);
             }
+            
+            // apply A-Z sort when select groups are not used
+            usort($select, function($a, $b) {
+                return strcmp($a['text'], $b['text']);
+            });
         }
 
         $yummy = [
