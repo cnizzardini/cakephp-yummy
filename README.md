@@ -21,31 +21,18 @@ base model and other associations such as HasOne, BelongsTo, and HasMany through
 ![yummy search screenshot](https://www.cnizz.com/media/cakephp-yummy-search-screenshot.png)
 
 ```php
-/**
- * Step 1. Basic Controller Usage:
- */
+// Step 1. Basic Controller Usage:
 $query = $this->ModelName->find();
 
-// load component
-$this->loadComponent('Yummy.YummySearch',[
-    'query' => query,
-]);
+$this->loadComponent('Yummy.YummySearch',['query' => query]);
 
-// call search
-$q = $this->YummySearch->search($query);
+$results = $this->paginate($this->YummySearch->search($query));
 
-// call paginate
-$results = $this->paginate($q);
-
-/**
- * Step 2. Basic View Usage:
- */
+// Step 2. Basic View Usage:
 $this->helpers()->load('Yummy.YummySearch');
 echo $this->YummySearch->basicForm();
 
-/**
- * Step 3. Include agnostic JavaScript
- */
+// Step 3. Include agnostic JavaScript
 <script src="/yummy/js/yummy-search.js"></script>
  
 ```
