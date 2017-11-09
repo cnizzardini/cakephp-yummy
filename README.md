@@ -9,7 +9,7 @@ go another few minor and revision releases before being considered 1.0.
 
 ## Demo & Docs
 
-[Live Demo available](http://cake3.cnizz.com/yummy-demo) and full documented in the [git wiki](https://github.com/cnizzardini/cakephp-yummy/wiki).
+[Live Demo available](https://www.cnizz.com/yummy-demo) and full documented in the [git wiki](https://github.com/cnizzardini/cakephp-yummy/wiki).
 
 ## Features
 
@@ -64,7 +64,7 @@ usage and customization.
 
 ### YummyBake
 
-A series of bootstrap admin themes for your admin portal [(demo)](http://cake3.cnizz.com/yummy-demo/teams)
+A series of bootstrap admin themes for your admin portal [(demo)](https://www.cnizz.com/yummy-demo/teams)
 
 ```
 bin/cake bake template <ControllerName> -t Yummy
