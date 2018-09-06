@@ -4,7 +4,6 @@ engines:
     enabled: true
     config:
       languages:
-      - javascript
       - php
   eslint:
     enabled: true
@@ -15,13 +14,21 @@ engines:
     checks:
       CleanCode/StaticAccess:
         enabled: false
+      ExcessiveMethodLength:
+        minimum: 50
+      ShortVariable:
+        minimum: 1
+      ElseExpression:
+        enabled: false
+      ExcessiveClassLength:
+        minimum: 1000
 ratings:
   paths:
   - "**.inc"
-  - "**.js"
-  - "**.jsx"
+  - "**.ctp"
   - "**.module"
   - "**.php"
 exclude_paths:
 - config/
 - tests/
+- webroot/
