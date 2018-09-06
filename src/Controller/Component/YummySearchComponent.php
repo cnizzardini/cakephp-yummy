@@ -476,15 +476,20 @@ class YummySearchComponent extends Component
                 $query->where(["$column LIKE" => "%$value%"]);
                 break;
             case 'not_like':
-                return $query->where(["$column NOT LIKE" => "%$value%"]);
+                $query->where(["$column NOT LIKE" => "%$value%"]);
+                break;
             case 'gt':
-                return $query->where(["$column >" => $value]);
+                $query->where(["$column >" => $value]);
+                break;
             case 'lt':
-                return $query->where(["$column <" => $value]);
+                $query->where(["$column <" => $value]);
+                break;
             case 'gt_eq':
-                return $query->where(["$column >=" => $value]);
+                $query->where(["$column >=" => $value]);
+                break;
             case 'lt_eq':
-                return $query->where(["$column <=" => $value]);
+                $query->where(["$column <=" => $value]);
+                break;
             default:
                 throw new InternalErrorException('Unknown condition encountered');
         }
