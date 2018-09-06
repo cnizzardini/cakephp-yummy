@@ -12,7 +12,7 @@ engines:
   phpmd:
     enabled: true
     config: 
-      rulesets: "unusedcode,naming,phpmy.xml"
+      rulesets: "unusedcode,naming,phpmd.xml"
     checks:
       CleanCode/StaticAccess:
         enabled: false
