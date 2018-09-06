@@ -14,14 +14,6 @@ engines:
     checks:
       CleanCode/StaticAccess:
         enabled: false
-      ExcessiveMethodLength:
-        minimum: 50
-      ShortVariable:
-        minimum: 1
-      ElseExpression:
-        enabled: false
-      ExcessiveClassLength:
-        minimum: 1000
 ratings:
   paths:
   - "**.inc"
