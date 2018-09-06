@@ -258,15 +258,21 @@ class YummySearchComponent extends Component
 
         $add = [];
 
-        foreach ($dots as $dot) {
+        $dotNotations = array_filter($dots, function($dot){
             $pieces = explode('.', $dot);
             $length = count($pieces);
-            if ($length > 1) {
-                for ($i = 1; $i < $length; $i++) {
-                    $tmp = $pieces;
-                    $path = implode('.', array_slice($tmp, 0, $i));
-                    $add[] = $path;
-                }
+            if ($length >= 1) {
+                return $dot;
+            }
+        });
+        
+        foreach ($dotNotations as $dot) {
+            $pieces = explode('.', $dot);
+            $length = count($pieces);
+            for ($i = 1; $i < $length; $i++) {
+                $tmp = $pieces;
+                $path = implode('.', array_slice($tmp, 0, $i));
+                $add[] = $path;
             }
         }
         return array_merge($dots, array_unique($add));
@@ -461,11 +467,14 @@ class YummySearchComponent extends Component
     {
         switch ($operator) {
             case 'eq':
-                return $query->where([$column => $value]);
+                $query->where([$column => $value]);
+                break;
             case 'not_eq':
-                return $query->where(["$column !=" => $value]);
+                $query->where(["$column !=" => $value]);
+                break;
             case 'like':
-                return $query->where(["$column LIKE" => "%$value%"]);
+                $query->where(["$column LIKE" => "%$value%"]);
+                break;
             case 'not_like':
                 return $query->where(["$column NOT LIKE" => "%$value%"]);
             case 'gt':
@@ -479,6 +488,8 @@ class YummySearchComponent extends Component
             default:
                 throw new InternalErrorException('Unknown condition encountered');
         }
+        
+        return $query;
     }
 
     /**
