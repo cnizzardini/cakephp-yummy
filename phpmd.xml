@@ -19,6 +19,11 @@
             <property name="minimum" value="50" />
         </properties>
     </rule>
+    <rule ref="rulesets/codesize.xml/ExcessiveClassLength">
+        <properties>
+            <property name="minimum" value="700" />
+        </properties>
+    </rule>
     <rule ref="rulesets/namingrules.xml/ShortVariable">
         <properties>
             <property name="minimum" value="1" />
