@@ -14,16 +14,20 @@
             <property name="maxmethods" value="25" />
         </properties>
     </rule>
+    
     <rule ref="rulesets/codesize.xml/ExcessiveMethodLength">
         <properties>
-            <property name="minimum" value="50" />
+            <property name="ignore-whitespace" value="true" />
+            <property name="minimum" value="100" />
         </properties>
     </rule>
+    
     <rule ref="rulesets/codesize.xml/ExcessiveClassLength">
         <properties>
             <property name="minimum" value="700" />
         </properties>
     </rule>
+    
     <rule ref="rulesets/namingrules.xml/ShortVariable">
         <properties>
             <property name="minimum" value="1" />
