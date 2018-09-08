@@ -9,6 +9,10 @@ engines:
     enabled: true
   fixme:
     enabled: true
+  sonar-php:
+    enabled: true
+  phpcodesniffer:
+    enabled: true
   phpmd:
     enabled: true
     config: 
