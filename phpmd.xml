@@ -11,6 +11,10 @@
         </properties>
     </rule>
     
+    <rule ref="rulesets/codesize.xml">
+        <exclude name="TooManyPublicMethods"/>
+    </rule>
+    
     <rule ref="rulesets/codesize.xml/ExcessiveMethodLength">
         <properties>
             <property name="ignore-whitespace" value="true" />

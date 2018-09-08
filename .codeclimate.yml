@@ -14,7 +14,7 @@ engines:
   phpmd:
     enabled: true
     config: 
-      rulesets: "unusedcode,naming,phpmd.xml"
+      rulesets: "codesize,unusedcode,naming,phpmd.xml"
     checks:
       CleanCode/StaticAccess:
         enabled: false
