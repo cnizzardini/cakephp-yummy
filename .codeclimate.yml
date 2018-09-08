@@ -15,9 +15,6 @@ engines:
     enabled: true
     config: 
       rulesets: "phpmd.xml"
-    checks:
-      CleanCode/StaticAccess:
-        enabled: false
 ratings:
   paths:
   - "**.inc"
