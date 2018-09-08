@@ -11,8 +11,9 @@ engines:
     enabled: true
   phpmd:
     enabled: true
-    config: 
-      rulesets: "phpmd.xml"
+    config:
+      file_extensions: "php"
+      rulesets: "unusedcode,codesize,naming,phpmd.xml"
 ratings:
   paths:
   - "**.inc"
