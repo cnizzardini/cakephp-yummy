@@ -12,7 +12,6 @@ use Cake\Network\Exception\InternalErrorException;
  */
 class YummySearchComponent extends Component
 {
-    const ComponentName = 'YummySearch';
     private $models = false;
     protected $_defaultConfig = [
         'operators' => [
@@ -70,7 +69,7 @@ class YummySearchComponent extends Component
         $yummy = $this->getYummyHelperData();
 
         // make yummy search data available to view
-        $this->controller->set(ComponentName, $yummy);
+        $this->controller->set('YummySearch', $yummy);
     }
 
     /**
@@ -108,7 +107,7 @@ class YummySearchComponent extends Component
                     'data-items' => ($meta['options'] !== false) ? implode(',', $meta['options']) : false,
                     'data-type' => ($meta['options'] !== false) ? 'list' : $field['type'],
                     'data-length' => $field['length'],
-                    'selected' => ($request->query(ComponentName) === null && $meta['default'] === true) ? true : false
+                    'selected' => ($request->query('YummySearch') === null && $meta['default'] === true) ? true : false
                 ];
 
                 if ($field['sort-order'] !== false) {
@@ -138,7 +137,7 @@ class YummySearchComponent extends Component
 
         $yummy = [
             'base_url' => $this->controller->request->here,
-            'rows' => $this->controller->request->query(ComponentName),
+            'rows' => $this->controller->request->query('YummySearch'),
             'operators' => $this->config('operators'),
             'models' => isset($select) ? $select : $selectOptions
         ];
@@ -505,11 +504,11 @@ class YummySearchComponent extends Component
     {
         // exit if no search was performed or user cleared search paramaters
         $request = $this->controller->request;
-        if ($request->query(ComponentName) == null || $request->query('YummySearch_clear') != null) {
+        if ($request->query('YummySearch') == null || $request->query('YummySearch_clear') != null) {
             return $query;
         }
 
-        $data = $request->query(ComponentName);     // get query parameters
+        $data = $request->query('YummySearch');     // get query parameters
         $length = count($data['field']);            // get array length
         // loop through available fields and set conditions
         for ($i = 0; $i < $length; $i++) {
