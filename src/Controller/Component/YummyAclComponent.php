@@ -44,12 +44,7 @@ class YummyAclComponent extends Component
 
         // determine the redirect url
         $this->setRedirect();
-
-        // has controller access?
-        if ($this->checkControllerAccess() == true) {
-            return true;
-        }
-
+        
         // has action access?
         if ($this->checkActionAccess() == false) {
             return $this->denyAccess();
@@ -145,23 +140,19 @@ class YummyAclComponent extends Component
     private function checkActionAccess()
     {
         $config = $this->config();
-
-        // deny if actions are not configured
+        
         if (!isset($config['actions'])) {
-            return false;
+            return $this->checkControllerAccess();
         }
 
-        // deny if action is not defined
         if (!isset($config['actions'][$this->actionName])) {
-            return false;
+            return $this->checkControllerAccess();
         }
-
-        // allow if wildcard
+        
         if ($config['actions'][$this->actionName] == '*') {
             return true;
         }
-
-        // allow if group is in allow
+        
         if (in_array($config['group'], $config['actions'][$this->actionName])) {
             return true;
         }
