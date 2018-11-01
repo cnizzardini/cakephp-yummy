@@ -34,7 +34,7 @@ do{
                     'label' => false,
                     'escape' => false,
                     'default' => $column,
-                    'empty' => true
+                    'empty' => false
                 ]); 
             ?>
         </div>
