@@ -58,7 +58,8 @@ do{
                     'class' => 'form-control border-input yummy-input',
                     'placeholder' => 'Search',
                     'label' => false,
-                    'default' => $search
+                    'default' => $search,
+                    'autofocus' => $i == 0 ? true : false
                 ]); 
             ?>
         </div>
