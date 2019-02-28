@@ -2,31 +2,31 @@
  * YummySearch
  */
 (function yummySearchModule(factory) {
-	"use strict";
+    "use strict";
 
-	if (typeof define === "function" && define.amd) {
-		define(factory);
-	}
-	else if (typeof module != "undefined" && typeof module.exports != "undefined") {
-		module.exports = factory();
-	}
-	else {
-		/* jshint sub:true */
-		window.YummySearch = factory();
-	}
-})(function yummySearchFactory() {
-	"use strict";
-
-	if (typeof window === "undefined" || !window.document) {
-		return function yummySearchError() {
-			throw new Error("yummy-search.js requires a window with a document");
-		};
-	}
-    
-    function YummySearch(){
-        
+    if (typeof define === "function" && define.amd) {
+        define(factory);
     }
-    
+    else if (typeof module != "undefined" && typeof module.exports != "undefined") {
+        module.exports = factory();
+    }
+    else {
+        /* jshint sub:true */
+        window.YummySearch = factory();
+    }
+})(function yummySearchFactory() {
+    "use strict";
+
+    if (typeof window === "undefined" || !window.document) {
+        return function yummySearchError() {
+            throw new Error("yummy-search.js requires a window with a document");
+        };
+    }
+
+    function YummySearch(){
+
+    }
+
     /**
      * Creates and dispatches event
      * @param {dom object} row
@@ -80,7 +80,7 @@
         }
 
         var event = new CustomEvent(
-            "yummySearchFieldChange", 
+            "yummySearchFieldChange",
             {
                 detail: {
                     field: field,
@@ -207,6 +207,7 @@
 
                 // add the row
                 rows[ rows.length - 1].after(createRow);
+                YummySearch.yummySearchFieldChangeEvent(createRow);
             }
 
         },false);
