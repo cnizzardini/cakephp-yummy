@@ -26,6 +26,7 @@ class YummySearchComponent extends Component
         ],
         'dataSource' => 'default',
         'selectGroups' => true,
+        'trim' => true
     ];
 
     public function initialize(array $config)
@@ -128,7 +129,7 @@ class YummySearchComponent extends Component
             foreach ($selectOptions as $options) {
                 $select = array_merge($select, $options);
             }
-            
+
             // apply A-Z sort when select groups are not used
             usort($select, function($a, $b) {
                 return strcmp($a['text'], $b['text']);
@@ -163,8 +164,8 @@ class YummySearchComponent extends Component
             $columns = $schema->columns();
         } catch(\Cake\Database\Exception $e) {
             throw new InternalErrorException("Unable to determine schema. Does this controller have an associated "
-                    . "database schema? Try manually defining the model YummySearch should use.  "
-                    . "\Cake\Database\Exception: " . $e->getMessage());
+                . "database schema? Try manually defining the model YummySearch should use.  "
+                . "\Cake\Database\Exception: " . $e->getMessage());
         }
 
 
@@ -264,7 +265,7 @@ class YummySearchComponent extends Component
                 return $dot;
             }
         });
-        
+
         foreach ($dotNotations as $dot) {
             $pieces = explode('.', $dot);
             $length = count($pieces);
@@ -365,14 +366,14 @@ class YummySearchComponent extends Component
             if ($key >= 0) {
                 return $key;
             }
-        // check deny all models
+            // check deny all models
         } elseif (isset($config['deny']) && $config['deny'] == '*') {
             return false;
-        // check deny specific model
+            // check deny specific model
         } elseif (isset($config['deny'][$model]) && $config['deny'][$model] == '*') {
             return false;
 
-        // check deny specific model.column
+            // check deny specific model.column
         } elseif (isset($config['deny'][$model]) && in_array($column, $config['deny'][$model])) {
             return false;
         }
@@ -463,6 +464,12 @@ class YummySearchComponent extends Component
      */
     private function getWhere($query, $column, $operator, $value)
     {
+        $config = $this->getConfig();
+
+        if ($config['trim'] == true) {
+            $value = trim($value);
+        }
+
         switch ($operator) {
             case 'eq':
                 $query->where([$column => $value]);
@@ -491,7 +498,7 @@ class YummySearchComponent extends Component
             default:
                 throw new InternalErrorException('Unknown condition encountered');
         }
-        
+
         return $query;
     }
 
