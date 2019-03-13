@@ -26,7 +26,6 @@ class YummySearchComponent extends Component
         ],
         'dataSource' => 'default',
         'selectGroups' => true,
-        'trim' => true
     ];
 
     public function initialize(array $config)
@@ -464,12 +463,6 @@ class YummySearchComponent extends Component
      */
     private function getWhere($query, $column, $operator, $value)
     {
-        $config = $this->getConfig();
-
-        if ($config['trim'] == true) {
-            $value = trim($value);
-        }
-
         switch ($operator) {
             case 'eq':
                 $query->where([$column => $value]);
@@ -519,6 +512,11 @@ class YummySearchComponent extends Component
         $length = count($data['field']);            // get array length
         // loop through available fields and set conditions
         for ($i = 0; $i < $length; $i++) {
+
+            if (!isset($data['field'][$i]) || !isset($data['operator'][$i]) || !isset($data['search'][$i])) {
+                continue;
+            }
+
             $field = $data['field'][$i];            // get field name
             $operator = $data['operator'][$i];      // get operator type
             $search = $data['search'][$i];          // get search paramter
