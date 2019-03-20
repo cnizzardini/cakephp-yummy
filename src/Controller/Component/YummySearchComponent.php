@@ -161,7 +161,8 @@ class YummySearchComponent extends Component
         }
 
         $database = ConnectionManager::get($this->getConfig('dataSource'));
-        $rule = new Rule($this->getConfig());
+
+        $rule = new Rule($this->_config);
         $schema = new Schema($rule);
 
         $this->models = [
@@ -298,7 +299,7 @@ class YummySearchComponent extends Component
             'default' => false,
         ];
 
-        $config = $this->getConfig();
+        $config = $this->_config;
 
         if (isset($config['allow'][$model][$column])) {
             $meta = $this->getColumnYummyMeta($config['allow'][$model][$column]);
@@ -344,7 +345,7 @@ class YummySearchComponent extends Component
             return $query;
         }
 
-        $rule = new Rule($this->getConfig());
+        $rule = new Rule($this->_config);
 
         $data = $request->query('YummySearch');     // get query parameters
         $length = count($data['field']);            // get array length
