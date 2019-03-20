@@ -42,6 +42,10 @@ class Rule
      */
     private function hasAccessMode(string $accessMode, array $config, string $model)
     {
+        if (!isset($config[$accessMode])) {
+            return false;
+        }
+
         if (in_array($model, $config[$accessMode])) {
             return true;
         }
