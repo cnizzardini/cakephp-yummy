@@ -50,19 +50,11 @@ class Rule
         // check if in allow columns
         if (isset($config['allow'][$model])) {
 
-            $isAllowed = false;
+            if (!$this->hasColumnAccess($config, $model, $column)) {
+                return false;
+            }
 
-            // check model elements
-            if (in_array($column, $config['allow'][$model])) {
-                $key = array_search($column, $config['allow'][$model], true);
-                $isAllowed = true;
-                // check model keys
-            } elseif (isset($config['allow'][$model][$column])) {
-                $keys = array_keys($config['allow'][$model]);
-                $key = array_search($column, $keys, true);
-                $isAllowed = true;
-                // look in model columns
-            } elseif (isset($config['allow'][$model]['_columns'])) {
+            if (isset($config['allow'][$model]['_columns'])) {
                 // check model column elements
                 if (in_array($column, $config['allow'][$model]['_columns'])) {
                     $key = array_search($column, $config['allow'][$model]['_columns']);
@@ -93,6 +85,24 @@ class Rule
         } elseif (isset($config['deny'][$model]) && in_array($column, $config['deny'][$model])) {
             return false;
         }
+
+        return true;
+    }
+
+    private function hasColumnAccess(array $config, string $model, string $column)
+    {
+        if (in_array($column, $config['allow'][$model])) {
+            if(array_search($column, $config['allow'][$model], true) > 0) {
+                return true;
+            }
+        }
+
+/*        if (isset($config['allow'][$model][$column])) {
+            $keys = array_keys($config['allow'][$model]);
+            if (array_search($column, $keys, true) > 0) {
+                return true;
+            }
+        }*/
 
         return true;
     }
