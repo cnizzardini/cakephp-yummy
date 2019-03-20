@@ -25,7 +25,7 @@ class Schema
      */
     public function getColumns(ConnectionInterface $database, string $name)
     {
-        $database->schemaCollection();
+        $collection = $database->schemaCollection();
 
         $data = [];
         $tableName = Inflector::underscore($name);
@@ -33,7 +33,7 @@ class Schema
         $modelName = Inflector::camelize($tableName);
 
         try{
-            $schema = $this->collection->describe($tableName);
+            $schema = $collection->describe($tableName);
             $columns = $schema->columns();
         } catch(\Cake\Database\Exception $e) {
             throw new Yummy\Exception\YummySearch(
