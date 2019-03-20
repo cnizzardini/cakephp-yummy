@@ -54,15 +54,39 @@ class RuleTest extends TestCase
         $this->assertFalse($rule->isModelAllowed('Bar'));
     }
 
-    public function testIsColumnAllowed()
+    public function testIsColumnAllowedTrue()
     {
         $rule = new Rule([
             'allow' => [
-                'Foo' => ['id']
-            ],
-            'deny' => [
-                'Bar'
+                'Foo' => ['id'],
+                'Bar' => [
+                    '_columns' => [
+                        'id'
+                    ]
+                ],
+                'Foobar' => [
+                    '_columns' => [
+                        'id' => ['_niceName' => 'ID']
+                    ]
+                ]
             ]
         ]);
+
+        $this->assertNotFalse($rule->isColumnAllowed('Foo','id'));
+        $this->assertNotFalse($rule->isColumnAllowed('Bar','id'));
+        $this->assertNotFalse($rule->isColumnAllowed('Foobar','id'));
+    }
+
+    public function testIsColumnAllowedFalse()
+    {
+        $rule = new Rule([
+            'deny' => [
+                'Foo' => ['id'],
+                'Bar' => '*'
+            ]
+        ]);
+
+        $this->assertFalse($rule->isColumnAllowed('Foo','id'));
+        $this->assertFalse($rule->isColumnAllowed('Bar','id'));
     }
 }
