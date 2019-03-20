@@ -6,6 +6,8 @@ use Cake\Controller\Component;
 use Cake\Datasource\ConnectionManager;
 use Cake\Utility\Inflector;
 use Cake\Network\Exception\InternalErrorException;
+use Yummy\Service\YummySearch\QueryGenerator;
+use Yummy\Service\YummySearch\Schema;
 
 /**
  * This component is a should be used in conjunction with the YummySearchHelper for building rudimentary search filters
@@ -49,10 +51,6 @@ class YummySearchComponent extends Component
         if (isset($config['selectGroups'])) {
             $this->setConfig('selectGroups', $config['selectGroups']);
         }
-
-        // Create a schema collection.
-        $database = ConnectionManager::get($this->getConfig('dataSource'));
-        $this->collection = $database->schemaCollection();
 
         $this->defineModels();
     }
@@ -146,50 +144,6 @@ class YummySearchComponent extends Component
     }
 
     /**
-     * getColumns - returns array of columns after checking allow/deny rules
-     * @param string $name
-     * @return array
-     * [ModelName.column_name => Column Name]
-     */
-    private function getColumns($name)
-    {
-        $data = [];
-        $tableName = Inflector::underscore($name);
-
-        $modelName = Inflector::camelize($tableName);
-
-        try{
-            $schema = $this->collection->describe($tableName);
-            $columns = $schema->columns();
-        } catch(\Cake\Database\Exception $e) {
-            throw new InternalErrorException("Unable to determine schema. Does this controller have an associated "
-                . "database schema? Try manually defining the model YummySearch should use.  "
-                . "\Cake\Database\Exception: " . $e->getMessage());
-        }
-
-
-        foreach ($columns as $column) {
-
-            $allowed = $this->isColumnAllowed($modelName, $column);
-
-            if ($allowed !== false) {
-
-                $columnMeta = $schema->column($column);
-
-                $data["$modelName.$column"] = [
-                    'column' => $column,
-                    'text' => Inflector::humanize($column),
-                    'type' => $columnMeta['type'],
-                    'length' => $columnMeta['length'],
-                    'sort-order' => $allowed === true ? null : $allowed
-                ];
-            }
-        }
-
-        return $data;
-    }
-
-    /**
      * Defines models associations
      * @return void
      */
@@ -205,11 +159,15 @@ class YummySearchComponent extends Component
             $baseHumanName = Inflector::humanize(Inflector::underscore($baseModel));
         }
 
+        $database = ConnectionManager::get($this->getConfig('dataSource'));
+
+        $schema = new Schema();
+
         $this->models = [
             $baseHumanName => [
                 'humanName' => $baseHumanName,
                 'path' => false,
-                'columns' => $this->getColumns($baseModel),
+                'columns' => $schema->getColumns($database, $baseModel),
             ]
         ];
 
@@ -225,17 +183,18 @@ class YummySearchComponent extends Component
                 $humanName = Inflector::humanize(Inflector::underscore($theName));
             }
 
-            if ($theName !== 'queryBuilder') {
+            if ($theName === 'queryBuilder') {
+                continue;
+            }
 
-                $columns = $this->getColumns($theName);
+            $columns = $schema->getColumns($database, $theName);
 
-                if (!empty($columns)) {
-                    $this->models[$theName] = [
-                        'humanName' => $humanName,
-                        'path' => $path,
-                        'columns' => $this->getColumns($theName),
-                    ];
-                }
+            if (!empty($columns)) {
+                $this->models[$theName] = [
+                    'humanName' => $humanName,
+                    'path' => $path,
+                    'columns' => $schema->getColumns($database, $theName),
+                ];
             }
         }
     }
@@ -443,56 +402,16 @@ class YummySearchComponent extends Component
      */
     private function getSqlCondition($model, $column, $operator, $value, $query)
     {
+        $queryGenerator = new QueryGenerator();
+
         // for base model searches
         if (empty($model)) {
-            return $this->getWhere($query, $column, $operator, $value);
+            return $queryGenerator->getWhere($query, $column, $operator, $value);
         }
 
-        return $query->matching($model, function ($q) use ($column, $operator, $value) {
-            return $this->getWhere($q, $column, $operator, $value);
+        return $query->matching($model, function ($q) use ($column, $operator, $value, $queryGenerator) {
+            return $queryGenerator->getWhere($q, $column, $operator, $value);
         });
-    }
-
-    /**
-     * Returns a where condition
-     * @param string $column
-     * @param string $operator
-     * @param string $value
-     * @return Cake\Database\Query
-     * @throws InternalErrorException
-     */
-    private function getWhere($query, $column, $operator, $value)
-    {
-        switch ($operator) {
-            case 'eq':
-                $query->where([$column => $value]);
-                break;
-            case 'not_eq':
-                $query->where(["$column !=" => $value]);
-                break;
-            case 'like':
-                $query->where(["$column LIKE" => "%$value%"]);
-                break;
-            case 'not_like':
-                $query->where(["$column NOT LIKE" => "%$value%"]);
-                break;
-            case 'gt':
-                $query->where(["$column >" => $value]);
-                break;
-            case 'lt':
-                $query->where(["$column <" => $value]);
-                break;
-            case 'gt_eq':
-                $query->where(["$column >=" => $value]);
-                break;
-            case 'lt_eq':
-                $query->where(["$column <=" => $value]);
-                break;
-            default:
-                throw new InternalErrorException('Unknown condition encountered');
-        }
-
-        return $query;
     }
 
     /**
