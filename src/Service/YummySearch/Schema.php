@@ -7,6 +7,13 @@ use Cake\Utility\Inflector;
 
 class Schema
 {
+    private $rule;
+
+    public function __construct(Rule $rule)
+    {
+        $this->rule = $rule;
+    }
+
     /**
      * Returns array of columns after checking allow/deny rules
      *
@@ -38,7 +45,7 @@ class Schema
 
         foreach ($columns as $column) {
 
-            $allowed = $this->isColumnAllowed($modelName, $column);
+            $allowed = $this->rule->isColumnAllowed($modelName, $column);
 
             if ($allowed !== false) {
                 continue;
