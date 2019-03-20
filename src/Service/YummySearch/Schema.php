@@ -47,7 +47,7 @@ class Schema
 
             $allowed = $this->rule->isColumnAllowed($modelName, $column);
 
-            if ($allowed !== false) {
+            if ($allowed === false) {
                 continue;
             }
 
