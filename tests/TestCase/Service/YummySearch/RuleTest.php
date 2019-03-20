@@ -8,7 +8,7 @@ use Yummy\Service\YummySearch\Rule;
 
 class RuleTest extends TestCase
 {
-    public function testIsModelAllowed()
+    public function testIsModelAllowedTrue()
     {
         $rule = new Rule([
             'allow' => [
@@ -35,8 +35,34 @@ class RuleTest extends TestCase
         $this->assertFalse($rule->isModelAllowed('Bar'));
     }
 
+    public function testIsModelAllowedFalse()
+    {
+        $rule = new Rule([
+            'deny' => [
+                'Bar'
+            ]
+        ]);
+
+        $this->assertFalse($rule->isModelAllowed('Bar'));
+
+        $rule = new Rule([
+            'deny' => [
+                'Bar' => '*'
+            ]
+        ]);
+
+        $this->assertFalse($rule->isModelAllowed('Bar'));
+    }
+
     public function testIsColumnAllowed()
     {
-        $this->markTestIncomplete('Not implemented yet.');
+        $rule = new Rule([
+            'allow' => [
+                'Foo' => ['id']
+            ],
+            'deny' => [
+                'Bar'
+            ]
+        ]);
     }
 }
