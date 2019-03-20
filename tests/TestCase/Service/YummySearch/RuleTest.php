@@ -13,11 +13,26 @@ class RuleTest extends TestCase
         $rule = new Rule([
             'allow' => [
                 'Foo'
+            ],
+            'deny' => [
+                'Bar'
             ]
         ]);
 
-        $this->assertFalse($rule->isColumnAllowed('Bar'));
-        $this->assertTrue($rule->isColumnAllowed('Foo'));
+        $this->assertTrue($rule->isModelAllowed('Foo'));
+        $this->assertFalse($rule->isModelAllowed('Bar'));
+
+        $rule = new Rule([
+            'allow' => [
+                'Foo' => '*',
+            ],
+            'deny' => [
+                'Bar' => '*'
+            ]
+        ]);
+
+        $this->assertTrue($rule->isModelAllowed('Foo'));
+        $this->assertFalse($rule->isModelAllowed('Bar'));
     }
 
     public function testIsColumnAllowed()

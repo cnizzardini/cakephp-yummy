@@ -17,20 +17,42 @@ class Rule
      * @param string $model
      * @return boolean
      */
-    private function isModelAllowed(string $model)
+    public function isModelAllowed(string $model)
     {
         $config = $this->config;
 
-        if (isset($config['allow'][$model])) {
+        if ($this->hasAccessMode('allow', $config, $model)) {
             return true;
-        } elseif (isset($config['deny'][$model]) && $config['deny'][$model] == '*') {
-            return false;
-        } elseif (isset($config['deny']) && $config['deny'] == '*') {
+        }
+
+        if ($this->hasAccessMode('deny', $config, $model)) {
             return false;
         }
 
         return true;
     }
+
+    /**
+     * Checks access mode for given config and model.
+     *
+     * @param string $accessMode
+     * @param array $config
+     * @param string $model
+     * @return bool
+     */
+    private function hasAccessMode(string $accessMode, array $config, string $model)
+    {
+        if (in_array($model, $config[$accessMode])) {
+            return true;
+        }
+
+        if (isset($config[$accessMode][$model]) && $config[$accessMode][$model] == '*') {
+            return true;
+        }
+
+        return false;
+    }
+
 
     /**
      * Checks allow/deny rules to see if column is allowed
