@@ -22,7 +22,7 @@ class Association
             $baseHumanName = Inflector::humanize(Inflector::underscore($baseModel));
         }
 
-        $rule = new Rule($this->_config);
+        $rule = new Rule($config);
         $schema = new Schema($rule);
 
         $models = [
@@ -33,7 +33,7 @@ class Association
             ]
         ];
 
-        $paths = $this->getPaths();
+        $paths = $this->getPaths($config);
 
         foreach ($paths as $path) {
 
