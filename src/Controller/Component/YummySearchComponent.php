@@ -55,7 +55,7 @@ class YummySearchComponent extends Component
 
         $association = new Association();
 
-        $this->models = $association->defineModels($database, $this->_config);
+        $this->models = $association->getModels($database, $this->_config);
     }
 
     /**
