@@ -7,7 +7,7 @@ use Yummy\Service\YummySearch\Schema;
 
 class SchemaTest extends TestCase
 {
-    public function getColumnsTest()
+    public function testGetColumns()
     {
         $this->markTestIncomplete('Not implemented yet.');
     }

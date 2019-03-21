@@ -7,7 +7,7 @@ use Yummy\Service\YummySearch\QueryGenerator;
 
 class QueryGeneratorTest extends TestCase
 {
-    public function getWhereTest()
+    public function testGetWhere()
     {
         $this->markTestIncomplete('Not implemented yet.');
     }
