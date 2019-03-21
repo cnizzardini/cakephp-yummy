@@ -21,11 +21,11 @@ class Rule
     {
         $config = $this->config;
 
-        if ($this->hasAccessMode('allow', $config, $model)) {
+        if ($this->hasAccessModel('allow', $config, $model)) {
             return true;
         }
 
-        if ($this->hasAccessMode('deny', $config, $model)) {
+        if ($this->hasAccessModel('deny', $config, $model)) {
             return false;
         }
 
@@ -40,7 +40,7 @@ class Rule
      * @param string $model
      * @return bool
      */
-    private function hasAccessMode(string $accessMode, array $config, string $model)
+    private function hasAccessModel(string $accessMode, array $config, string $model)
     {
         if (!isset($config[$accessMode])) {
             return false;
@@ -59,7 +59,8 @@ class Rule
 
 
     /**
-     * Checks allow/deny rules to see if column is allowed
+     * Checks allow/deny rules to see if column is allowed. Will return true or int (for sort order) if the column
+     * is allowed. False otherwise.
      *
      * @param string $model
      * @param string $column
@@ -73,53 +74,41 @@ class Rule
 
         $config = $this->config;
 
+        if (isset($config['deny'][$model]) && in_array($column, $config['deny'][$model])) {
+            return false;
+        }
+
         // check if in allow columns
-        if (isset($config['allow'][$model])) {
+        if (!isset($config['allow'][$model])) {
+            return true;
+        }
 
-            $isAllowed = false;
+        $key = false;
 
-            // check model elements
-            if (in_array($column, $config['allow'][$model])) {
-                $key = array_search($column, $config['allow'][$model], true);
-                $isAllowed = true;
-                // check model keys
-            } elseif (isset($config['allow'][$model][$column])) {
-                $keys = array_keys($config['allow'][$model]);
+        // check model elements
+        if (in_array($column, $config['allow'][$model])) {
+            $key = array_search($column, $config['allow'][$model], true);
+        // check model keys
+        } else if (isset($config['allow'][$model][$column])) {
+            $keys = array_keys($config['allow'][$model]);
+            $key = array_search($column, $keys, true);
+        // look in model columns
+        } else if (isset($config['allow'][$model]['_columns'])) {
+            // check model column elements
+            if (in_array($column, $config['allow'][$model]['_columns'])) {
+                $key = array_search($column, $config['allow'][$model]['_columns']);
+            // check model column keys
+            } else if (isset($config['allow'][$model]['_columns'][$column])) {
+                $keys = array_keys($config['allow'][$model]['_columns']);
                 $key = array_search($column, $keys, true);
-                $isAllowed = true;
-                // look in model columns
-            } elseif (isset($config['allow'][$model]['_columns'])) {
-                // check model column elements
-                if (in_array($column, $config['allow'][$model]['_columns'])) {
-                    $key = array_search($column, $config['allow'][$model]['_columns']);
-                    $isAllowed = true;
-                    // check model column keys
-                } elseif (isset($config['allow'][$model]['_columns'][$column])) {
-                    $keys = array_keys($config['allow'][$model]['_columns']);
-                    $key = array_search($column, $keys, true);
-                    $isAllowed = true;
-                }
             }
+        }
 
-            if ($isAllowed === false) {
-                return false;
-            }
-
-            if ($key >= 0) {
-                return $key;
-            }
-            // check deny all models
-        } elseif (isset($config['deny']) && $config['deny'] == '*') {
-            return false;
-            // check deny specific model
-        } elseif (isset($config['deny'][$model]) && $config['deny'][$model] == '*') {
-            return false;
-
-            // check deny specific model.column
-        } elseif (isset($config['deny'][$model]) && in_array($column, $config['deny'][$model])) {
-            return false;
+        if ($key >= 0) {
+            return $key;
         }
 
         return true;
     }
+
 }
