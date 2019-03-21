@@ -264,18 +264,18 @@ class YummySearchComponent extends Component
         $data = $this->getFormattedData($request->query('YummySearch'));
 
         foreach ($data as $item) {
+
             $pieces = explode('.', $item['field']);
             $column = array_pop($pieces);
             $model = implode('.', $pieces);
-            $path = '';
 
-            if (isset($this->models[$model])) {
-                $path = $this->models[$model]['path'];
+            if ($rule->isColumnAllowed($model, $column) === false) {
+                continue;
             }
 
-            if ($rule->isColumnAllowed($model, $column) !== false) {
-                $query = $this->getSqlCondition($path, "$model.$column", $item['operator'], $item['search'], $query);
-            }
+            $path = isset($this->models[$model]) ? $this->models[$model]['path'] : '';
+
+            $query = $this->getSqlCondition($path, "$model.$column", $item['operator'], $item['search'], $query);
         }
 
         return $query;
