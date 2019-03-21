@@ -26,39 +26,45 @@ class QueryGenerator
      */
     public function getWhere(Query $query, string $column, string $operator, string $value)
     {
+        $operator = $this->getOperator($operator);
+
+        if ($operator === false) {
+            throw new Yummy\Exception\YummySearch\QueryException('Unknown condition encountered');
+        }
+
         if ($this->config['trim'] == true) {
             $value = trim($value);
         }
 
-        switch ($operator) {
-            case 'eq':
-                $query->where([$column => $value]);
-                break;
-            case 'not_eq':
-                $query->where(["$column !=" => $value]);
-                break;
-            case 'like':
-                $query->where(["$column LIKE" => "%$value%"]);
-                break;
-            case 'not_like':
-                $query->where(["$column NOT LIKE" => "%$value%"]);
-                break;
-            case 'gt':
-                $query->where(["$column >" => $value]);
-                break;
-            case 'lt':
-                $query->where(["$column <" => $value]);
-                break;
-            case 'gt_eq':
-                $query->where(["$column >=" => $value]);
-                break;
-            case 'lt_eq':
-                $query->where(["$column <=" => $value]);
-                break;
-            default:
-                throw new Yummy\Exception\YummySearch\QueryException('Unknown condition encountered');
-        }
+        $query->where(["$column $operator" => $value]);
 
         return $query;
+    }
+
+    /**
+     * Returns the correct SQL operator, returns false if operator not found
+     *
+     * @param $operator
+     * @return string|bool
+     */
+    private function getOperator($operator)
+    {
+        $operators = [
+            'like' => 'LIKE',
+            'not_like' => 'NOT LIKE',
+            'gt' => '>',
+            'gt_eq' => '>=',
+            'lt' => '<',
+            'lt_eq' => '<=',
+            'eq' => '',
+            'not_eq' => '!='
+        ];
+
+        if (isset($operators[$operator])) {
+            return $operators[$operator];
+        }
+
+        return false;
+
     }
 }
