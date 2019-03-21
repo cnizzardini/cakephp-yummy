@@ -253,8 +253,8 @@ class YummySearchComponent extends Component
      */
     public function search(Query $query)
     {
-        // exit if no search was performed or user cleared search paramaters
         $request = $this->controller->request;
+
         if ($request->query('YummySearch') == null || $request->query('YummySearch_clear') != null) {
             return $query;
         }
