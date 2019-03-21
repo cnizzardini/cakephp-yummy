@@ -261,20 +261,10 @@ class YummySearchComponent extends Component
 
         $rule = new Rule($this->_config);
 
-        $data = $request->query('YummySearch');     // get query parameters
-        $length = count($data['field']);            // get array length
-        // loop through available fields and set conditions
-        for ($i = 0; $i < $length; $i++) {
+        $data = $this->getFormattedData($request->query('YummySearch'));
 
-            if (!isset($data['field'][$i]) || !isset($data['operator'][$i]) || !isset($data['search'][$i])) {
-                continue;
-            }
-
-            $field = $data['field'][$i];            // get field name
-            $operator = $data['operator'][$i];      // get operator type
-            $search = $data['search'][$i];          // get search paramter
-
-            $pieces = explode('.', $field);
+        foreach ($data as $item) {
+            $pieces = explode('.', $item['field']);
             $column = array_pop($pieces);
             $model = implode('.', $pieces);
             $path = '';
@@ -284,10 +274,37 @@ class YummySearchComponent extends Component
             }
 
             if ($rule->isColumnAllowed($model, $column) !== false) {
-                $query = $this->getSqlCondition($path, "$model.$column", $operator, $search, $query);
+                $query = $this->getSqlCondition($path, "$model.$column", $item['operator'], $item['search'], $query);
             }
         }
 
         return $query;
+    }
+
+    /**
+     * @param array $data
+     * @return array
+     */
+    private function getFormattedData(array $data)
+    {
+        $array = [];
+
+        $length = count($data['field']);
+
+        // loop through available fields and set conditions
+        for ($i = 0; $i < $length; $i++) {
+
+            if (!isset($data['field'][$i]) || !isset($data['operator'][$i]) || !isset($data['search'][$i])) {
+                continue;
+            }
+
+            $array[] = [
+                'field' => $data['field'][$i],
+                'operator' => $data['operator'][$i],
+                'search' => $data['search'][$i],
+            ];
+        }
+
+        return $array;
     }
 }
