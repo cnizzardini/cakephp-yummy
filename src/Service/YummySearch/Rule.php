@@ -46,6 +46,10 @@ class Rule
             return false;
         }
 
+        if (!is_array($config[$accessMode])) {
+            return false;
+        }
+
         if (in_array($model, $config[$accessMode])) {
             return true;
         }
@@ -88,16 +92,16 @@ class Rule
         // check model elements
         if (in_array($column, $config['allow'][$model])) {
             $key = array_search($column, $config['allow'][$model], true);
-        // check model keys
+            // check model keys
         } else if (isset($config['allow'][$model][$column])) {
             $keys = array_keys($config['allow'][$model]);
             $key = array_search($column, $keys, true);
-        // look in model columns
+            // look in model columns
         } else if (isset($config['allow'][$model]['_columns'])) {
             // check model column elements
             if (in_array($column, $config['allow'][$model]['_columns'])) {
                 $key = array_search($column, $config['allow'][$model]['_columns']);
-            // check model column keys
+                // check model column keys
             } else if (isset($config['allow'][$model]['_columns'][$column])) {
                 $keys = array_keys($config['allow'][$model]['_columns']);
                 $key = array_search($column, $keys, true);
