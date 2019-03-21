@@ -18,17 +18,17 @@ class Schema
      * Returns array of columns after checking allow/deny rules
      *
      * @param ConnectionInterface $database
-     * @param string $name
+     * @param string $modelName
      * @return array
      *
      * @throw Yummy\Exception\YummySearch\SchemaException
      */
-    public function getColumns(ConnectionInterface $database, string $name)
+    public function getColumns(ConnectionInterface $database, string $modelName)
     {
         $collection = $database->schemaCollection();
 
         $data = [];
-        $tableName = Inflector::underscore($name);
+        $tableName = Inflector::underscore($modelName);
 
         $modelName = Inflector::camelize($tableName);
 
