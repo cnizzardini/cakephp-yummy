@@ -3,14 +3,18 @@
 namespace Yummy\Service\YummySearch;
 
 use Cake\Utility\Inflector;
+use Cake\Database\Connection;
 
 class Association
 {
     /**
      * Defines models associations
+     *
+     * @param Connection $connection
+     * @param array $config
      * @return void
      */
-    public function getModels($database, array $config)
+    public function getModels(Connection $connection, array $config)
     {
         $baseModel = $config['model'];
 
@@ -25,7 +29,7 @@ class Association
             $baseHumanName => [
                 'humanName' => $baseHumanName,
                 'path' => false,
-                'columns' => $schema->getColumns($database, $baseModel),
+                'columns' => $schema->getColumns($connection, $baseModel),
             ]
         ];
 
@@ -40,7 +44,7 @@ class Association
                 continue;
             }
 
-            $columns = $schema->getColumns($database, $theName);
+            $columns = $schema->getColumns($connection, $theName);
 
             if (empty($columns)) {
                 continue;
@@ -49,7 +53,7 @@ class Association
             $models[$theName] = [
                 'humanName' => $this->getHumanName($allowedModels, $theName),
                 'path' => $path,
-                'columns' => $schema->getColumns($database, $theName),
+                'columns' => $columns,
             ];
         }
 
