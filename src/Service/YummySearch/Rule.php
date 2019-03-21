@@ -87,6 +87,25 @@ class Rule
             return true;
         }
 
+        $key = $this->getColumnKey($config, $column, $model);
+
+        if ($key >= 0) {
+            return $key;
+        }
+
+        return true;
+    }
+
+    /**
+     * Returns the key for the corresponding column
+     *
+     * @param array $config
+     * @param string $column
+     * @param string $model
+     * @return bool|false|int|string
+     */
+    private function getColumnKey(array $config, string $column, string $model)
+    {
         $key = false;
 
         // check model elements
@@ -108,11 +127,7 @@ class Rule
             }
         }
 
-        if ($key >= 0) {
-            return $key;
-        }
-
-        return true;
+        return $key;
     }
 
 }
