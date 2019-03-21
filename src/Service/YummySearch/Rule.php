@@ -87,7 +87,7 @@ class Rule
             return true;
         }
 
-        $key = $this->getColumnKey($config, $column, $model);
+        $key = $this->getColumnKey($config, $model, $column);
 
         if ($key >= 0) {
             return $key;
@@ -104,30 +104,62 @@ class Rule
      * @param string $model
      * @return bool|false|int|string
      */
-    private function getColumnKey(array $config, string $column, string $model)
+    private function getColumnKey(array $config, string $model, string $column)
     {
-        $key = false;
+        $key = $this->getColumnKeyFromBaseArray($config, $model, $column);
 
-        // check model elements
-        if (in_array($column, $config['allow'][$model])) {
-            $key = array_search($column, $config['allow'][$model], true);
-            // check model keys
-        } else if (isset($config['allow'][$model][$column])) {
-            $keys = array_keys($config['allow'][$model]);
-            $key = array_search($column, $keys, true);
-            // look in model columns
-        } else if (isset($config['allow'][$model]['_columns'])) {
-            // check model column elements
-            if (in_array($column, $config['allow'][$model]['_columns'])) {
-                $key = array_search($column, $config['allow'][$model]['_columns']);
-                // check model column keys
-            } else if (isset($config['allow'][$model]['_columns'][$column])) {
-                $keys = array_keys($config['allow'][$model]['_columns']);
-                $key = array_search($column, $keys, true);
-            }
+        if (is_numeric($key) && $key >= 0) {
+            return $key;
         }
 
-        return $key;
+        return $this->getColumnKeyFromColumnsArray($config, $model, $column);
     }
 
+    /**
+     * Look in base allow field for column key
+     *
+     * @param array $config
+     * @param string $model
+     * @param string $column
+     * @return bool|false|int|string
+     */
+    private function getColumnKeyFromBaseArray(array $config, string $model, string $column)
+    {
+        if (in_array($column, $config['allow'][$model])) {
+            return array_search($column, $config['allow'][$model], true);
+        }
+
+        if (isset($config['allow'][$model][$column])) {
+            $keys = array_keys($config['allow'][$model]);
+            return array_search($column, $keys, true);
+        }
+
+        return false;
+    }
+
+    /**
+     * Look in _columns for column key
+     *
+     * @param array $config
+     * @param string $model
+     * @param string $column
+     * @return bool|false|int|string
+     */
+    private function getColumnKeyFromColumnsArray(array $config, string $model, string $column)
+    {
+        if (!isset($config['allow'][$model]['_columns'])) {
+            return false;
+        }
+
+        if (in_array($column, $config['allow'][$model]['_columns'])) {
+            return array_search($column, $config['allow'][$model]['_columns']);
+        }
+
+        if (isset($config['allow'][$model]['_columns'][$column])) {
+            $keys = array_keys($config['allow'][$model]['_columns']);
+            return array_search($column, $keys, true);
+        }
+
+        return false;
+    }
 }
