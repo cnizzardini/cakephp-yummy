@@ -4,6 +4,7 @@ namespace Yummy\Controller\Component;
 
 use Cake\Controller\Component;
 use Cake\Datasource\ConnectionManager;
+use Cake\Database\Query;
 use Yummy\Service\YummySearch\QueryGenerator;
 use Yummy\Service\YummySearch\Rule;
 use Yummy\Service\YummySearch\Association;
@@ -228,9 +229,10 @@ class YummySearchComponent extends Component
      * @param string $column
      * @param string $operator
      * @param string $value
-     * @return Cake\Database\Query
+     * @param Query $query
+     * @return Query
      */
-    private function getSqlCondition($model, $column, $operator, $value, $query)
+    private function getSqlCondition(string $model,  string $column, string $operator, string $value, Query $query)
     {
         $queryGenerator = new QueryGenerator($this->_config);
 
