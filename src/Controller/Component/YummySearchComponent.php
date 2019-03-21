@@ -76,6 +76,41 @@ class YummySearchComponent extends Component
     }
 
     /**
+     * Adds conditions to Cake\ORM\Query
+     * @param Query $query
+     * @return Query
+     */
+    public function search(Query $query)
+    {
+        $request = $this->controller->request;
+
+        if ($request->query('YummySearch') == null || $request->query('YummySearch_clear') != null) {
+            return $query;
+        }
+
+        $rule = new Rule($this->_config);
+
+        $data = $this->getFormattedData($request->query('YummySearch'));
+
+        foreach ($data as $item) {
+
+            $pieces = explode('.', $item['field']);
+            $column = array_pop($pieces);
+            $model = implode('.', $pieces);
+
+            if ($rule->isColumnAllowed($model, $column) === false) {
+                continue;
+            }
+
+            $path = isset($this->models[$model]['path']) ? $this->models[$model]['path'] : '';
+
+            $query = $this->getSqlCondition($path, "$model.$column", $item['operator'], $item['search'], $query);
+        }
+
+        return $query;
+    }
+
+    /**
      * checkComponents - throws exception if missing a required component
      * @throws InternalErrorException
      */
@@ -244,41 +279,6 @@ class YummySearchComponent extends Component
         return $query->matching($model, function ($q) use ($column, $operator, $value, $queryGenerator) {
             return $queryGenerator->getWhere($q, $column, $operator, $value);
         });
-    }
-
-    /**
-     * Adds conditions to Cake\ORM\Query
-     * @param Query $query
-     * @return Query
-     */
-    public function search(Query $query)
-    {
-        $request = $this->controller->request;
-
-        if ($request->query('YummySearch') == null || $request->query('YummySearch_clear') != null) {
-            return $query;
-        }
-
-        $rule = new Rule($this->_config);
-
-        $data = $this->getFormattedData($request->query('YummySearch'));
-
-        foreach ($data as $item) {
-
-            $pieces = explode('.', $item['field']);
-            $column = array_pop($pieces);
-            $model = implode('.', $pieces);
-
-            if ($rule->isColumnAllowed($model, $column) === false) {
-                continue;
-            }
-
-            $path = isset($this->models[$model]['path']) ? $this->models[$model]['path'] : '';
-
-            $query = $this->getSqlCondition($path, "$model.$column", $item['operator'], $item['search'], $query);
-        }
-
-        return $query;
     }
 
     /**
