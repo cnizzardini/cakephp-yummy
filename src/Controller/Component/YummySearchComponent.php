@@ -131,7 +131,7 @@ class YummySearchComponent extends Component
      * @param string $camelName
      * @return array
      */
-    private function getYummyMetaColumns(string $model, string $camelName)
+    private function getYummyMetaColumns(array $model, string $camelName)
     {
         $selectOptions = [];
 
@@ -232,7 +232,7 @@ class YummySearchComponent extends Component
      */
     private function getSqlCondition($model, $column, $operator, $value, $query)
     {
-        $queryGenerator = new QueryGenerator();
+        $queryGenerator = new QueryGenerator($this->_config);
 
         // for base model searches
         if (empty($model)) {
