@@ -16,11 +16,7 @@ class Association
 
         $allowedModels = $config['allow'];;
 
-        if (isset($allowedModels[$baseModel]['_niceName'])) {
-            $baseHumanName = $allowedModels[$baseModel]['_niceName'];
-        } else {
-            $baseHumanName = Inflector::humanize(Inflector::underscore($baseModel));
-        }
+        $baseHumanName = $this->getHumanName($allowedModels, $baseModel);
 
         $rule = new Rule($config);
         $schema = new Schema($rule);
@@ -44,21 +40,17 @@ class Association
                 continue;
             }
 
-            if (isset($allowedModels[$theName]['_niceName'])) {
-                $humanName = $allowedModels[$theName]['_niceName'];
-            } else {
-                $humanName = Inflector::humanize(Inflector::underscore($theName));
-            }
-
             $columns = $schema->getColumns($database, $theName);
 
-            if (!empty($columns)) {
-                $models[$theName] = [
-                    'humanName' => $humanName,
-                    'path' => $path,
-                    'columns' => $schema->getColumns($database, $theName),
-                ];
+            if (empty($columns)) {
+                continue;
             }
+
+            $models[$theName] = [
+                'humanName' => $this->getHumanName($allowedModels, $theName),
+                'path' => $path,
+                'columns' => $schema->getColumns($database, $theName),
+            ];
         }
 
         return $models;
@@ -66,9 +58,10 @@ class Association
 
     /**
      * Returns paths to model associations in dot notation
+     * param string $config
      * @return array
      */
-    private function getPaths($config)
+    private function getPaths(array $config)
     {
         $query = $config['query'];
 
@@ -98,6 +91,7 @@ class Association
                 $add[] = $path;
             }
         }
+
         return array_merge($dots, array_unique($add));
     }
 
@@ -118,5 +112,21 @@ class Association
             }
         }
         return $results;
+    }
+
+    /**
+     * Returns human readable name of the supplied model
+     *
+     * @param array $allowedModels
+     * @param string $baseModel
+     * @return string
+     */
+    private function getHumanName(array $allowedModels, string $baseModel)
+    {
+        if (isset($allowedModels[$baseModel]['_niceName'])) {
+            return $allowedModels[$baseModel]['_niceName'];
+        }
+
+        return Inflector::humanize(Inflector::underscore($baseModel));
     }
 }
