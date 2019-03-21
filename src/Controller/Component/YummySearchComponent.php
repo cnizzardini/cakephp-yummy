@@ -4,11 +4,9 @@ namespace Yummy\Controller\Component;
 
 use Cake\Controller\Component;
 use Cake\Datasource\ConnectionManager;
-use Cake\Utility\Inflector;
-use Cake\Network\Exception\InternalErrorException;
 use Yummy\Service\YummySearch\QueryGenerator;
-use Yummy\Service\YummySearch\Schema;
 use Yummy\Service\YummySearch\Rule;
+use Yummy\Service\YummySearch\Association;
 
 /**
  * This component is a should be used in conjunction with the YummySearchHelper for building rudimentary search filters
@@ -53,7 +51,11 @@ class YummySearchComponent extends Component
             $this->setConfig('selectGroups', $config['selectGroups']);
         }
 
-        $this->defineModels();
+        $database = ConnectionManager::get($this->getConfig('dataSource'));
+
+        $association = new Association();
+
+        $this->models = $association->defineModels($database, $this->_config);
     }
 
     /**
@@ -78,7 +80,9 @@ class YummySearchComponent extends Component
     private function checkComponents()
     {
         if (!isset($this->controller->Paginator)) {
-            throw new \Cake\Network\Exception\InternalErrorException(__('YummySearch requires Paginator Component'));
+            throw new \Cake\Network\Exception\InternalErrorException(
+                __('YummySearch requires Paginator Component')
+            );
         }
     }
 
@@ -142,119 +146,6 @@ class YummySearchComponent extends Component
         ];
 
         return $yummy;
-    }
-
-    /**
-     * Defines models associations
-     * @return void
-     */
-    private function defineModels()
-    {
-        $baseModel = $this->getConfig('model');
-
-        $allowedModels = $this->getConfig('allow');
-
-        if (isset($allowedModels[$baseModel]['_niceName'])) {
-            $baseHumanName = $allowedModels[$baseModel]['_niceName'];
-        } else {
-            $baseHumanName = Inflector::humanize(Inflector::underscore($baseModel));
-        }
-
-        $database = ConnectionManager::get($this->getConfig('dataSource'));
-
-        $rule = new Rule($this->_config);
-        $schema = new Schema($rule);
-
-        $this->models = [
-            $baseHumanName => [
-                'humanName' => $baseHumanName,
-                'path' => false,
-                'columns' => $schema->getColumns($database, $baseModel),
-            ]
-        ];
-
-        $paths = $this->getPaths();
-
-        foreach ($paths as $path) {
-            $pieces = explode('.', $path);
-            $theName = end($pieces);
-
-            if (isset($allowedModels[$theName]['_niceName'])) {
-                $humanName = $allowedModels[$theName]['_niceName'];
-            } else {
-                $humanName = Inflector::humanize(Inflector::underscore($theName));
-            }
-
-            if ($theName === 'queryBuilder') {
-                continue;
-            }
-
-            $columns = $schema->getColumns($database, $theName);
-
-            if (!empty($columns)) {
-                $this->models[$theName] = [
-                    'humanName' => $humanName,
-                    'path' => $path,
-                    'columns' => $schema->getColumns($database, $theName),
-                ];
-            }
-        }
-    }
-
-    /**
-     * Returns paths to model associations in dot notation
-     * @return array
-     */
-    private function getPaths()
-    {
-        $query = $this->getConfig('query');
-
-        if (method_exists($query, 'contain') === false) {
-            return [];
-        }
-
-        $contains = $query->contain();
-        $dots = array_keys($this->dot($contains));
-
-        $add = [];
-
-        $dotNotations = array_filter($dots, function($dot){
-            $pieces = explode('.', $dot);
-            $length = count($pieces);
-            if ($length >= 1) {
-                return $dot;
-            }
-        });
-
-        foreach ($dotNotations as $dot) {
-            $pieces = explode('.', $dot);
-            $length = count($pieces);
-            for ($i = 1; $i < $length; $i++) {
-                $tmp = $pieces;
-                $path = implode('.', array_slice($tmp, 0, $i));
-                $add[] = $path;
-            }
-        }
-        return array_merge($dots, array_unique($add));
-    }
-
-    /**
-     * Flatten multi-dimensional array with key names in dotted notation
-     * @param array $array
-     * @param string $prepend
-     * @return array
-     */
-    private function dot($array, $prepend = '')
-    {
-        $results = [];
-        foreach ($array as $key => $value) {
-            if (is_array($value) && !empty($value)) {
-                $results = array_merge($results, $this->dot($value, $prepend . $key . '.'));
-            } else {
-                $results[$prepend . $key] = $value;
-            }
-        }
-        return $results;
     }
 
     /**
