@@ -27,6 +27,7 @@ class YummySearchComponent extends Component
         ],
         'dataSource' => 'default',
         'selectGroups' => true,
+        'trim' => true
     ];
 
     public function initialize(array $config)
