@@ -3,8 +3,6 @@
 namespace Yummy\Service\YummySearch;
 
 use Cake\Utility\Inflector;
-use Schema;
-use Rule;
 
 class Association
 {
