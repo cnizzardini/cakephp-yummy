@@ -12,7 +12,7 @@ class Association
      *
      * @param Connection $connection
      * @param array $config
-     * @return void
+     * @return array
      */
     public function getModels(Connection $connection, array $config)
     {
