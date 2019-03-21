@@ -248,10 +248,10 @@ class YummySearchComponent extends Component
 
     /**
      * Adds conditions to Cake\ORM\Query
-     * @param object $query
-     * @return \Cake\ORM\Query
+     * @param Query $query
+     * @return Query
      */
-    public function search(\Cake\ORM\Query $query)
+    public function search(Query $query)
     {
         // exit if no search was performed or user cleared search paramaters
         $request = $this->controller->request;
