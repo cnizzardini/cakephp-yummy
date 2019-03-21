@@ -62,7 +62,8 @@ class Association
 
     /**
      * Returns paths to model associations in dot notation
-     * param string $config
+     *
+     * param array $config
      * @return array
      */
     private function getPaths(array $config)
@@ -101,6 +102,7 @@ class Association
 
     /**
      * Flatten multi-dimensional array with key names in dotted notation
+     *
      * @param array $array
      * @param string $prepend
      * @return array
