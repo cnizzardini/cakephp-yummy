@@ -87,43 +87,18 @@ class YummySearchComponent extends Component
     }
 
     /**
-     * getYummyHelperData - retrieves an array used by YummySearchHelper
+     * Retrieves an array used by YummySearchHelper
      * @return array
      */
     private function getYummyHelperData()
     {
         $selectOptions = [];
 
-        $request = $this->controller->request;
-
         foreach ($this->models as $camelName => $model) {
-            foreach ($model['columns'] as $column => $field) {
-
-                $humanName = $model['humanName'];
-
-                $meta = $this->getYummyMeta($camelName, $field['column']);
-
-                $element = [
-                    'text' => ($meta['niceName'] !== false) ? $meta['niceName'] : $field['text'],
-                    'path' => $model['path'],
-                    'value' => $column,
-                    'data-items' => ($meta['options'] !== false) ? implode(',', $meta['options']) : false,
-                    'data-type' => ($meta['options'] !== false) ? 'list' : $field['type'],
-                    'data-length' => $field['length'],
-                    'selected' => ($request->query('YummySearch') === null && $meta['default'] === true) ? true : false
-                ];
-
-                if ($field['sort-order'] !== false) {
-                    $key = $field['sort-order'];
-                    if ($key !== null && !isset($selectOptions[$humanName][$key])) {
-                        $selectOptions[$humanName][$key] = $element;
-                    } else {
-                        $selectOptions[$humanName][] = $element;
-                    }
-                } else {
-                    $selectOptions[$humanName][] = $element;
-                }
-            }
+            $selectOptions = array_merge(
+                $selectOptions,
+                $this->getYummyMetaColumns($model, $camelName)
+            );
         }
 
         if ($this->getConfig('selectGroups') === false) {
@@ -146,6 +121,51 @@ class YummySearchComponent extends Component
         ];
 
         return $yummy;
+    }
+
+    /**
+     * Retrieves columns to build dropdowns
+     *
+     * @param string $model
+     * @param string $camelName
+     * @return array
+     */
+    private function getYummyMetaColumns(string $model, string $camelName)
+    {
+        $selectOptions = [];
+
+        $request = $this->controller->request;
+
+        foreach ($model['columns'] as $column => $field) {
+
+            $humanName = $model['humanName'];
+
+            $meta = $this->getYummyMeta($camelName, $field['column']);
+
+            $element = [
+                'text' => ($meta['niceName'] !== false) ? $meta['niceName'] : $field['text'],
+                'path' => $model['path'],
+                'value' => $column,
+                'data-items' => ($meta['options'] !== false) ? implode(',', $meta['options']) : false,
+                'data-type' => ($meta['options'] !== false) ? 'list' : $field['type'],
+                'data-length' => $field['length'],
+                'selected' => ($request->query('YummySearch') === null && $meta['default'] === true) ? true : false
+            ];
+
+            if ($field['sort-order'] === false) {
+                $selectOptions[$humanName][] = $element;
+                continue;
+            }
+
+            $key = $field['sort-order'];
+            if ($key !== null && !isset($selectOptions[$humanName][$key])) {
+                $selectOptions[$humanName][$key] = $element;
+            } else {
+                $selectOptions[$humanName][] = $element;
+            }
+        }
+
+        return $selectOptions;
     }
 
     /**
