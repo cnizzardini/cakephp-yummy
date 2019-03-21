@@ -273,7 +273,7 @@ class YummySearchComponent extends Component
                 continue;
             }
 
-            $path = isset($this->models[$model]) ? $this->models[$model]['path'] : '';
+            $path = isset($this->models[$model]['path']) ? $this->models[$model]['path'] : '';
 
             $query = $this->getSqlCondition($path, "$model.$column", $item['operator'], $item['search'], $query);
         }
