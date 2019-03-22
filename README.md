@@ -4,8 +4,9 @@
 [![Code Climate](https://codeclimate.com/github/cnizzardini/cakephp-yummy/badges/gpa.svg)](https://codeclimate.com/github/cnizzardini/cakephp-yummy)
 [![Issue Count](https://codeclimate.com/github/cnizzardini/cakephp-yummy/badges/issue_count.svg)](https://codeclimate.com/github/cnizzardini/cakephp-yummy)
 
-Delightfully tasty tools for your cakephp project. This project is nearing a stable 1.0 release but will probably under 
-go another few minor and revision releases before being considered 1.0.
+A delightfully tasty plugin for your CakePHP 3 project including a group-based 
+Access Control List (ACL), a search component with an intuitive user-interface, 
+and boostrap 3 Bake Themes. Each of these components may be used separately.
 
 ## Demo & Docs
 
