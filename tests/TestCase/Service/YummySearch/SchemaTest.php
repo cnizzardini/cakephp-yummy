@@ -119,7 +119,7 @@ class SchemaTest extends TestCase
         $exceptionName = '';
 
         try {
-            $columns = $schema->getColumns($connection, 'Nope');
+            $schema->getColumns($connection, 'Nope');
         } catch(\Exception $e) {
             $exceptionName = (get_class($e));
         }
