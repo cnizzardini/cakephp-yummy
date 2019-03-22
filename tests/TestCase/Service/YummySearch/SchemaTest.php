@@ -5,7 +5,6 @@ namespace Yummy\Test\TestCase\Service\YummySearch;
 use Cake\TestSuite\TestCase;
 use Cake\Datasource\ConnectionManager;
 use Cake\ORM\TableRegistry;
-use Yummy\Service\YummySearch\Association;
 use Yummy\Service\YummySearch\Schema;
 use Yummy\Service\YummySearch\Rule;
 
@@ -25,8 +24,6 @@ class SchemaTest extends TestCase
         ];
 
         $connection = ConnectionManager::get('test');
-        $association = new Association();
-        $models = $association->getModels($connection, $config);
 
         $rule = new Rule($config);
         $schema = new Schema($rule);
@@ -61,8 +58,6 @@ class SchemaTest extends TestCase
         ];
 
         $connection = ConnectionManager::get('test');
-        $association = new Association();
-        $models = $association->getModels($connection, $config);
 
         $rule = new Rule($config);
         $schema = new Schema($rule);
@@ -90,8 +85,6 @@ class SchemaTest extends TestCase
         ];
 
         $connection = ConnectionManager::get('test');
-        $association = new Association();
-        $models = $association->getModels($connection, $config);
 
         $rule = new Rule($config);
         $schema = new Schema($rule);
@@ -100,5 +93,38 @@ class SchemaTest extends TestCase
 
         $this->assertArrayHasKey('Teams.name', $columns);
         $this->assertArrayNotHasKey('Teams.id', $columns);
+    }
+
+    public function testGetColumnsException()
+    {
+        $query = TableRegistry::get('Teams')->find()->contain([
+            'Divisions' => [
+                'Conferences'
+            ],
+        ]);
+
+        $config = [
+            'query' => $query,
+            'model' => 'Teams',
+            'deny' => [
+                'Teams' => ['id'],
+            ]
+        ];
+
+        $connection = ConnectionManager::get('test');
+
+        $rule = new Rule($config);
+        $schema = new Schema($rule);
+
+        $exceptionName = '';
+
+        try {
+            $columns = $schema->getColumns($connection, 'Nope');
+        } catch(\Exception $e) {
+            $exceptionName = (get_class($e));
+        }
+
+        $this->assertEquals('Yummy\Exception\YummySearch\SchemaException',$exceptionName);
+
     }
 }
