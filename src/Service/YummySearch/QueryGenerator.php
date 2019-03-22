@@ -3,6 +3,7 @@
 namespace Yummy\Service\YummySearch;
 
 use Cake\Database\Query;
+use Cake\ORM\TableRegistry;
 
 class QueryGenerator
 {
@@ -34,6 +35,10 @@ class QueryGenerator
 
         if ($this->config['trim'] == true) {
             $value = trim($value);
+        }
+
+        if ($operator == 'LIKE' || $operator == 'NOT LIKE') {
+            $value = "%$value%";
         }
 
         $query->where(["$column $operator" => $value]);
