@@ -17,9 +17,7 @@ class Association
     public function getModels(Connection $connection, array $config)
     {
         $baseModel = $config['model'];
-
-        $allowedModels = $config['allow'];;
-
+        $allowedModels = $config['allow'];
         $baseHumanName = $this->getHumanName($allowedModels, $baseModel);
 
         $rule = new Rule($config);
@@ -38,20 +36,16 @@ class Association
         foreach ($paths as $path) {
 
             $pieces = explode('.', $path);
-            $theName = end($pieces);
+            $modelName = end($pieces);
 
-            if ($theName === 'queryBuilder') {
+            $columns = $schema->getColumns($connection, $modelName);
+
+            if ($modelName === 'queryBuilder' || empty($columns)) {
                 continue;
             }
 
-            $columns = $schema->getColumns($connection, $theName);
-
-            if (empty($columns)) {
-                continue;
-            }
-
-            $models[$theName] = [
-                'humanName' => $this->getHumanName($allowedModels, $theName),
+            $models[$modelName] = [
+                'humanName' => $this->getHumanName($allowedModels, $modelName),
                 'path' => $path,
                 'columns' => $columns,
             ];
