@@ -17,13 +17,13 @@ class Schema
     /**
      * Returns array of columns after checking allow/deny rules
      *
-     * @param Connection $connection
+     * @param \Cake\Database\Connection $connection
      * @param string $modelName
      * @return array
      *
      * @throw Yummy\Exception\YummySearch\SchemaException
      */
-    public function getColumns(Connection $connection, string $modelName)
+    public function getColumns(\Cake\Database\Connection $connection, string $modelName)
     {
         $data = [];
         $collection = $connection->schemaCollection();
