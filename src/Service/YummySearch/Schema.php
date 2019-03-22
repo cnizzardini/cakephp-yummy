@@ -51,7 +51,7 @@ class Schema
                 continue;
             }
 
-            $columnMeta = $schema->column($column);
+            $columnMeta = $schema->getColumn($column);
 
             $data["$modelName.$column"] = [
                 'column' => $column,
