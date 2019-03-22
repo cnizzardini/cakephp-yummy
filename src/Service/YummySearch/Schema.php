@@ -34,7 +34,7 @@ class Schema
             $schema = $collection->describe($tableName);
             $columns = $schema->columns();
         } catch(\Cake\Database\Exception $e) {
-            throw new Yummy\Exception\YummySearch\SchemaException(
+            throw new \Yummy\Exception\YummySearch\SchemaException(
                 "Unable to determine schema. Does this controller have an associated "
                 . "database schema? Try manually defining the model YummySearch should use.  "
                 . "\Cake\Database\Exception: " . $e->getMessage()
