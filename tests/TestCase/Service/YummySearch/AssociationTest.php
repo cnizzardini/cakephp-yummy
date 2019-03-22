@@ -4,8 +4,9 @@ namespace Yummy\Test\TestCase\Service\YummySearch;
 
 use Cake\ORM\TableRegistry;
 use Cake\TestSuite\TestCase;
-use Yummy\Service\YummySearch\Association;
 use Cake\Datasource\ConnectionManager;
+use Yummy\Service\YummySearch\Association;
+
 
 class AssociationTest extends TestCase
 {
