@@ -18,7 +18,7 @@ go another few minor and revision releases before being considered 1.0.
 A search component designed to work with CakePHPs Paginator Component and Cake\ORM\Query. It supports searching the 
 base model and other associations such as HasOne, BelongsTo, and HasMany through an intuitive UI in just three easy steps.
 
-![yummy search screenshot](asssets/yummy-search.png)
+![yummy search screenshot](yummy-search.png)
 
 ```php
 // Step 1. Basic Controller Usage:
@@ -44,7 +44,7 @@ usage and customization.
 
 A component that works with Auth to add group-based access controls to your admin portal.
 
-![yummy acl screenshot](asssets/yummy-acl.png)
+![yummy acl screenshot](yummy-acl.png)
 
 ```php
 // Basic Usage
