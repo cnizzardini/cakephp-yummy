@@ -85,11 +85,7 @@ class Rule
 
         $key = $this->getColumnKey($config, $model, $column);
 
-        if ($key >= 0) {
-            return $key;
-        }
-
-        return true;
+        return ($key >= 0) ? $key : true;
     }
 
     /**
