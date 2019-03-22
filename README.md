@@ -9,7 +9,7 @@ go another few minor and revision releases before being considered 1.0.
 
 ## Demo & Docs
 
-[Live Demo available](https://www.cnizz.com/yummy-demo) and full documented in the [git wiki](https://github.com/cnizzardini/cakephp-yummy/wiki).
+[Live Demo available](https://www.cnizz.com/yummy-demo) and fully documented in the [git wiki](https://github.com/cnizzardini/cakephp-yummy/wiki).
 
 ## Features
 
