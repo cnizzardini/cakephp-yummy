@@ -42,11 +42,7 @@ class Rule
      */
     private function hasAccessModel(string $accessMode, array $config, string $model)
     {
-        if (!isset($config[$accessMode])) {
-            return false;
-        }
-
-        if (!is_array($config[$accessMode])) {
+        if (!isset($config[$accessMode]) || !is_array($config[$accessMode])) {
             return false;
         }
 
