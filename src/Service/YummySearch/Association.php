@@ -16,7 +16,7 @@ class Association
     public function getModels(\Cake\Database\Connection $connection, array $config)
     {
         $baseModel = $config['model'];
-        $allowedModels = $config['allow'];
+        $allowedModels = isset($config['allow']) ? $config['allow'] : [];
         $baseHumanName = $this->getHumanName($allowedModels, $baseModel);
 
         $rule = new Rule($config);
