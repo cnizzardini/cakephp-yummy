@@ -5,14 +5,27 @@ namespace Yummy\Test\TestCase\Service\YummySearch;
 use Cake\TestSuite\TestCase;
 use Cake\Datasource\ConnectionManager;
 use Cake\ORM\TableRegistry;
+use Yummy\Service\YummySearch\Association;
 use Yummy\Service\YummySearch\QueryGenerator;
 
 class QueryGeneratorTest extends TestCase
 {
-    public function testGetWhere()
+    public function testGetWhereSingle()
     {
-        $this->markTestIncomplete('Not implemented yet.');
-        /*
+        $teamsTable = TableRegistry::get('Teams');
+        $teamsTable->addAssociations([
+            'belongsTo' => [
+                'Divisions'
+            ]
+        ]);
+
+        $divisionsTable = TableRegistry::get('Divisions');
+        $divisionsTable->addAssociations([
+            'belongsTo' => [
+                'Conferences'
+            ]
+        ]);
+
         $query = TableRegistry::get('Teams')->find()->contain([
             'Divisions' => [
                 'Conferences'
@@ -22,16 +35,19 @@ class QueryGeneratorTest extends TestCase
         $config = [
             'query' => $query,
             'model' => 'Teams',
-            'allow' => [
-                'Teams' => ['name'],
-            ]
+            'trim' => true
         ];
 
         $connection = ConnectionManager::get('test');
         $association = new Association();
         $models = $association->getModels($connection, $config);
 
-        $queryGenerator = new QueryGenerator($config);
-        */
+        $queryGenerator = new QueryGenerator($config, $query);
+        $query = $queryGenerator->getWhere(
+            $query,
+            'Teams.name',
+            'eq',
+            'NY Giants'
+        );
     }
 }
