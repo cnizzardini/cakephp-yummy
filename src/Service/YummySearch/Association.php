@@ -37,9 +37,13 @@ class Association
             $pieces = explode('.', $path);
             $modelName = end($pieces);
 
+            if ($modelName === 'queryBuilder') {
+                continue;
+            }
+
             $columns = $schema->getColumns($connection, $modelName);
 
-            if ($modelName === 'queryBuilder' || empty($columns)) {
+            if (empty($columns)) {
                 continue;
             }
 
