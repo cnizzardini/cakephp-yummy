@@ -8,6 +8,7 @@ use Cake\Database\Query;
 use Yummy\Service\YummySearch\QueryGenerator;
 use Yummy\Service\YummySearch\Rule;
 use Yummy\Service\YummySearch\Association;
+use Yummy\Service\YummySearch\Option;
 
 /**
  * This component is a should be used in conjunction with the YummySearchHelper for building rudimentary search filters
@@ -207,29 +208,17 @@ class YummySearchComponent extends Component
 
     /**
      * returns yummy meta data for a column
-     * @param array $element
+     * @param mixed $element
      * @return array
      */
-    private function getColumnYummyMeta($element)
+    private function getColumnYummyMeta($element) : array
     {
-        if (is_array($element)) {
-            if (isset($element['_niceName'])) {
-                $niceName = $element['_niceName'];
-            }
-            if (isset($element['_options'])) {
-                $options = $element['_options'];
-            }
-            if (isset($element['_default'])) {
-                $default = $element['_default'];
-            }
-        } elseif (is_string($element)) {
-            $niceName = $element;
-        }
+        $option = new Option($this->_config);
 
         return [
-            'niceName' => isset($niceName) ? $niceName : false,
-            'options' => isset($options) ? $options : false,
-            'default' => isset($default) ? $default : false,
+            'niceName' => $option->getColumnNiceName($element),
+            'options' => $option->getColumnOptions($element),
+            'default' => $option->getColumnDefault($element),
         ];
     }
 
