@@ -141,19 +141,13 @@ class YummyAclComponent extends Component
     {
         $config = $this->config();
         
-        if (!isset($config['actions'])) {
+        if (!isset($config['actions']) || !isset($config['actions'][$this->actionName])) {
             return $this->checkControllerAccess();
         }
 
-        if (!isset($config['actions'][$this->actionName])) {
-            return $this->checkControllerAccess();
-        }
-        
-        if ($config['actions'][$this->actionName] == '*') {
-            return true;
-        }
-        
-        if (in_array($config['group'], $config['actions'][$this->actionName])) {
+        $actions = $config['actions'][$this->actionName];
+
+        if ($actions == '*' || in_array($config['group'], $actions)) {
             return true;
         }
 
