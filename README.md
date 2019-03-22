@@ -18,7 +18,7 @@ go another few minor and revision releases before being considered 1.0.
 A search component designed to work with CakePHPs Paginator Component and Cake\ORM\Query. It supports searching the 
 base model and other associations such as HasOne, BelongsTo, and HasMany through an intuitive UI in just three easy steps.
 
-![yummy search screenshot](https://www.cnizz.com/media/cakephp-yummy-search-screenshot.png)
+![yummy search screenshot](yummy-search.png)
 
 ```php
 // Step 1. Basic Controller Usage:
@@ -96,7 +96,5 @@ You can also view the source code for demo project on github:
 
 ## Test Cases
 ```
-vendor/bin/phpunit plugins/Yummy/tests/TestCase/Controller/Component/YummyAclComponentTest.php
-
-vendor/bin/phpunit plugins/Yummy/tests/TestCase/Controller/Component/YummySearchComponentTest.php
+vendor/bin/phpunit 
 ```
