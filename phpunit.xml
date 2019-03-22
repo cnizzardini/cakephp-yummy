@@ -12,7 +12,7 @@
 
     <!-- Add any additional test suites you want to run here -->
     <testsuites>
-        <testsuite name="Api Test Suite">
+        <testsuite name="YummySearch Test Suite">
             <directory>./tests/TestCase</directory>
         </testsuite>
     </testsuites>
