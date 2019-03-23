@@ -2,7 +2,6 @@
 
 namespace Yummy\Service\YummySearch;
 
-use Cake\Datasource\ConnectionInterface;
 use Cake\Utility\Inflector;
 
 class Schema
