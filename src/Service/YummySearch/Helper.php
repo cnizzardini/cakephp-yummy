@@ -10,7 +10,7 @@ class Helper
      * @param \Cake\Network\Request
      * @return array
      */
-    public static function getFormattedData(\Cake\Network\Request $request)
+    public static function getFormattedData(\Cake\Network\Request $request) : array
     {
         $array = [];
 
@@ -39,14 +39,17 @@ class Helper
      * Throws exception if missing a required component
      *
      * @param \Cake\Controller\Controller $controller
+     * @return bool
      * @throws InternalErrorException
      */
-    public static function checkComponents(\Cake\Controller\Controller $controller)
+    public static function checkComponents(\Cake\Controller\Controller $controller) : bool
     {
         if (!isset($controller->Paginator)) {
             throw new \Cake\Network\Exception\InternalErrorException(
                 __('YummySearch requires Paginator Component')
             );
         }
+
+        return true;
     }
 }
