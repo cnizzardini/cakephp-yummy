@@ -34,6 +34,12 @@ class YummySearchComponent extends Component
         'trim' => true
     ];
 
+    /**
+     * Component initialization
+     *
+     * @param array $config
+     * @return void
+     */
     public function initialize(array $config)
     {
         parent::initialize($config);
@@ -64,7 +70,9 @@ class YummySearchComponent extends Component
     }
 
     /**
-     * beforeRender - sets fields for use by YummySearchHelper
+     * Sets $yummy array for use by YummySearchHelper
+     *
+     * @return void
      */
     public function beforeRender()
     {
@@ -81,10 +89,11 @@ class YummySearchComponent extends Component
 
     /**
      * Adds conditions to Cake\ORM\Query
+     *
      * @param Query $query
      * @return Query
      */
-    public function search(Query $query)
+    public function search(Query $query) : Query
     {
         $request = $this->controller->request;
 
@@ -121,7 +130,8 @@ class YummySearchComponent extends Component
     }
 
     /**
-     * Returns cakephp orm compatible condition
+     * Returns CakePHP ORM compatible conditions
+     *
      * @param string $model
      * @param string $column
      * @param string $operator
@@ -129,7 +139,7 @@ class YummySearchComponent extends Component
      * @param Query $query
      * @return Query
      */
-    private function getSqlCondition(string $model,  string $column, string $operator, string $value, Query $query)
+    private function getSqlCondition(string $model,  string $column, string $operator, string $value, Query $query) : Query
     {
         $queryGenerator = new QueryGenerator($this->_config);
 
