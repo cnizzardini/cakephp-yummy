@@ -5,6 +5,7 @@ namespace Yummy\Controller\Component;
 use Cake\Controller\Component;
 use Cake\Datasource\ConnectionManager;
 use Cake\Database\Query;
+use Yummy\Service\YummySearch\Helper;
 use Yummy\Service\YummySearch\QueryGenerator;
 use Yummy\Service\YummySearch\Rule;
 use Yummy\Service\YummySearch\Association;
@@ -67,13 +68,12 @@ class YummySearchComponent extends Component
      */
     public function beforeRender()
     {
-        // check components
-        $this->checkComponents();
+        Helper::checkComponents($this->controller);
 
         $option = new Option($this->_config);
-        $helper = new ViewHelper($this->_config, $option);
+        $viewHelper = new ViewHelper($this->_config, $option);
 
-        $yummy = $helper->getYummyHelperData($this->models, $this->controller->request);
+        $yummy = $viewHelper->getYummyHelperData($this->models, $this->controller->request);
 
         // make yummy search data available to view
         $this->controller->set('YummySearch', $yummy);
@@ -94,7 +94,7 @@ class YummySearchComponent extends Component
 
         $rule = new Rule($this->_config);
 
-        $data = $this->getFormattedData($request->query('YummySearch'));
+        $data = Helper::getFormattedData($request);
 
         foreach ($data as $item) {
 
@@ -121,19 +121,6 @@ class YummySearchComponent extends Component
     }
 
     /**
-     * checkComponents - throws exception if missing a required component
-     * @throws InternalErrorException
-     */
-    private function checkComponents()
-    {
-        if (!isset($this->controller->Paginator)) {
-            throw new \Cake\Network\Exception\InternalErrorException(
-                __('YummySearch requires Paginator Component')
-            );
-        }
-    }
-
-    /**
      * Returns cakephp orm compatible condition
      * @param string $model
      * @param string $column
@@ -154,32 +141,5 @@ class YummySearchComponent extends Component
         return $query->matching($model, function ($q) use ($column, $operator, $value, $queryGenerator) {
             return $queryGenerator->getWhere($q, $column, $operator, $value);
         });
-    }
-
-    /**
-     * @param array $data
-     * @return array
-     */
-    private function getFormattedData(array $data)
-    {
-        $array = [];
-
-        $length = count($data['field']);
-
-        // loop through available fields and set conditions
-        for ($i = 0; $i < $length; $i++) {
-
-            if (!isset($data['field'][$i]) || !isset($data['operator'][$i]) || !isset($data['search'][$i])) {
-                continue;
-            }
-
-            $array[] = [
-                'field' => $data['field'][$i],
-                'operator' => $data['operator'][$i],
-                'search' => $data['search'][$i],
-            ];
-        }
-
-        return $array;
     }
 }
