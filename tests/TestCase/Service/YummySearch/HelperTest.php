@@ -57,6 +57,6 @@ class HelperTest extends TestCase
         } catch(\Exception $e) {
             $className = get_class($e);
         }
-        $this->assertEquals('git Yummy\Exception\YummySearch\ConfigurationException', $className);
+        $this->assertEquals('Yummy\Exception\YummySearch\ConfigurationException', $className);
     }
 }
