@@ -1,4 +1,13 @@
 <?php
+/**
+ * Licensed under The MIT License
+ * For full copyright and license information, please see the LICENSE.txt
+ * Redistributions of files must retain the above copyright notice.
+ *
+ * @author          Chris Nizzardini
+ * @link            https://github.com/cnizzardini/cakephp-yummy
+ * @license         http://www.opensource.org/licenses/mit-license.php MIT License
+ */
 
 namespace Yummy\Controller\Component;
 
@@ -13,7 +22,9 @@ use Yummy\Service\YummySearch\Option;
 use Yummy\Service\YummySearch\ViewHelper;
 
 /**
- * This component is a should be used in conjunction with the YummySearchHelper for building rudimentary search filters
+ * This component is used to generate a query builder UI, ORM conditions, and return the subsequent query results
+ *
+ * @link https://github.com/cnizzardini/cakephp-yummy
  */
 class YummySearchComponent extends Component
 {
