@@ -45,7 +45,7 @@ class Helper
     public static function checkComponents(\Cake\Controller\Controller $controller) : bool
     {
         if (!isset($controller->Paginator)) {
-            throw new \Cake\Network\Exception\InternalErrorException(
+            throw new \Yummy\Exception\YummySearch\ConfigurationException(
                 __('YummySearch requires Paginator Component')
             );
         }
