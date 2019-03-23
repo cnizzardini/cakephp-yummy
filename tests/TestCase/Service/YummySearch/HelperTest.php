@@ -4,6 +4,11 @@ namespace Yummy\Test\TestCase\Service\YummySearch;
 
 use Cake\TestSuite\TestCase;
 use Cake\Http\ServerRequest;
+use Cake\Controller\Controller;
+use Cake\Controller\Component\PaginatorComponent;
+use Cake\Controller\ComponentRegistry;
+use Cake\Event\Event;
+use Cake\Http\Response;
 use Yummy\Service\YummySearch\Helper;
 
 
@@ -40,8 +45,21 @@ class HelperTest extends TestCase
         $this->assertEquals('NFC',$data[0]['search']);
     }
 
-    public function testCheckComponents()
+    public function testCheckComponentsTrue()
     {
         $this->markTestIncomplete('Not implemented yet.');
+
+/*        $request = new ServerRequest();
+        $response = new Response();
+        $this->controller = $this->getMockBuilder('Cake\Controller\Controller')
+            ->setConstructorArgs([$request, $response])
+            ->setMethods(null)
+            ->getMock();
+        $registry = new ComponentRegistry($this->controller);
+        $this->component = new PaginatorComponent($registry);
+        $event = new Event('Controller.startup', $this->controller);
+        $this->component->startup($event);
+
+        $this->assertTrue(Helper::checkComponents($this->controller));*/
     }
 }
