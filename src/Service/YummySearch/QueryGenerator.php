@@ -3,7 +3,6 @@
 namespace Yummy\Service\YummySearch;
 
 use Cake\Database\Query;
-use Cake\ORM\TableRegistry;
 
 class QueryGenerator
 {
