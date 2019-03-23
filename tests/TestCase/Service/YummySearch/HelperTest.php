@@ -5,10 +5,6 @@ namespace Yummy\Test\TestCase\Service\YummySearch;
 use Cake\TestSuite\TestCase;
 use Cake\Http\ServerRequest;
 use Cake\Controller\Controller;
-use Cake\Controller\Component\PaginatorComponent;
-use Cake\Controller\ComponentRegistry;
-use Cake\Event\Event;
-use Cake\Http\Response;
 use Yummy\Service\YummySearch\Helper;
 
 
@@ -47,19 +43,20 @@ class HelperTest extends TestCase
 
     public function testCheckComponentsTrue()
     {
-        $this->markTestIncomplete('Not implemented yet.');
+        $controller = new Controller();
+        $controller->loadComponent('Paginator');
+        $this->assertTrue(Helper::checkComponents($controller));
+    }
 
-/*        $request = new ServerRequest();
-        $response = new Response();
-        $this->controller = $this->getMockBuilder('Cake\Controller\Controller')
-            ->setConstructorArgs([$request, $response])
-            ->setMethods(null)
-            ->getMock();
-        $registry = new ComponentRegistry($this->controller);
-        $this->component = new PaginatorComponent($registry);
-        $event = new Event('Controller.startup', $this->controller);
-        $this->component->startup($event);
-
-        $this->assertTrue(Helper::checkComponents($this->controller));*/
+    public function testCheckComponentsException()
+    {
+        $className = '';
+        $controller = new Controller();
+        try{
+            Helper::checkComponents($controller);
+        } catch(\Exception $e) {
+            $className = get_class($e);
+        }
+        $this->assertEquals('git Yummy\Exception\YummySearch\ConfigurationException', $className);
     }
 }
