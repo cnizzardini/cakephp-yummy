@@ -3,9 +3,7 @@
 namespace Yummy\Test\TestCase\Service\YummySearch;
 
 use Cake\TestSuite\TestCase;
-use Cake\Datasource\ConnectionManager;
 use Cake\ORM\TableRegistry;
-use Yummy\Service\YummySearch\Association;
 use Yummy\Service\YummySearch\QueryGenerator;
 
 class QueryGeneratorTest extends TestCase
