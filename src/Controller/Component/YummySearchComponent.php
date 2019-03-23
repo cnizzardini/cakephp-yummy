@@ -70,7 +70,7 @@ class YummySearchComponent extends Component
     }
 
     /**
-     * Sets $yummy array for use by YummySearchHelper
+     * Sets $YummySearch array for use by YummySearchHelper in template
      *
      * @return void
      */
