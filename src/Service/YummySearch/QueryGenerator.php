@@ -14,6 +14,28 @@ class QueryGenerator
     }
 
     /**
+     * Returns Query with where conditions
+     *
+     * @param string $model
+     * @param string $column
+     * @param string $operator
+     * @param string $value
+     * @param Query $query
+     * @return Query
+     */
+    public function getQuery(Query $query, string $model,  string $column, string $operator, string $value) : Query
+    {
+        // for base model searches
+        if (empty($model)) {
+            return $this->getWhere($query, $column, $operator, $value);
+        }
+
+        return $query->matching($model, function ($q) use ($column, $operator, $value) {
+            return $this->getWhere($q, $column, $operator, $value);
+        });
+    }
+
+    /**
      * Returns Query object after setting where condition
      *
      * @param Query $query

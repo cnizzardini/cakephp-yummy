@@ -116,6 +116,8 @@ class YummySearchComponent extends Component
 
         $data = Helper::getFormattedData($request);
 
+        $queryGenerator = new QueryGenerator($this->_config);
+
         foreach ($data as $item) {
 
             $pieces = explode('.', $item['field']);
@@ -128,39 +130,15 @@ class YummySearchComponent extends Component
 
             $path = isset($this->models[$model]['path']) ? $this->models[$model]['path'] : '';
 
-            $query = $this->getSqlCondition(
+            $query = $queryGenerator->getQuery(
+                $query,
                 $path,
                 "$model.$column",
                 $item['operator'],
-                $item['search'],
-                $query
+                $item['search']
             );
         }
 
         return $query;
-    }
-
-    /**
-     * Returns CakePHP ORM compatible conditions
-     *
-     * @param string $model
-     * @param string $column
-     * @param string $operator
-     * @param string $value
-     * @param Query $query
-     * @return Query
-     */
-    private function getSqlCondition(string $model,  string $column, string $operator, string $value, Query $query) : Query
-    {
-        $queryGenerator = new QueryGenerator($this->_config);
-
-        // for base model searches
-        if (empty($model)) {
-            return $queryGenerator->getWhere($query, $column, $operator, $value);
-        }
-
-        return $query->matching($model, function ($q) use ($column, $operator, $value, $queryGenerator) {
-            return $queryGenerator->getWhere($q, $column, $operator, $value);
-        });
     }
 }
