@@ -9,7 +9,7 @@ use Yummy\Service\YummySearch\QueryGenerator;
 use Yummy\Service\YummySearch\Rule;
 use Yummy\Service\YummySearch\Association;
 use Yummy\Service\YummySearch\Option;
-use Yummy\Service\YummySearch\Helper;
+use Yummy\Service\YummySearch\ViewHelper;
 
 /**
  * This component is a should be used in conjunction with the YummySearchHelper for building rudimentary search filters
@@ -71,7 +71,7 @@ class YummySearchComponent extends Component
         $this->checkComponents();
 
         $option = new Option($this->_config);
-        $helper = new Helper($this->_config, $option);
+        $helper = new ViewHelper($this->_config, $option);
 
         $yummy = $helper->getYummyHelperData($this->models, $this->controller->request);
 
