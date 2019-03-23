@@ -56,11 +56,11 @@ class YummySearchComponent extends Component
             $this->setConfig('selectGroups', $config['selectGroups']);
         }
 
-        $database = ConnectionManager::get($this->getConfig('dataSource'));
+        $connection = ConnectionManager::get($this->getConfig('dataSource'));
 
         $association = new Association();
 
-        $this->models = $association->getModels($database, $this->_config);
+        $this->models = $association->getModels($connection, $this->_config);
     }
 
     /**
