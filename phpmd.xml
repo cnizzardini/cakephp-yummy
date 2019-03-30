@@ -23,13 +23,13 @@
     </rule>
     <rule ref="rulesets/codesize.xml/TooManyMethods">
         <properties>
-            <property name="maxmethods" value="20" />
+            <property name="maxmethods" value="10" />
         </properties>
     </rule>
     <rule ref="rulesets/codesize.xml/ExcessiveMethodLength">
         <properties>
             <property name="ignore-whitespace" value="true" />
-            <property name="minimum" value="50" />
+            <property name="minimum" value="30" />
         </properties>
     </rule>
     <rule ref="rulesets/codesize.xml/ExcessiveClassComplexity"/>
