@@ -2,6 +2,8 @@
 
 namespace Yummy\Service\YummySearch;
 
+use Cake\Utility\Inflector;
+
 class ViewHelper
 {
     private $option;
@@ -11,10 +13,9 @@ class ViewHelper
      * @param array $config
      * @param Option $option
      */
-    public function __construct(array $config, Option $option)
+    public function __construct(array $config)
     {
         $this->config = $config;
-        $this->option = $option;
     }
 
     /**
@@ -75,6 +76,12 @@ class ViewHelper
 
             $meta = $this->getYummyMeta($camelName, $field['column']);
 
+            echo '<pre>' . __FILE__ . ':' . __LINE__;
+            print_r($meta);
+            echo '</pre>';
+            die();
+
+
             $element = [
                 'text' => ($meta['niceName'] !== false) ? $meta['niceName'] : $field['text'],
                 'path' => $model['path'],
@@ -85,17 +92,7 @@ class ViewHelper
                 'selected' => ($request->query('YummySearch') === null && $meta['default'] === true) ? true : false
             ];
 
-            if ($field['sort-order'] === false) {
-                $selectOptions[$humanName][] = $element;
-                continue;
-            }
-
-            $key = $field['sort-order'];
-            if ($key !== null && !isset($selectOptions[$humanName][$key])) {
-                $selectOptions[$humanName][$key] = $element;
-            } else {
-                $selectOptions[$humanName][] = $element;
-            }
+            $selectOptions[$humanName][$meta['sortOrder']] = $element;
         }
 
         return $selectOptions;
@@ -108,7 +105,7 @@ class ViewHelper
      * @param string $column
      * @return array
      */
-    private function getYummyMeta(string $model, string $column)
+    private function getYummyMeta(string $model, string $column) : array
     {
         $meta = [
             'options' => false,
@@ -118,27 +115,20 @@ class ViewHelper
 
         $config = $this->config;
 
-        if (isset($config['allow'][$model][$column])) {
-            $meta = $this->getColumnYummyMeta($config['allow'][$model][$column]);
-        } elseif (isset($config['allow'][$model]['_columns'][$column])) {
-            $meta = $this->getColumnYummyMeta($config['allow'][$model]['_columns'][$column]);
+        if (!isset($config['allow']["$model.$column"])) {
+            return $meta;
         }
 
-        return $meta;
-    }
+        $options = $config['allow']["$model.$column"];
 
-    /**
-     * Returns yummy meta data for a column
-     *
-     * @param mixed $element
-     * @return array
-     */
-    private function getColumnYummyMeta($element) : array
-    {
         return [
-            'niceName' => $this->option->getColumnNiceName($element),
-            'options' => $this->option->getColumnOptions($element),
-            'default' => $this->option->getColumnDefault($element),
+            'niceName' => $options['name'] ? $options['name'] : Inflector::singularize($model) . ' ' . ucwords($column),
+            'options' => $options['select'],
+            'default' => false,
+            'sortOrder' => array_search(
+                "$model.$column",
+                $config['allow']
+            )
         ];
     }
 }

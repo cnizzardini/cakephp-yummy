@@ -42,9 +42,7 @@ class Schema
 
         foreach ($columns as $column) {
 
-            $allowed = $this->rule->isColumnAllowed($modelName, $column);
-
-            if ($allowed === false) {
+            if ($this->rule->hasAllowRule() && !$this->rule->isColumnAllowed($modelName, $column)) {
                 continue;
             }
 
@@ -55,7 +53,7 @@ class Schema
                 'text' => Inflector::humanize($column),
                 'type' => $columnMeta['type'],
                 'length' => $columnMeta['length'],
-                'sort-order' => $allowed === true ? null : $allowed
+                'sort-order' => $this->rule->hasAllowRule() ? $this->rule->getSortOrder($modelName, $column) : null
             ];
         }
 
