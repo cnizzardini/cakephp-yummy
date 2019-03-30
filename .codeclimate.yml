@@ -13,6 +13,11 @@ exclude_patterns:
   - "**/*_test.go"
   - "**/*.d.ts"
   - "**/webroot/"
+version: "2"         # required to adjust maintainability checks
+checks:
+  method-lines:
+    config:
+      threshold: 30
 plugins:
   phpmd:
     enabled: true
