@@ -43,8 +43,10 @@ class AssociationTest extends TestCase
         $models = $association->getModels($connection, [
             'query' => $query,
             'model' => 'Teams',
-            'deny' => [
-                'Conferences' => '*'
+            'allow' => [
+                'Teams.id',
+                'Teams.name',
+                'Divisions.id',
             ],
             'selectGroups' => false
         ]);

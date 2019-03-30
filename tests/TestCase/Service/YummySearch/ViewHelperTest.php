@@ -7,7 +7,6 @@ use Cake\ORM\TableRegistry;
 use Cake\Datasource\ConnectionManager;
 use Cake\Http\ServerRequest;
 use Yummy\Service\YummySearch\ViewHelper;
-use Yummy\Service\YummySearch\Option;
 use Yummy\Service\YummySearch\Association;
 
 class ViewHelperTest extends TestCase
@@ -24,16 +23,21 @@ class ViewHelperTest extends TestCase
             'query' => $query,
             'model' => 'Teams',
             'allow' => [
-                'Teams' => ['name'],
+                'Teams.id' => ['name' => 'ID', 'operators' => false, 'select' => false],
+                'Teams.name' => ['name' => false, 'select' => false],
+                'Conferences.name' => ['name' => false, 'operators' => ['eq'], 'select' => [
+                    '1' => 'AFC',
+                    '2' => 'NFC'
+                ]],
             ],
             'operators' => [
-                'eq' => 'Equals'
+                'eq' => 'Equals',
+                'like' => 'Containing'
             ],
             'selectGroups' => true
         ];
 
-        $option = new Option($config);
-        $viewHelper = new ViewHelper($config, $option);
+        $viewHelper = new ViewHelper($config);
         $association = new Association();
         $request = new ServerRequest();
 
@@ -44,6 +48,10 @@ class ViewHelperTest extends TestCase
 
         $this->assertArrayHasKey('Teams', $data['models']);
         $this->assertArrayHasKey('Conferences', $data['models']);
-        $this->assertArrayHasKey('Divisions', $data['models']);
+        $this->assertArrayNotHasKey('Divisions', $data['models']);
+
+        $this->assertEquals('ID', $data['models']['Teams'][0]['text']);
+        $this->assertEquals('Team Name', $data['models']['Teams'][1]['text']);
+        $this->assertEquals('AFC,NFC', $data['models']['Conferences'][2]['data-items']);
     }
 }

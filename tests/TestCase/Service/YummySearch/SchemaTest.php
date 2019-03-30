@@ -53,34 +53,7 @@ class SchemaTest extends TestCase
             'query' => $query,
             'model' => 'Teams',
             'allow' => [
-                'Teams' => ['name'],
-            ]
-        ];
-
-        $connection = ConnectionManager::get('test');
-
-        $rule = new Rule($config);
-        $schema = new Schema($rule);
-
-        $columns = $schema->getColumns($connection, 'Teams');
-
-        $this->assertArrayHasKey('Teams.name', $columns);
-        $this->assertArrayNotHasKey('Teams.id', $columns);
-    }
-
-    public function testGetColumnsCustomDeny()
-    {
-        $query = TableRegistry::get('Teams')->find()->contain([
-            'Divisions' => [
-                'Conferences'
-            ],
-        ]);
-
-        $config = [
-            'query' => $query,
-            'model' => 'Teams',
-            'deny' => [
-                'Teams' => ['id'],
+                'Teams.name' => ['name' => false, 'operators' => false, 'select' => false]
             ]
         ];
 
@@ -106,9 +79,6 @@ class SchemaTest extends TestCase
         $config = [
             'query' => $query,
             'model' => 'Teams',
-            'deny' => [
-                'Teams' => ['id'],
-            ]
         ];
 
         $connection = ConnectionManager::get('test');
