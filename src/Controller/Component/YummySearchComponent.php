@@ -18,7 +18,6 @@ use Yummy\Service\YummySearch\Helper;
 use Yummy\Service\YummySearch\QueryGenerator;
 use Yummy\Service\YummySearch\Rule;
 use Yummy\Service\YummySearch\Association;
-use Yummy\Service\YummySearch\Option;
 use Yummy\Service\YummySearch\ViewHelper;
 
 /**
@@ -140,5 +139,25 @@ class YummySearchComponent extends Component
         }
 
         return $query;
+    }
+
+    /**
+     * Adds a column that can be searched on
+     *
+     * @param string $column
+     * @param array $options
+     * @return YummySearchComponent
+     */
+    public function addColumn(string $column, array $options = []) : self
+    {
+        $option = array_merge($options, [
+            'name' => false,
+            'operators' => false,
+            'select' => false
+        ]);
+
+        $this->_config['allow'][$column] = $option;
+
+        return $this;
     }
 }
