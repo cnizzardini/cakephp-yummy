@@ -76,12 +76,6 @@ class ViewHelper
 
             $meta = $this->getYummyMeta($camelName, $field['column']);
 
-            echo '<pre>' . __FILE__ . ':' . __LINE__;
-            print_r($meta);
-            echo '</pre>';
-            die();
-
-
             $element = [
                 'text' => ($meta['niceName'] !== false) ? $meta['niceName'] : $field['text'],
                 'path' => $model['path'],
@@ -122,8 +116,8 @@ class ViewHelper
         $options = $config['allow']["$model.$column"];
 
         return [
-            'niceName' => $options['name'] ? $options['name'] : Inflector::singularize($model) . ' ' . ucwords($column),
-            'options' => $options['select'],
+            'niceName' => isset($options['name']) ? $options['name'] : Inflector::singularize($model) . ' ' . ucwords($column),
+            'options' => isset($options['select']) ? $options['select'] : false,
             'default' => false,
             'sortOrder' => array_search(
                 "$model.$column",
