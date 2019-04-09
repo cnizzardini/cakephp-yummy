@@ -1,26 +1,31 @@
----
-engines:
-  duplication:
-    enabled: true
+exclude_patterns:
+  - "config/"
+  - "db/"
+  - "dist/"
+  - "features/"
+  - "**/node_modules/"
+  - "script/"
+  - "**/spec/"
+  - "**/test/"
+  - "**/tests/"
+  - "Tests/"
+  - "**/vendor/"
+  - "**/*_test.go"
+  - "**/*.d.ts"
+  - "**/webroot/"
+version: "2"         # required to adjust maintainability checks
+checks:
+  method-lines:
     config:
-      languages:
-      - php
-  eslint:
-    enabled: true
-  fixme:
-    enabled: true
+      threshold: 30
+plugins:
   phpmd:
     enabled: true
     config:
+      file_extensions:
+        - php
+      rulesets: "phpmd.xml"
+  phpcodesniffer:
+    enabled: true
+    config:
       file_extensions: "php"
-      rulesets: "unusedcode,codesize,naming,phpmd.xml"
-ratings:
-  paths:
-  - "**.inc"
-  - "**.ctp"
-  - "**.module"
-  - "**.php"
-exclude_paths:
-- config/
-- tests/
-- webroot/
