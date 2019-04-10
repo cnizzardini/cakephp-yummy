@@ -13,7 +13,6 @@ class ViewHelperTest extends TestCase
 {
     public function testGetYummyHelperData()
     {
-
         $teamsTable = TableRegistry::get('Teams');
         $teamsTable->addAssociations([
             'belongsTo' => [
@@ -69,5 +68,15 @@ class ViewHelperTest extends TestCase
         $this->assertEquals('Identifier', $data['models']['Teams'][1]['text']);
         $this->assertEquals('Team Name', $data['models']['Teams'][0]['text']);
         $this->assertEquals('AFC,NFC', $data['models']['Conferences'][2]['data-items']);
+    }
+
+    public function testGetYummyHelperDataStandardOptionGroup()
+    {
+        $this->markTestIncomplete('@todo');
+    }
+
+    public function testGetYummyHelperDataCustomOptionGroup()
+    {
+        $this->markTestIncomplete('@todo');
     }
 }
