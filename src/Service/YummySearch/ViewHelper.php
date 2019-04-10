@@ -29,21 +29,8 @@ class ViewHelper
         $selectOptions = [];
 
         foreach ($models as $camelName => $model) {
-            $newOptions = $this->getYummyMetaColumns($model, $camelName, $request);
-            ksort($newOptions[$camelName]);
-            $selectOptions = $selectOptions + $newOptions;
-        }
-
-        if ($this->config['selectGroups'] === false) {
-            $select = [];
-            foreach ($selectOptions as $options) {
-                $select = array_merge($select, $options);
-            }
-
-            // apply A-Z sort when select groups are not used
-            usort($select, function($a, $b) {
-                return strcmp($a['text'], $b['text']);
-            });
+            $options = $this->getYummyMetaColumns($model, $camelName, $request);
+            $selectOptions = $selectOptions + $this->getOptions($options);
         }
 
         $yummy = [
@@ -82,7 +69,8 @@ class ViewHelper
                 'data-type' => ($meta['options'] !== false) ? 'list' : $field['type'],
                 'data-length' => $field['length'],
                 'selected' => ($request->query('YummySearch') === null && $meta['default'] === true) ? true : false,
-                'data-operators' => is_array($meta['operators']) ? implode(',', $meta['operators']) : false
+                'data-operators' => is_array($meta['operators']) ? implode(',', $meta['operators']) : false,
+                'data-group' => $meta['group']
             ];
 
             $selectOptions[$humanName][$meta['sortOrder']] = $element;
@@ -120,7 +108,35 @@ class ViewHelper
             'options' => isset($options['select']) ? $options['select'] : [],
             'operators' => isset($options['operators']) ? $options['operators'] : [],
             'default' => false,
-            'sortOrder' => array_search("$model.$column", $keys)
+            'sortOrder' => array_search("$model.$column", $keys),
+            'group' => isset($options['group']) ? $options['group'] : false
         ];
+    }
+
+    /**
+     * Gets array of html select compatible options as either options, optgroups, or custom optgroups depending
+     * on configuration
+     *
+     * @param array $options
+     * @return array
+     */
+    private function getOptions(array $options) : array
+    {
+        $keys = array_keys($options);
+        $name = reset($keys);
+        ksort($options[$name]);
+
+        if ($this->config['selectGroups'] === false) {
+            $options = $options[$name];
+        } else if ($this->config['selectGroups'] === 'custom') {
+            $tmp = $options[$name];
+            $options = [];
+            foreach ($tmp as $option) {
+                $groupName = $option['data-group'] ? $option['data-group'] : $name;
+                $options[$groupName][] = $option;
+            }
+        }
+
+        return $options;
     }
 }
