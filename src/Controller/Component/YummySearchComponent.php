@@ -88,8 +88,7 @@ class YummySearchComponent extends Component
     {
         Helper::checkComponents($this->controller);
 
-        $option = new Option($this->_config);
-        $viewHelper = new ViewHelper($this->_config, $option);
+        $viewHelper = new ViewHelper($this->_config);
 
         $yummy = $viewHelper->getYummyHelperData($this->models, $this->controller->request);
 
