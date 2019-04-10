@@ -34,7 +34,7 @@ class Rule
      */
     public function isColumnAllowed(string $model, string $column) : bool
     {
-        if (isset($this->config['allow']["$model.$column"])) {
+        if (!isset($this->config['allow']) || isset($this->config['allow']["$model.$column"])) {
             return true;
         }
 
