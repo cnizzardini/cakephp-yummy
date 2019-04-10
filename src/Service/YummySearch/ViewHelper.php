@@ -3,15 +3,14 @@
 namespace Yummy\Service\YummySearch;
 
 use Cake\Utility\Inflector;
+use Cake\Network\Request;
 
 class ViewHelper
 {
-    private $option;
     private $config;
 
     /**
      * @param array $config
-     * @param Option $option
      */
     public function __construct(array $config)
     {
@@ -22,18 +21,17 @@ class ViewHelper
      * Retrieves an array used by YummySearchHelper
      *
      * @param array $models
-     * @param \Cake\Network\Request $request
+     * @param Request $request
      * @return array
      */
-    public function getYummyHelperData(array $models, \Cake\Network\Request $request)
+    public function getYummyHelperData(array $models, Request $request) : array
     {
         $selectOptions = [];
 
         foreach ($models as $camelName => $model) {
-            $selectOptions = array_merge(
-                $selectOptions,
-                $this->getYummyMetaColumns($model, $camelName, $request)
-            );
+            $newOptions = $this->getYummyMetaColumns($model, $camelName, $request);
+            ksort($newOptions[$camelName]);
+            $selectOptions = $selectOptions + $newOptions;
         }
 
         if ($this->config['selectGroups'] === false) {
@@ -63,10 +61,10 @@ class ViewHelper
      *
      * @param array $model
      * @param string $camelName
-     * @param \Cake\Network\Request $request
+     * @param Request $request
      * @return array
      */
-    private function getYummyMetaColumns(array $model, string $camelName, \Cake\Network\Request $request)
+    private function getYummyMetaColumns(array $model, string $camelName, Request $request) : array
     {
         $selectOptions = [];
 
@@ -114,15 +112,13 @@ class ViewHelper
         }
 
         $options = $config['allow']["$model.$column"];
+        $keys = array_keys($config['allow']);
 
         return [
             'niceName' => isset($options['name']) ? $options['name'] : Inflector::singularize($model) . ' ' . ucwords($column),
             'options' => isset($options['select']) ? $options['select'] : false,
             'default' => false,
-            'sortOrder' => array_search(
-                "$model.$column",
-                $config['allow']
-            )
+            'sortOrder' => array_search("$model.$column", $keys)
         ];
     }
 }
