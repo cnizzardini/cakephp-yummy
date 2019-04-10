@@ -8,12 +8,7 @@ use Yummy\Service\YummySearch\QueryGenerator;
 
 class QueryGeneratorTest extends TestCase
 {
-    public function testGetQuery()
-    {
-        $this->markTestIncomplete('Not implemented yet.');
-    }
-
-    public function testGetWhereBaseModelSingleEqualCondition()
+    public function testGetWhere()
     {
         $teamsTable = TableRegistry::get('Teams');
         $teamsTable->addAssociations([
