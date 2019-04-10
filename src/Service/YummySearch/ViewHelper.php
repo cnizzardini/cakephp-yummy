@@ -81,7 +81,8 @@ class ViewHelper
                 'data-items' => ($meta['options'] !== false) ? implode(',', $meta['options']) : false,
                 'data-type' => ($meta['options'] !== false) ? 'list' : $field['type'],
                 'data-length' => $field['length'],
-                'selected' => ($request->query('YummySearch') === null && $meta['default'] === true) ? true : false
+                'selected' => ($request->query('YummySearch') === null && $meta['default'] === true) ? true : false,
+                'data-operators' => is_array($meta['operators']) ? implode(',', $meta['operators']) : false
             ];
 
             $selectOptions[$humanName][$meta['sortOrder']] = $element;
@@ -116,7 +117,8 @@ class ViewHelper
 
         return [
             'niceName' => isset($options['name']) ? $options['name'] : Inflector::singularize($model) . ' ' . ucwords($column),
-            'options' => isset($options['select']) ? $options['select'] : false,
+            'options' => isset($options['select']) ? $options['select'] : [],
+            'operators' => isset($options['operators']) ? $options['operators'] : [],
             'default' => false,
             'sortOrder' => array_search("$model.$column", $keys)
         ];
