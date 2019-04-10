@@ -13,6 +13,21 @@ class ViewHelperTest extends TestCase
 {
     public function testGetYummyHelperData()
     {
+
+        $teamsTable = TableRegistry::get('Teams');
+        $teamsTable->addAssociations([
+            'belongsTo' => [
+                'Divisions'
+            ]
+        ]);
+
+        $divisionsTable = TableRegistry::get('Divisions');
+        $divisionsTable->addAssociations([
+            'belongsTo' => [
+                'Conferences'
+            ]
+        ]);
+
         $query = TableRegistry::get('Teams')->find()->contain([
             'Divisions' => [
                 'Conferences'
@@ -23,12 +38,13 @@ class ViewHelperTest extends TestCase
             'query' => $query,
             'model' => 'Teams',
             'allow' => [
-                'Teams.id' => ['name' => 'ID', 'operators' => false, 'select' => false],
-                'Teams.name' => ['name' => false, 'select' => false],
-                'Conferences.name' => ['name' => false, 'operators' => ['eq'], 'select' => [
-                    '1' => 'AFC',
-                    '2' => 'NFC'
-                ]],
+                'Teams.name' => ['name' => 'Team Name', 'select' => false],
+                'Teams.id' => ['name' => 'Identifier', 'operators' => false, 'select' => false],
+                'Conferences.name' => [
+                    'name' => 'Conference',
+                    'operators' => ['eq'],
+                    'select' => ['1' => 'AFC','2' => 'NFC']
+                ],
             ],
             'operators' => [
                 'eq' => 'Equals',
@@ -50,8 +66,8 @@ class ViewHelperTest extends TestCase
         $this->assertArrayHasKey('Conferences', $data['models']);
         $this->assertArrayNotHasKey('Divisions', $data['models']);
 
-        $this->assertEquals('ID', $data['models']['Teams'][0]['text']);
-        $this->assertEquals('Team Name', $data['models']['Teams'][1]['text']);
+        $this->assertEquals('Identifier', $data['models']['Teams'][1]['text']);
+        $this->assertEquals('Team Name', $data['models']['Teams'][0]['text']);
         $this->assertEquals('AFC,NFC', $data['models']['Conferences'][2]['data-items']);
     }
 }
