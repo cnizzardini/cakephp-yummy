@@ -65,8 +65,8 @@ class ViewHelper
                 'text' => ($meta['niceName'] !== false) ? $meta['niceName'] : $field['text'],
                 'path' => $model['path'],
                 'value' => $column,
-                'data-items' => ($meta['options'] !== false) ? implode(',', $meta['options']) : false,
-                'data-type' => ($meta['options'] !== false) ? 'list' : $field['type'],
+                'data-items' => !empty($meta['options']) ? implode(',', $meta['options']) : false,
+                'data-type' => !empty($meta['options']) ? 'list' : $field['type'],
                 'data-length' => $field['length'],
                 'selected' => ($request->query('YummySearch') === null && $meta['default'] === true) ? true : false,
                 'data-operators' => is_array($meta['operators']) ? implode(',', $meta['operators']) : false,
@@ -102,9 +102,10 @@ class ViewHelper
 
         $options = $config['allow']["$model.$column"];
         $keys = array_keys($config['allow']);
+        $defaultName = Inflector::singularize($model) . ' ' . ucwords($column);
 
         return [
-            'niceName' => isset($options['name']) ? $options['name'] : Inflector::singularize($model) . ' ' . ucwords($column),
+            'niceName' => isset($options['name']) ? $options['name'] : $defaultName,
             'options' => isset($options['select']) ? $options['select'] : [],
             'operators' => isset($options['operators']) ? $options['operators'] : [],
             'default' => false,
