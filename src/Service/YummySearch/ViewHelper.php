@@ -55,11 +55,12 @@ class ViewHelper
     {
         $selectOptions = [];
 
+
         foreach ($model['columns'] as $column => $field) {
 
             $humanName = $model['humanName'];
 
-            $meta = $this->getYummyMeta($camelName, $field['column']);
+            $meta = $this->getYummyMeta($camelName, $field);
 
             $element = [
                 'text' => ($meta['niceName'] !== false) ? $meta['niceName'] : $field['text'],
@@ -83,10 +84,10 @@ class ViewHelper
      * Returns yummy meta data for a column
      *
      * @param string $model
-     * @param string $column
+     * @param array $field
      * @return array
      */
-    private function getYummyMeta(string $model, string $column) : array
+    private function getYummyMeta(string $model, array $field) : array
     {
         $meta = [
             'options' => false,
@@ -95,6 +96,7 @@ class ViewHelper
         ];
 
         $config = $this->config;
+        $column = $field['column'];
 
         if (!isset($config['allow']["$model.$column"])) {
             return $meta;
@@ -107,11 +109,30 @@ class ViewHelper
         return [
             'niceName' => isset($options['name']) ? $options['name'] : $defaultName,
             'options' => isset($options['select']) ? $options['select'] : [],
-            'operators' => isset($options['operators']) ? $options['operators'] : [],
+            'operators' => $this->getOperators($field, $options),
             'default' => false,
             'sortOrder' => array_search("$model.$column", $keys),
             'group' => isset($options['group']) ? $options['group'] : false
         ];
+    }
+
+    private function getOperators(array $field, array $options) : array
+    {
+        if (isset($options['operators'])) {
+            return $options['operators'];
+        }
+
+        switch (strtolower($field['type'])) {
+            case 'string':
+                return ['like','not_like','eq','not_eq'];
+                break;
+            case 'date':
+            case 'datetime':
+                return ['eq','not_eq','qt','lt','qt_eq','lt_eq'];
+                break;
+            default:
+                return [];
+        }
     }
 
     /**
