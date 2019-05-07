@@ -44,10 +44,17 @@
 
         var dataType = option.getAttribute('data-type').toLowerCase();
         var operator = row.getElementsByClassName('yummy-operator')[0];
-        var prevOperator = this.getPreviousOperator(operator);
-        var prevValue = this.getPreviousSearchValue(row)
         var items = this.getCustomSearchList(option);
-        this.setOperators(option, row);
+
+        var self = this;
+
+        new Promise(function(resolve, reject) {
+            if (self.setOperators(option, row)) {
+                resolve();
+            }
+        }).then(function(){
+            self.setDefaultOperator(row);
+        });
 
         var detail = {
             field: field,
@@ -55,11 +62,9 @@
             input: row.getElementsByClassName('yummy-input')[0],
             dataType: dataType,
             items: items,
-            prevValue: prevValue,
-            prevOperator: prevOperator,
         };
 
-        this.setDefaultOperator(row);
+
         this.setDropDownList(detail);
 
         var event = new CustomEvent(
@@ -122,6 +127,11 @@
     };
 
     YummySearch.setOperators = function(option, row) {
+
+        if (option.getAttribute('data-operators') === null) {
+            return true;
+        }
+
         var operators = option.getAttribute('data-operators').split(',').filter(function(op){
             if (op.trim().length > 0) {
                 return true;
@@ -132,9 +142,10 @@
 
         if (operators.length > 0) {
             for (var i=0; i < defaultOperators.length; i++) {
-
                 if (operators.indexOf(defaultOperators[i].value) === -1) {
                     row.getElementsByClassName('yummy-operator')[0].options[i].setAttribute('hidden', true);
+                } else {
+                    row.getElementsByClassName('yummy-operator')[0].options[i].removeAttribute('hidden');
                 }
             }
         } else {
@@ -142,6 +153,8 @@
                 row.getElementsByClassName('yummy-operator')[0].options[i].removeAttribute('hidden');
             }
         }
+
+        return true;
     };
 
     YummySearch.getCustomSearchList = function(option) {
@@ -155,11 +168,12 @@
         var options = row.getElementsByClassName('yummy-operator')[0].options;
         for (var i=0; i < options.length; i++) {
             if (options[i].getAttribute('hidden') === false || options[i].getAttribute('hidden') === null) {
-                //console.log(options[i].value);
-                row.getElementsByClassName('yummy-operator')[0].value = options[i].value;
+                console.log(options[i].value);
+                row.getElementsByClassName('yummy-operator')[0].selectedIndex = i;
                 break;
             }
         }
+
         return true;
     };
 
@@ -204,8 +218,22 @@
      * @returns {undefined}
      */
     YummySearch.changeEvent = function(e,target){
-        var row = target.parentElement.parentElement.parentElement;
-        //console.log(row,'search by field change');
+        function collectionHas(a, b) { //helper function (see below)
+            for(var i = 0, len = a.length; i < len; i ++) {
+                if(a[i] == b) return true;
+            }
+            return false;
+        }
+        function findParentBySelector(elm, selector) {
+            var all = document.querySelectorAll(selector);
+            var cur = elm.parentNode;
+            while(cur && !collectionHas(all, cur)) { //keep going up until you find a match
+                cur = cur.parentNode; //go up
+            }
+            return cur; //will return null if not found
+        }
+        var row = findParentBySelector(target, '.yummy-search-row');
+        console.log(row,'search by field change');
         YummySearch.yummySearchFieldChangeEvent(row);
     };
 
