@@ -34,17 +34,60 @@
      */
     YummySearch.yummySearchFieldChangeEvent = function (row){
 
-        var fields = row.getElementsByClassName('yummy-field');
-        var field = fields[0];
+        var field = this.getSearchColumnField(row);
+        var option = this.getSearchColumnFieldOptionElement(field);
 
-        var option = field.options[ field.selectedIndex ];
-        if (option.getAttribute('value') === null || option.getAttribute('value').trim() === '') {
+        if (option === false) {
+            console.log('error option value cannot be empty');
             return false;
         }
 
         var dataType = option.getAttribute('data-type').toLowerCase();
-
         var operator = row.getElementsByClassName('yummy-operator')[0];
+        var prevOperator = this.getPreviousOperator(operator);
+        var prevValue = this.getPreviousSearchValue(row)
+        var items = this.getCustomSearchList(option);
+        this.setOperators(option, row);
+
+        var detail = {
+            field: field,
+            operator: operator,
+            input: row.getElementsByClassName('yummy-input')[0],
+            dataType: dataType,
+            items: items,
+            prevValue: prevValue,
+            prevOperator: prevOperator,
+        };
+
+        this.setDefaultOperator(row);
+        this.setDropDownList(detail);
+
+        var event = new CustomEvent(
+            "yummySearchFieldChange",
+            {
+                detail: detail,
+                bubbles: true,
+                cancelable: true
+            }
+        );
+
+        field.dispatchEvent(event);
+    };
+
+    YummySearch.getSearchColumnField = function(row) {
+        var fields = row.getElementsByClassName('yummy-field');
+        return fields[0];
+    };
+
+    YummySearch.getSearchColumnFieldOptionElement = function(field) {
+        var option = field.options[ field.selectedIndex ];
+        if (option.getAttribute('value') === null || option.getAttribute('value').trim() === '') {
+            return false;
+        }
+        return option;
+    };
+
+    YummySearch.getPreviousOperator = function (operator) {
         var prevOperator = false;
 
         if (operator.tagName.toLowerCase() === 'select') {
@@ -57,10 +100,13 @@
             prevOperator = operator.getAttribute('value') == 'null' ? 'like' : operator.getAttribute('value');
         }
 
-        var prevValue = false;
+        return prevOperator;
+    };
 
+    YummySearch.getPreviousSearchValue = function(row) {
         var input = row.getElementsByClassName('yummy-input')[0];
-
+        var operator = row.getElementsByClassName('yummy-operator')[0];
+        var prevValue = false;
         if (input !== undefined) {
             if (input.tagName.toLowerCase() === 'input') {
                 prevValue = input.getAttribute('value');
@@ -72,31 +118,83 @@
                 }
             }
         }
+        return prevValue;
+    };
 
-        var items = false;
-        if (dataType === 'list') {
-            var list = option.getAttribute('data-items');
-            items = list.split(',');
+    YummySearch.setOperators = function(option, row) {
+        var operators = option.getAttribute('data-operators').split(',').filter(function(op){
+            if (op.trim().length > 0) {
+                return true;
+            }
+        });
+
+        var defaultOperators = row.getElementsByClassName('yummy-operator')[0].options;
+
+        if (operators.length > 0) {
+            for (var i=0; i < defaultOperators.length; i++) {
+
+                if (operators.indexOf(defaultOperators[i].value) === -1) {
+                    row.getElementsByClassName('yummy-operator')[0].options[i].setAttribute('hidden', true);
+                }
+            }
+        } else {
+            for (var i=0; i < defaultOperators.length; i++) {
+                row.getElementsByClassName('yummy-operator')[0].options[i].removeAttribute('hidden');
+            }
+        }
+    };
+
+    YummySearch.getCustomSearchList = function(option) {
+        if (option.getAttribute('data-type').toLowerCase() === 'list') {
+            return option.getAttribute('data-items').split(',');
+        }
+        return false;
+    };
+
+    YummySearch.setDefaultOperator = function(row) {
+        var options = row.getElementsByClassName('yummy-operator')[0].options;
+        for (var i=0; i < options.length; i++) {
+            if (options[i].getAttribute('hidden') === false || options[i].getAttribute('hidden') === null) {
+                //console.log(options[i].value);
+                row.getElementsByClassName('yummy-operator')[0].value = options[i].value;
+                break;
+            }
+        }
+        return true;
+    };
+
+    YummySearch.setDropDownList = function(detail) {
+
+        if (detail.dataType !== 'list') {
+            detail.input.style.display = '';
+            detail.input.removeAttribute('disabled');
+            var selects = detail.input.parentNode.getElementsByTagName('select');
+            if (selects.length === 1) {
+                selects[0].remove();
+            }
+            return true;
         }
 
-        var event = new CustomEvent(
-            "yummySearchFieldChange",
-            {
-                detail: {
-                    field: field,
-                    operator: operator,
-                    input: input,
-                    dataType: dataType,
-                    items: items,
-                    prevValue: prevValue,
-                    prevOperator: prevOperator
-                },
-                bubbles: true,
-                cancelable: true
-            }
-        );
+        detail.input.style.display = 'none';
+        detail.input.setAttribute('disabled', 'disabled');
 
-        field.dispatchEvent(event);
+        var dropdown = document.createElement("select");
+        dropdown.classList = 'form-control border-input yummy-search';
+        dropdown.name = 'YummySearch[search][]';
+
+        for (var i=0; i<detail.items.length; i++) {
+            var option = document.createElement("option");
+            option.value = detail.items[ i ];
+            option.text = detail.items[ i ];
+            if (detail.prevValue === detail.items[ i ]) {
+                option.selected = 'selected';
+            }
+            dropdown.appendChild(option);
+        }
+
+        detail.input.parentNode.appendChild(dropdown);
+        return true;
+        //detail.input.parentNode.appendChild(dropdown);
     };
 
     /**
@@ -106,8 +204,8 @@
      * @returns {undefined}
      */
     YummySearch.changeEvent = function(e,target){
-        var row = target.parentElement.parentElement.parentElement.parentElement;
-        //console.log(row);
+        var row = target.parentElement.parentElement.parentElement;
+        //console.log(row,'search by field change');
         YummySearch.yummySearchFieldChangeEvent(row);
     };
 
