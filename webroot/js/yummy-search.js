@@ -44,6 +44,8 @@
 
         var dataType = option.getAttribute('data-type').toLowerCase();
         var operator = row.getElementsByClassName('yummy-operator')[0];
+        var prevOperator = this.getPreviousOperator(operator);
+        var prevValue = this.getPreviousSearchValue(row)
         var items = this.getCustomSearchList(option);
 
         var self = this;
@@ -62,6 +64,8 @@
             input: row.getElementsByClassName('yummy-input')[0],
             dataType: dataType,
             items: items,
+            prevValue: prevValue,
+            prevOperator: prevOperator,
         };
 
 
