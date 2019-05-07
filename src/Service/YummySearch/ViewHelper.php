@@ -93,6 +93,9 @@ class ViewHelper
             'options' => false,
             'niceName' => false,
             'default' => false,
+            'operators' => false,
+            'group' => '',
+            'sortOrder' => false
         ];
 
         $config = $this->config;
