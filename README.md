@@ -25,7 +25,12 @@ base model and other associations such as HasOne, BelongsTo, and HasMany through
 // Step 1. Basic Controller Usage:
 $query = $this->ModelName->find();
 
-$this->loadComponent('Yummy.YummySearch',['query' => query]);
+$this->loadComponent('Yummy.YummySearch',[
+    'query' => $query,
+    'allow' => [
+        'Table.column' => ['name' => 'Column Name'],
+    ]
+]);
 
 $results = $this->paginate($this->YummySearch->search($query));
 
