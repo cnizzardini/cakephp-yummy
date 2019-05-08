@@ -5,8 +5,8 @@
     "license": "MIT",
     "keywords": ["cakephp3","cakephp3 search","cakephp3 acl","cakephp3 bake"],
     "require": {
-        "php": ">=7.0",
-        "cakephp/cakephp": ">=3.3.2 <4.0.0"
+        "php": ">=7.2",
+        "cakephp/cakephp": ">=3.5.0 <4.0.0"
     },
     "require-dev": {
         "phpunit/phpunit": "6.0.*"
