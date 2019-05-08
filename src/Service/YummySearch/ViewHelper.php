@@ -131,7 +131,8 @@ class ViewHelper
                 break;
             case 'date':
             case 'datetime':
-                return ['eq','not_eq','qt','lt','qt_eq','lt_eq'];
+            case 'timestamp':
+                return ['eq','not_eq','gt','lt','gt_eq','lt_eq'];
                 break;
             default:
                 return [];
