@@ -33,6 +33,8 @@ class ViewHelper
             $selectOptions = $selectOptions + $this->getOptions($options);
         }
 
+        ksort($selectOptions);
+
         $yummy = [
             'base_url' => $request->here,
             'rows' => $request->query('YummySearch'),
