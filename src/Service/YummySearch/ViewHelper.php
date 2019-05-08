@@ -30,7 +30,8 @@ class ViewHelper
 
         foreach ($models as $camelName => $model) {
             $options = $this->getYummyMetaColumns($model, $camelName, $request);
-            $selectOptions = $selectOptions + $this->getOptions($options);
+            //$selectOptions = $selectOptions + $this->getOptions($options);
+            $selectOptions = array_merge_recursive($selectOptions, $this->getOptions($options));
         }
 
         ksort($selectOptions);
@@ -96,7 +97,7 @@ class ViewHelper
             'niceName' => false,
             'default' => false,
             'operators' => false,
-            'group' => '',
+            'group' => false,
             'sortOrder' => false
         ];
 
@@ -117,7 +118,7 @@ class ViewHelper
             'operators' => $this->getOperators($field, $options),
             'default' => false,
             'sortOrder' => array_search("$model.$column", $keys),
-            'group' => isset($options['group']) ? $options['group'] : false
+            'group' => isset($options['group']) ? $options['group'] : $model
         ];
     }
 
@@ -159,6 +160,7 @@ class ViewHelper
         } else if ($this->config['selectGroups'] === 'custom') {
             $tmp = $options[$name];
             $options = [];
+
             foreach ($tmp as $option) {
                 $groupName = $option['data-group'] ? $option['data-group'] : $name;
                 $options[$groupName][] = $option;
