@@ -18,12 +18,13 @@ class Association
         $baseModel = $config['model'];
         $allowedModels = isset($config['allow']) ? $config['allow'] : [];
         $baseHumanName = $this->getHumanName($allowedModels, $baseModel);
+        $baseModelName = Inflector::camelize($baseModel);
 
         $rule = new Rule($config);
         $schema = new Schema($rule);
 
         $models = [
-            $baseHumanName => [
+            $baseModelName => [
                 'humanName' => $baseHumanName,
                 'path' => false,
                 'columns' => $schema->getColumns($connection, $baseModel),
