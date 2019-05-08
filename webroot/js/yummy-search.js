@@ -146,6 +146,7 @@
 
         if (operators.length > 0) {
             for (var i=0; i < defaultOperators.length; i++) {
+                console.log(row.getElementsByClassName('yummy-operator')[0].options[i]);
                 if (operators.indexOf(defaultOperators[i].value) === -1) {
                     row.getElementsByClassName('yummy-operator')[0].options[i].setAttribute('hidden', true);
                 } else {
@@ -169,10 +170,17 @@
     };
 
     YummySearch.setDefaultOperator = function(row) {
+
+        if (row.getElementsByClassName('yummy-operator')[0].value.length > 0) {
+            return true;
+        }
+
         var options = row.getElementsByClassName('yummy-operator')[0].options;
+
         for (var i=0; i < options.length; i++) {
-            if (options[i].getAttribute('hidden') === false || options[i].getAttribute('hidden') === null) {
-                console.log(options[i].value);
+            var isVisible = options[i].getAttribute('hidden') === false || options[i].getAttribute('hidden') === null;
+            var isActive = options[i].getAttribute('disabled') === false || options[i].getAttribute('disabled') === null;
+            if (isVisible === true && isActive === true && options[i].value.length > 0) {
                 row.getElementsByClassName('yummy-operator')[0].selectedIndex = i;
                 break;
             }
@@ -212,7 +220,6 @@
 
         detail.input.parentNode.appendChild(dropdown);
         return true;
-        //detail.input.parentNode.appendChild(dropdown);
     };
 
     /**
@@ -237,7 +244,6 @@
             return cur; //will return null if not found
         }
         var row = findParentBySelector(target, '.yummy-search-row');
-        console.log(row,'search by field change');
         YummySearch.yummySearchFieldChangeEvent(row);
     };
 
