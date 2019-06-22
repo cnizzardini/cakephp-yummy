@@ -40,7 +40,7 @@ class YummySearchComponent extends Component
             'not_eq' => 'Not Matching',
         ],
         'dataSource' => 'default',
-        'selectGroups' => true,
+        'selectGroups' => false,
         'trim' => true
     ];
 
