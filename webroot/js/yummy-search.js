@@ -146,6 +146,7 @@
 
         if (operators.length > 0) {
             for (var i=0; i < defaultOperators.length; i++) {
+                console.log(row.getElementsByClassName('yummy-operator')[0].options[i]);
                 if (operators.indexOf(defaultOperators[i].value) === -1) {
                     row.getElementsByClassName('yummy-operator')[0].options[i].setAttribute('hidden', true);
                 } else {
@@ -170,13 +171,7 @@
 
     YummySearch.setDefaultOperator = function(row) {
 
-        var options = row.getElementsByClassName('yummy-operator')[0].options;
-        var selectedIndex = row.getElementsByClassName('yummy-operator')[0].selectedIndex;
-        var option = options[selectedIndex];
-        var isVisible = option.getAttribute('hidden') === false || option.getAttribute('hidden') === null;
-        var isActive = option.getAttribute('disabled') === false || option.getAttribute('disabled') === null;
-
-        if (isVisible === true && isActive === true && options.value.length > 0) {
+        if (row.getElementsByClassName('yummy-operator')[0].value.length > 0) {
             return true;
         }
 
@@ -196,13 +191,14 @@
 
     YummySearch.setDropDownList = function(detail) {
 
+        var selects = detail.input.parentNode.getElementsByTagName('select');
+        for (var i=0; i<selects.length; i++) {
+            selects[i].remove();
+        }
+
         if (detail.dataType !== 'list') {
             detail.input.style.display = '';
             detail.input.removeAttribute('disabled');
-            var selects = detail.input.parentNode.getElementsByTagName('select');
-            if (selects.length === 1) {
-                selects[0].remove();
-            }
             return true;
         }
 
