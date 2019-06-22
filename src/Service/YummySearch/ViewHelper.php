@@ -34,6 +34,7 @@ class ViewHelper
         }
 
         if ($this->config['selectGroups'] !== false) {
+            ksort($selectOptions);
             foreach(array_keys($selectOptions) as $group) {
                 ksort($selectOptions[$group]);
             }
@@ -62,7 +63,6 @@ class ViewHelper
     private function getYummyMetaColumns(array $model, string $camelName, Request $request) : array
     {
         $selectOptions = [];
-
 
         foreach ($model['columns'] as $column => $field) {
 
@@ -166,12 +166,40 @@ class ViewHelper
             $tmp = $options[$name];
             $options = [];
 
+            $groups = $this->getSortedGroups();
+
             foreach ($tmp as $key => $option) {
+
                 $groupName = $option['data-group'] ? $option['data-group'] : $name;
-                $options[$groupName][$key] = $option;
+
+                $index = array_search($groupName, $groups);
+                $padding = count($groups) - $index;
+
+                $groupIndex = str_pad('', $padding, ' ') . $groupName;
+
+                $options[$groupIndex][$key] = $option;
             }
         }
 
         return $options;
+    }
+
+    /**
+     * Returns an array of sorted groups
+     *
+     * @return array
+     */
+    private function getSortedGroups() : array
+    {
+        $groups = [];
+
+        foreach ($this->config['allow'] as $option) {
+            if (!isset($option['group'])) {
+                continue;
+            }
+            $groups[] = $option['group'];
+        }
+
+        return array_values(array_unique($groups));
     }
 }
