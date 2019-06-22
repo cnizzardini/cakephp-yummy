@@ -169,19 +169,27 @@ class ViewHelper
             $groups = $this->getSortedGroups();
 
             foreach ($tmp as $key => $option) {
-
                 $groupName = $option['data-group'] ? $option['data-group'] : $name;
-
-                $index = array_search($groupName, $groups);
-                $padding = count($groups) - $index;
-
-                $groupIndex = str_pad('', $padding, ' ') . $groupName;
-
+                $groupIndex = $this->getSortedIndexByGroupName($groupName, $groups);
                 $options[$groupIndex][$key] = $option;
             }
         }
 
         return $options;
+    }
+
+    /**
+     * Returns a padding string so groups can be sorted
+     *
+     * @param string $groupName
+     * @param array $groups
+     * @return string
+     */
+    private function getSortedIndexByGroupName(string $groupName, array $groups) : string
+    {
+        $index = array_search($groupName, $groups);
+        $padding = count($groups) - $index;
+        return str_pad('', $padding, ' ') . $groupName;
     }
 
     /**
