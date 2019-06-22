@@ -30,11 +30,16 @@ class ViewHelper
 
         foreach ($models as $camelName => $model) {
             $options = $this->getYummyMetaColumns($model, $camelName, $request);
-            //$selectOptions = $selectOptions + $this->getOptions($options);
-            $selectOptions = array_merge_recursive($selectOptions, $this->getOptions($options));
+            $selectOptions = array_replace_recursive($selectOptions, $this->getOptions($options));
         }
 
-        ksort($selectOptions);
+        if ($this->config['selectGroups'] !== false) {
+            foreach(array_keys($selectOptions) as $group) {
+                ksort($selectOptions[$group]);
+            }
+        } else {
+            ksort($selectOptions);
+        }
 
         $yummy = [
             'base_url' => $request->here,
@@ -161,9 +166,9 @@ class ViewHelper
             $tmp = $options[$name];
             $options = [];
 
-            foreach ($tmp as $option) {
+            foreach ($tmp as $key => $option) {
                 $groupName = $option['data-group'] ? $option['data-group'] : $name;
-                $options[$groupName][] = $option;
+                $options[$groupName][$key] = $option;
             }
         }
 
