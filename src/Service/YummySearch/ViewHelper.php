@@ -156,40 +156,39 @@ class ViewHelper
      */
     private function getOptions(array $options) : array
     {
+        $return = [];
+
         $keys = array_keys($options);
         $name = reset($keys);
+
+        if (!isset($options[$name])) {
+            return $return;
+        }
+
         ksort($options[$name]);
 
-        if ($this->config['selectGroups'] === false) {
-            $options = $options[$name];
+        if ($this->config['selectGroups'] === false && isset($options[$name])) {
+            $return = $options[$name];
         } else if ($this->config['selectGroups'] === 'custom') {
             $tmp = $options[$name];
-            $options = [];
+            $return = [];
 
             $groups = $this->getSortedGroups();
 
             foreach ($tmp as $key => $option) {
+
                 $groupName = $option['data-group'] ? $option['data-group'] : $name;
-                $groupIndex = $this->getSortedIndexByGroupName($groupName, $groups);
-                $options[$groupIndex][$key] = $option;
+
+                $index = array_search($groupName, $groups);
+                $padding = count($groups) - $index;
+
+                $groupIndex = str_pad('', $padding, ' ') . $groupName;
+
+                $return[$groupIndex][$key] = $option;
             }
         }
 
-        return $options;
-    }
-
-    /**
-     * Returns a padding string so groups can be sorted
-     *
-     * @param string $groupName
-     * @param array $groups
-     * @return string
-     */
-    private function getSortedIndexByGroupName(string $groupName, array $groups) : string
-    {
-        $index = array_search($groupName, $groups);
-        $padding = count($groups) - $index;
-        return str_pad('', $padding, ' ') . $groupName;
+        return $return;
     }
 
     /**
