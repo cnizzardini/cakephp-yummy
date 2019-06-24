@@ -133,6 +133,10 @@ class ViewHelper
             return $options['operators'];
         }
 
+        if (isset($options['select']) && !empty($options['select'])) {
+            return ['eq','not_eq'];
+        }
+
         switch (strtolower($field['type'])) {
             case 'string':
                 return ['like','not_like','eq','not_eq'];
