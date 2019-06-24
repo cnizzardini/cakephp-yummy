@@ -146,7 +146,6 @@
 
         if (operators.length > 0) {
             for (var i=0; i < defaultOperators.length; i++) {
-                console.log(row.getElementsByClassName('yummy-operator')[0].options[i]);
                 if (operators.indexOf(defaultOperators[i].value) === -1) {
                     row.getElementsByClassName('yummy-operator')[0].options[i].setAttribute('hidden', true);
                 } else {
@@ -170,9 +169,8 @@
     };
 
     YummySearch.setDefaultOperator = function(row) {
-
         if (row.getElementsByClassName('yummy-operator')[0].value.length > 0) {
-            return true;
+            //return true;
         }
 
         var options = row.getElementsByClassName('yummy-operator')[0].options;
