@@ -174,11 +174,14 @@
         }
 
         var options = row.getElementsByClassName('yummy-operator')[0].options;
+        var value = row.getElementsByClassName('yummy-operator')[0].value;
+
+        console.log(value)
 
         for (var i=0; i < options.length; i++) {
             var isVisible = options[i].getAttribute('hidden') === false || options[i].getAttribute('hidden') === null;
             var isActive = options[i].getAttribute('disabled') === false || options[i].getAttribute('disabled') === null;
-            if (isVisible === true && isActive === true && options[i].value.length > 0) {
+            if (isVisible === true && isActive === true && options[i].value.length == value) {
                 row.getElementsByClassName('yummy-operator')[0].selectedIndex = i;
                 break;
             }
