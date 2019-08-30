@@ -15,6 +15,7 @@ use Cake\Controller\Component;
 use Cake\Datasource\ConnectionManager;
 use Cake\Database\Query;
 use Yummy\Service\YummySearch\Helper;
+use Yummy\Service\YummySearch\Parameter;
 use Yummy\Service\YummySearch\QueryGenerator;
 use Yummy\Service\YummySearch\Rule;
 use Yummy\Service\YummySearch\Association;
@@ -128,12 +129,16 @@ class YummySearchComponent extends Component
 
             $path = isset($this->models[$model]['path']) ? $this->models[$model]['path'] : '';
 
+            $parameter = new Parameter($model, $column, $this->_config);
+            $parameter
+                ->setType($this->models[$model]['columns']["$model.$column"]['type'])
+                ->setOperator($item['operator'])
+                ->setValue($item['search']);
+
             $query = $queryGenerator->getQuery(
                 $query,
                 $path,
-                "$model.$column",
-                $item['operator'],
-                $item['search']
+                $parameter
             );
         }
 

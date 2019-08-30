@@ -16,22 +16,20 @@ class QueryGenerator
     /**
      * Returns Query with where conditions
      *
-     * @param string $model
-     * @param string $column
-     * @param string $operator
-     * @param string $value
      * @param Query $query
+     * @param string $model
+     * @param Parameter $parameter
      * @return Query
      */
-    public function getQuery(Query $query, string $model,  string $column, string $operator, string $value) : Query
+    public function getQuery(Query $query, string $model, Parameter $parameter) : Query
     {
         // for base model searches
         if (empty($model)) {
-            return $this->getWhere($query, $column, $operator, $value);
+            return $this->getWhere($query, $parameter);
         }
 
-        return $query->matching($model, function ($q) use ($column, $operator, $value) {
-            return $this->getWhere($q, $column, $operator, $value);
+        return $query->matching($model, function ($q) use ($parameter) {
+            return $this->getWhere($q, $parameter);
         });
     }
 
@@ -39,23 +37,27 @@ class QueryGenerator
      * Returns Query object after setting where condition
      *
      * @param Query $query
-     * @param string $column
-     * @param string $operator
-     * @param string $value
+     * @param Parameter $parameter
      * @return Query
      *
      * @throws Yummy\Exception\YummySearch\QueryException
      */
-    public function getWhere(Query $query, string $column, string $operator, string $value)
+    public function getWhere(Query $query, Parameter $parameter) : Query
     {
-        $operator = $this->getOperator($operator);
+        $operator = $this->getOperator($parameter->getOperator());
 
         if ($operator === false) {
             throw new Yummy\Exception\YummySearch\QueryException('Unknown condition encountered');
         }
 
-        if ($this->config['trim'] == true) {
-            $value = trim($value);
+        $column = $parameter->getModel() . '.' . $parameter->getColumn();
+        $value = $this->config['trim'] == true ? trim($parameter->getValue()) : $parameter->getValue();
+
+        if ($parameter->getDoCastToDate() === true) {
+            $date = new \DateTime($value);
+            $where = "CAST($column as DATE) $operator CAST('" . $date->format('Y-m-d') . "' as DATE)";
+            $query->where([$where]);
+            return $query;
         }
 
         if ($operator == 'LIKE' || $operator == 'NOT LIKE') {
@@ -82,7 +84,7 @@ class QueryGenerator
             'gt_eq' => '>=',
             'lt' => '<',
             'lt_eq' => '<=',
-            'eq' => '',
+            'eq' => '=',
             'not_eq' => '!='
         ];
 
@@ -91,6 +93,5 @@ class QueryGenerator
         }
 
         return false;
-
     }
 }
