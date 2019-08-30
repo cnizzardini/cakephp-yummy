@@ -4,6 +4,7 @@ namespace Yummy\Test\TestCase\Service\YummySearch;
 
 use Cake\TestSuite\TestCase;
 use Cake\ORM\TableRegistry;
+use Yummy\Service\YummySearch\Parameter;
 use Yummy\Service\YummySearch\QueryGenerator;
 
 class QueryGeneratorTest extends TestCase
@@ -37,12 +38,10 @@ class QueryGeneratorTest extends TestCase
         ];
 
         $queryGenerator = new QueryGenerator($config, $query);
-        $query = $queryGenerator->getWhere(
-            $query,
-            'Teams.name',
-            'eq',
-            'NY Giants'
-        );
+        $parameter  = new Parameter('Teams','name', $config);
+        $parameter->setType('string')->setOperator('eq')->setValue('NY Giants');
+
+        $query = $queryGenerator->getWhere($query, $parameter);
 
         $results = $query->toArray();
 
@@ -82,12 +81,10 @@ class QueryGeneratorTest extends TestCase
         ];
 
         $queryGenerator = new QueryGenerator($config, $query);
-        $query = $queryGenerator->getWhere(
-            $query,
-            'Teams.id',
-            'not_eq',
-            '1'
-        );
+        $parameter  = new Parameter('Teams','id', $config);
+        $parameter->setType('integer')->setOperator('not_eq')->setValue('1');
+
+        $query = $queryGenerator->getWhere($query, $parameter);
 
         $results = $query->toArray();
 
@@ -123,12 +120,10 @@ class QueryGeneratorTest extends TestCase
         ];
 
         $queryGenerator = new QueryGenerator($config, $query);
-        $query = $queryGenerator->getWhere(
-            $query,
-            'Teams.name',
-            'like',
-            'NY'
-        );
+        $parameter  = new Parameter('Teams','name', $config);
+        $parameter->setType('string')->setOperator('like')->setValue('NY');
+
+        $query = $queryGenerator->getWhere($query, $parameter);
 
         $results = $query->toArray();
 
@@ -170,12 +165,10 @@ class QueryGeneratorTest extends TestCase
         ];
 
         $queryGenerator = new QueryGenerator($config, $query);
-        $query = $queryGenerator->getWhere(
-            $query,
-            'Teams.name',
-            'not_like',
-            'NY G'
-        );
+        $parameter  = new Parameter('Teams','name', $config);
+        $parameter->setType('string')->setOperator('not_like')->setValue('NY G');
+
+        $query = $queryGenerator->getWhere($query, $parameter);
 
         $results = $query->toArray();
 
@@ -211,12 +204,10 @@ class QueryGeneratorTest extends TestCase
         ];
 
         $queryGenerator = new QueryGenerator($config, $query);
-        $query = $queryGenerator->getWhere(
-            $query,
-            'Teams.id',
-            'gt',
-            '1'
-        );
+        $parameter  = new Parameter('Teams','id', $config);
+        $parameter->setType('integer')->setOperator('gt')->setValue('1');
+
+        $query = $queryGenerator->getWhere($query, $parameter);
 
         $results = $query->toArray();
 
@@ -252,12 +243,10 @@ class QueryGeneratorTest extends TestCase
         ];
 
         $queryGenerator = new QueryGenerator($config, $query);
-        $query = $queryGenerator->getWhere(
-            $query,
-            'Teams.id',
-            'lt',
-            '10'
-        );
+        $parameter  = new Parameter('Teams','id', $config);
+        $parameter->setType('integer')->setOperator('lt')->setValue('10');
+
+        $query = $queryGenerator->getWhere($query, $parameter);
 
         $results = $query->toArray();
 

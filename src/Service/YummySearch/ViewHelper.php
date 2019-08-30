@@ -30,7 +30,8 @@ class ViewHelper
 
         foreach ($models as $camelName => $model) {
             $options = $this->getYummyMetaColumns($model, $camelName, $request);
-            $selectOptions = array_replace_recursive($selectOptions, $this->getOptions($options));
+            $options = $this->getOptions($options);
+            $selectOptions = array_replace_recursive($selectOptions, $options);
         }
 
         if ($this->config['selectGroups'] !== false) {
@@ -129,7 +130,7 @@ class ViewHelper
 
     private function getOperators(array $field, array $options) : array
     {
-        if (isset($options['operators'])) {
+        if (isset($options['operators']) && is_array($options['operators'])) {
             return $options['operators'];
         }
 
@@ -190,6 +191,8 @@ class ViewHelper
 
                 $return[$groupIndex][$key] = $option;
             }
+        } else {
+            $return = $options;
         }
 
         return $return;

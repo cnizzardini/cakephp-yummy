@@ -4,14 +4,21 @@ namespace Yummy\Service\YummySearch;
 
 class Parameter
 {
-    private $model, $column, $field, $config, $operator, $value, $type, $doCastToDate = false;
+    private $model,
+            $column,
+            $field,
+            $allow = [],
+            $operator,
+            $value,
+            $type,
+            $doCastToDate = false;
 
     public function __construct(string $model, string $column, array $config)
     {
         $this->model = $model;
         $this->column = $column;
         $this->field = $model  . '.' . $column;
-        $this->allow = $config['allow'];
+        $this->allow = isset($config['allow']) ? $config['allow']: [];
         $this->defineAttributes();
     }
 
