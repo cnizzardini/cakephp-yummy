@@ -24,8 +24,8 @@ class YummyAclComponent extends Component
         $this->controllerName = $this->controller->name . 'Controller';
         $this->actionName = $this->controller->request->action;
 
-        if (!$this->config('use_config_file')) {
-            $this->config('use_config_file', false);
+        if (!$this->getConfig('use_config_file')) {
+            $this->getConfig('use_config_file', false);
         }
 
         return true;
@@ -44,7 +44,7 @@ class YummyAclComponent extends Component
 
         // determine the redirect url
         $this->setRedirect();
-        
+
         // has action access?
         if ($this->checkActionAccess() == false) {
             return $this->denyAccess();
@@ -94,7 +94,7 @@ class YummyAclComponent extends Component
      */
     private function sanityCheck()
     {
-        $config = $this->config();
+        $config = $this->_config;
 
         // if allow is set must be "*" or (array)
         if (isset($config['allow']) && !is_string($config['allow']) && !is_array($config['allow'])) {
@@ -122,7 +122,7 @@ class YummyAclComponent extends Component
             ]
         ]);
 
-        $redirect = $this->config('redirect');
+        $redirect = $this->getConfig('redirect');
 
         if ($redirect == 403) {
             throw new ForbiddenException();
@@ -139,8 +139,8 @@ class YummyAclComponent extends Component
      */
     private function checkActionAccess()
     {
-        $config = $this->config();
-        
+        $config = $this->getConfig();
+
         if (!isset($config['actions']) || !isset($config['actions'][$this->actionName])) {
             return $this->checkControllerAccess();
         }
@@ -163,12 +163,12 @@ class YummyAclComponent extends Component
     private function checkControllerAccess()
     {
         // allow all
-        if ($this->config('allow') == '*') {
+        if ($this->getConfig('allow') == '*') {
             return true;
         }
 
         // allow group
-        if (is_array($this->config('allow')) && in_array($this->config('group'), $this->config('allow'))) {
+        if (is_array($this->getConfig('allow')) && in_array($this->getConfig('group'), $this->getConfig('allow'))) {
             return true;
         }
 
@@ -198,7 +198,7 @@ class YummyAclComponent extends Component
     private function whichConfig()
     {
         // check if we are using a config file or not, if not then exit
-        if ($this->config('use_config_file') !== true) {
+        if ($this->getConfig('use_config_file') !== true) {
             return true;
         }
 
@@ -225,7 +225,7 @@ class YummyAclComponent extends Component
      */
     private function setRedirect()
     {
-        if ($this->config('redirect') != null) {
+        if ($this->getConfig('redirect') != null) {
             return true;
         }
 
