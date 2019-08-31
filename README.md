@@ -72,7 +72,7 @@ usage and customization.
 
 ### YummyBake
 
-A series of bootstrap admin themes for your admin portal [(demo)](https://www.cnizz.com/yummy-demo/teams)
+A series of bootstrap admin themes for your admin portal [(demo)](https://cnizz.com/yummy-demo/teams)
 
 ```
 bin/cake bake template <ControllerName> -t Yummy
