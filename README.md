@@ -10,7 +10,7 @@ and boostrap 3 Bake Themes. Each of these components may be used separately.
 
 ## Demo & Docs
 
-[Live Demo available](https://www.cnizz.com/yummy-demo) and fully documented in the [git wiki](https://github.com/cnizzardini/cakephp-yummy/wiki).
+[Live Demo available](https://cnizz.com/yummy-demo) and fully documented in the [git wiki](https://github.com/cnizzardini/cakephp-yummy/wiki).
 
 ## Features
 
