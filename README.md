@@ -94,6 +94,8 @@ Load the plugin in: `config/bootstrap.php`
 Plugin::load('Yummy', ['bootstrap' => false, 'routes' => true]);
 ```
 
+In newer versions of cake load the plugin via your `src/Application.php` file.
+
 ## Documentation
 
 Checkout the [Wiki](https://github.com/cnizzardini/cakephp-yummy/wiki/).
