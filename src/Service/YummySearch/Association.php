@@ -2,6 +2,7 @@
 
 namespace Yummy\Service\YummySearch;
 
+use Cake\Database\Connection;
 use Cake\Utility\Inflector;
 
 class Association
@@ -9,11 +10,11 @@ class Association
     /**
      * Defines models associations
      *
-     * @param \Cake\Database\Connection $connection
+     * @param Connection $connection
      * @param array $config
      * @return array
      */
-    public function getModels(\Cake\Database\Connection $connection, array $config)
+    public function getModels(Connection $connection, array $config)
     {
         $baseModel = $config['model'];
         $allowedModels = isset($config['allow']) ? $config['allow'] : [];
