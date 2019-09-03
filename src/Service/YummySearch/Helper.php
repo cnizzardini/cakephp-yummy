@@ -2,15 +2,19 @@
 
 namespace Yummy\Service\YummySearch;
 
+use Cake\Controller\Controller;
+use Cake\Network\Request;
+use Yummy\Exception\YummySearch\ConfigurationException;
+
 class Helper
 {
     /**
      * Reformat HTTP POST data in more usable array
      *
-     * @param \Cake\Network\Request
+     * @param Request $request
      * @return array
      */
-    public static function getFormattedData(\Cake\Network\Request $request) : array
+    public static function getFormattedData(Request $request) : array
     {
         $array = [];
 
@@ -38,14 +42,14 @@ class Helper
     /**
      * Throws exception if missing a required component
      *
-     * @param \Cake\Controller\Controller $controller
+     * @param Controller $controller
      * @return bool
      * @throws InternalErrorException
      */
-    public static function checkComponents(\Cake\Controller\Controller $controller) : bool
+    public static function checkComponents(Controller $controller) : bool
     {
         if (!isset($controller->Paginator)) {
-            throw new \Yummy\Exception\YummySearch\ConfigurationException(
+            throw new ConfigurationException(
                 __('YummySearch requires Paginator Component')
             );
         }
