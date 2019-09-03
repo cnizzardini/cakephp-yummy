@@ -32,7 +32,7 @@ class FrozenTime extends Chronos implements JsonSerializable
 
     /**
      * The format to use when formatting a time using `Cake\I18n\FrozenTime::i18nFormat()`
-     * and `__toString`
+     * and `__toString`. This format is also used by `parseDateTime()`.
      *
      * The format should be either the formatting constants from IntlDateFormatter as
      * described in (https://secure.php.net/manual/en/class.intldateformatter.php) or a pattern
@@ -241,7 +241,7 @@ class FrozenTime extends Chronos implements JsonSerializable
     }
 
     /**
-     * Returns true this instance will happen within the specified interval
+     * Returns true this instance happened within the specified interval
      *
      * This overridden method provides backwards compatible behavior for integers,
      * or strings with trailing spaces. This behavior is *deprecated* and will be
@@ -266,7 +266,7 @@ class FrozenTime extends Chronos implements JsonSerializable
     }
 
     /**
-     * Returns true this instance happened within the specified interval
+     * Returns true this instance will happen within the specified interval
      *
      * This overridden method provides backwards compatible behavior for integers,
      * or strings with trailing spaces. This behavior is *deprecated* and will be

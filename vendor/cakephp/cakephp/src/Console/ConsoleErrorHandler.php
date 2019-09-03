@@ -58,7 +58,7 @@ class ConsoleErrorHandler extends BaseErrorHandler
      * Handle errors in the console environment. Writes errors to stderr,
      * and logs messages if Configure::read('debug') is false.
      *
-     * @param \Exception $exception ConfigurationException instance.
+     * @param \Exception $exception Exception instance.
      * @return void
      * @throws \Exception When renderer class not found
      * @see https://secure.php.net/manual/en/function.set-exception-handler.php
@@ -80,7 +80,7 @@ class ConsoleErrorHandler extends BaseErrorHandler
      */
     protected function _displayException($exception)
     {
-        $errorName = 'ConfigurationException:';
+        $errorName = 'Exception:';
         if ($exception instanceof FatalErrorException) {
             $errorName = 'Fatal Error:';
         }

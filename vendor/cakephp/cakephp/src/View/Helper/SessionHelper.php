@@ -18,7 +18,7 @@ use Cake\View\Helper;
 use Cake\View\View;
 
 /**
- * Session ViewHelper.
+ * Session Helper.
  *
  * Session reading from the view.
  *
@@ -32,7 +32,7 @@ class SessionHelper extends Helper
      * Constructor
      *
      * @param \Cake\View\View $View The View this helper is being attached to.
-     * @param array $config ConfigurationException settings for the helper.
+     * @param array $config Configuration settings for the helper.
      */
     public function __construct(View $View, array $config = [])
     {

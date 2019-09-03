@@ -201,7 +201,7 @@ class SelectLoader
     }
 
     /**
-     * ViewHelper method to infer the requested finder and its options.
+     * Helper method to infer the requested finder and its options.
      *
      * Returns the inferred options from the finder $type.
      *

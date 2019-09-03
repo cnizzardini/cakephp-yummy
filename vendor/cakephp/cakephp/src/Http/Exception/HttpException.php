@@ -19,8 +19,8 @@ use Cake\Core\Exception\Exception;
  * All HTTP status/error related exceptions should extend this class so
  * catch blocks can be specifically typed.
  *
- * You may also use this as a meaningful bridge to Cake\Core\ConfigurationException\ConfigurationException, e.g.:
- * throw new \Cake\Network\ConfigurationException\HttpException('HTTP Version Not Supported', 505);
+ * You may also use this as a meaningful bridge to Cake\Core\Exception\Exception, e.g.:
+ * throw new \Cake\Network\Exception\HttpException('HTTP Version Not Supported', 505);
  */
 class HttpException extends Exception
 {

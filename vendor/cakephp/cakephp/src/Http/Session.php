@@ -190,7 +190,7 @@ class Session
     /**
      * Constructor.
      *
-     * ### ConfigurationException:
+     * ### Configuration:
      *
      * - timeout: The time in minutes the session should be valid for.
      * - cookiePath: The url path for which session cookie is set. Maps to the
@@ -201,7 +201,7 @@ class Session
      *   the configuration array for the engine. You can set the `class` key to an already
      *   instantiated session handler object.
      *
-     * @param array $config The ConfigurationException to apply to this session object
+     * @param array $config The Configuration to apply to this session object
      */
     public function __construct(array $config = [])
     {
@@ -545,7 +545,7 @@ class Session
     }
 
     /**
-     * ViewHelper method to destroy invalid sessions.
+     * Helper method to destroy invalid sessions.
      *
      * @return void
      */

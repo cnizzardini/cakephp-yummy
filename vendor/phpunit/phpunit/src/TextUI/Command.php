@@ -1013,7 +1013,7 @@ Test Execution Options:
   --testdox-exclude-group     Exclude tests from the specified group(s).
   --printer <printer>         TestListener implementation to use.
 
-ConfigurationException Options:
+Configuration Options:
 
   --bootstrap <file>          A "bootstrap" PHP file that is run before the tests.
   -c|--configuration <file>   Read configuration from XML file.

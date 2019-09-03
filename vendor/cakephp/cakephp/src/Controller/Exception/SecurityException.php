@@ -20,7 +20,7 @@ use Cake\Http\Exception\BadRequestException;
 class SecurityException extends BadRequestException
 {
     /**
-     * Security ConfigurationException type
+     * Security Exception type
      * @var string
      */
     protected $_type = 'secure';
@@ -45,7 +45,7 @@ class SecurityException extends BadRequestException
     /**
      * Set Message
      *
-     * @param string $message ConfigurationException message
+     * @param string $message Exception message
      * @return void
      */
     public function setMessage($message)

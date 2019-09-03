@@ -176,7 +176,7 @@ abstract class ObjectRegistry implements Countable, IteratorAggregate
      *
      * @param string $class The class to build.
      * @param string $alias The alias of the object.
-     * @param array $config The ConfigurationException settings for construction
+     * @param array $config The Configuration settings for construction
      * @return mixed
      */
     abstract protected function _create($class, $alias, $config);

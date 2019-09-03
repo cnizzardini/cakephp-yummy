@@ -56,7 +56,7 @@ class Exception extends RuntimeException
      * when debug = 0.
      *
      * @param string|array $message Either the string of the error message, or an array of attributes
-     *   that are made available in the view, and sprintf()'d into ConfigurationException::$_messageTemplate
+     *   that are made available in the view, and sprintf()'d into Exception::$_messageTemplate
      * @param int|null $code The code of the error, is also the HTTP status code for the error.
      * @param \Exception|null $previous the previous exception.
      */
@@ -102,7 +102,7 @@ class Exception extends RuntimeException
         if (is_array($header)) {
             if (isset($header[0])) {
                 deprecationWarning(
-                    'Passing a list string headers to ConfigurationException::responseHeader() is deprecated. ' .
+                    'Passing a list string headers to Exception::responseHeader() is deprecated. ' .
                     'Use an associative array instead.'
                 );
             }

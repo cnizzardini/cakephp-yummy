@@ -52,7 +52,7 @@ class QueryLogger
     }
 
     /**
-     * ViewHelper function used to replace query placeholders by the real
+     * Helper function used to replace query placeholders by the real
      * params used to execute the query
      *
      * @param \Cake\Database\Log\LoggedQuery $query The query to log

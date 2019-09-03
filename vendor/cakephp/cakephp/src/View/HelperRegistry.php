@@ -108,7 +108,7 @@ class HelperRegistry extends ObjectRegistry implements EventDispatcherInterface
      */
     protected function _resolveClassName($class)
     {
-        return App::className($class, 'View/ViewHelper', 'ViewHelper');
+        return App::className($class, 'View/Helper', 'Helper');
     }
 
     /**
@@ -125,7 +125,7 @@ class HelperRegistry extends ObjectRegistry implements EventDispatcherInterface
     protected function _throwMissingClassError($class, $plugin)
     {
         throw new MissingHelperException([
-            'class' => $class . 'ViewHelper',
+            'class' => $class . 'Helper',
             'plugin' => $plugin
         ]);
     }

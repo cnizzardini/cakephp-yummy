@@ -306,7 +306,7 @@ class TestRunner extends BaseTestRunner
 
             if (isset($arguments['configuration'])) {
                 $this->writeMessage(
-                    'ConfigurationException',
+                    'Configuration',
                     $arguments['configuration']->getFilename()
                 );
             }

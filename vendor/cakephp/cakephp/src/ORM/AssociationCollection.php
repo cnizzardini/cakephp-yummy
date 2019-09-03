@@ -261,7 +261,7 @@ class AssociationCollection implements IteratorAggregate
     }
 
     /**
-     * ViewHelper method for saving an association's data.
+     * Helper method for saving an association's data.
      *
      * @param \Cake\ORM\Table $table The table the save is currently operating on
      * @param \Cake\Datasource\EntityInterface $entity The entity to save
@@ -301,7 +301,7 @@ class AssociationCollection implements IteratorAggregate
     }
 
     /**
-     * ViewHelper method for saving an association's data.
+     * Helper method for saving an association's data.
      *
      * @param \Cake\ORM\Association $association The association object to save with.
      * @param \Cake\Datasource\EntityInterface $entity The entity to save

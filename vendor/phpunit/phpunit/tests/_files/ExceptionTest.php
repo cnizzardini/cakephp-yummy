@@ -4,21 +4,21 @@ use PHPUnit\Framework\TestCase;
 class ExceptionTest extends TestCase
 {
     /**
-     * ConfigurationException message
+     * Exception message
      *
      * @var string
      */
-    const ERROR_MESSAGE = 'ConfigurationException message';
+    const ERROR_MESSAGE = 'Exception message';
 
     /**
-     * ConfigurationException message
+     * Exception message
      *
      * @var string
      */
     const ERROR_MESSAGE_REGEX = '#regex#';
 
     /**
-     * ConfigurationException code
+     * Exception code
      *
      * @var int
      */

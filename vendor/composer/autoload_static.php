@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit8c6ff33c684b0f5b713403a400d21bbc
+class ComposerStaticInit7d3deb5df9aff0d1c5bb96ebb64fbee5
 {
     public static $files = array (
         '320cde22f66dd4f5d3fd621d3e88b98f' => __DIR__ . '/..' . '/symfony/polyfill-ctype/bootstrap.php',
@@ -35,6 +35,7 @@ class ComposerStaticInit8c6ff33c684b0f5b713403a400d21bbc
         ),
         'Y' => 
         array (
+            'Yummy\\Test\\Fixture\\' => 19,
             'Yummy\\Test\\' => 11,
             'Yummy\\' => 6,
         ),
@@ -51,6 +52,7 @@ class ComposerStaticInit8c6ff33c684b0f5b713403a400d21bbc
             'Psr\\SimpleCache\\' => 16,
             'Psr\\Log\\' => 8,
             'Psr\\Http\\Message\\' => 17,
+            'Prophecy\\' => 9,
         ),
         'D' => 
         array (
@@ -59,7 +61,6 @@ class ComposerStaticInit8c6ff33c684b0f5b713403a400d21bbc
         ),
         'C' => 
         array (
-            'Cake\\Test\\' => 10,
             'Cake\\Chronos\\' => 13,
             'Cake\\' => 5,
         ),
@@ -79,6 +80,10 @@ class ComposerStaticInit8c6ff33c684b0f5b713403a400d21bbc
         'Zend\\Diactoros\\' => 
         array (
             0 => __DIR__ . '/..' . '/zendframework/zend-diactoros/src',
+        ),
+        'Yummy\\Test\\Fixture\\' => 
+        array (
+            0 => __DIR__ . '/../..' . '/tests',
         ),
         'Yummy\\Test\\' => 
         array (
@@ -108,6 +113,10 @@ class ComposerStaticInit8c6ff33c684b0f5b713403a400d21bbc
         array (
             0 => __DIR__ . '/..' . '/psr/http-message/src',
         ),
+        'Prophecy\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/phpspec/prophecy/src/Prophecy',
+        ),
         'Doctrine\\Instantiator\\' => 
         array (
             0 => __DIR__ . '/..' . '/doctrine/instantiator/src/Doctrine/Instantiator',
@@ -115,10 +124,6 @@ class ComposerStaticInit8c6ff33c684b0f5b713403a400d21bbc
         'DeepCopy\\' => 
         array (
             0 => __DIR__ . '/..' . '/myclabs/deep-copy/src/DeepCopy',
-        ),
-        'Cake\\Test\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/cakephp/cakephp/tests',
         ),
         'Cake\\Chronos\\' => 
         array (
@@ -131,16 +136,6 @@ class ComposerStaticInit8c6ff33c684b0f5b713403a400d21bbc
         'Aura\\Intl\\' => 
         array (
             0 => __DIR__ . '/..' . '/aura/intl/src',
-        ),
-    );
-
-    public static $prefixesPsr0 = array (
-        'P' => 
-        array (
-            'Prophecy\\' => 
-            array (
-                0 => __DIR__ . '/..' . '/phpspec/prophecy/src',
-            ),
         ),
     );
 
@@ -614,10 +609,9 @@ class ComposerStaticInit8c6ff33c684b0f5b713403a400d21bbc
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit8c6ff33c684b0f5b713403a400d21bbc::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit8c6ff33c684b0f5b713403a400d21bbc::$prefixDirsPsr4;
-            $loader->prefixesPsr0 = ComposerStaticInit8c6ff33c684b0f5b713403a400d21bbc::$prefixesPsr0;
-            $loader->classMap = ComposerStaticInit8c6ff33c684b0f5b713403a400d21bbc::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit7d3deb5df9aff0d1c5bb96ebb64fbee5::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit7d3deb5df9aff0d1c5bb96ebb64fbee5::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInit7d3deb5df9aff0d1c5bb96ebb64fbee5::$classMap;
 
         }, null, ClassLoader::class);
     }

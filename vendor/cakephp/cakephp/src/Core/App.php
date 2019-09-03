@@ -29,7 +29,7 @@ namespace Cake\Core;
  * controller paths.
  *
  * It is also possible to inspect paths for plugin classes, for instance, to get
- * the path to a plugin's helpers you would call `App::path('View/ViewHelper', 'MyPlugin')`
+ * the path to a plugin's helpers you would call `App::path('View/Helper', 'MyPlugin')`
  *
  * ### Locating plugins
  *

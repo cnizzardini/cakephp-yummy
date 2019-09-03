@@ -17,7 +17,7 @@ namespace Cake\ORM\Exception;
 use Cake\Core\Exception\Exception;
 
 /**
- * ConfigurationException raised when a Table could not be found.
+ * Exception raised when a Table could not be found.
  */
 class MissingTableClassException extends Exception
 {

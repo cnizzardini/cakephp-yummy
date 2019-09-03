@@ -3,8 +3,8 @@
 namespace Yummy\Controller\Component;
 
 use Cake\Controller\Component;
-use Cake\Network\Exception\InternalErrorException;
-use Cake\Network\Exception\ForbiddenException;
+use Cake\Http\Exception\InternalErrorException;
+use Cake\Http\Exception\ForbiddenException;
 use Cake\Core\Configure;
 
 /**
@@ -21,8 +21,8 @@ class YummyAclComponent extends Component
         parent::initialize($config);
 
         $this->controller = $this->_registry->getController();
-        $this->controllerName = $this->controller->name . 'Controller';
-        $this->actionName = $this->controller->request->action;
+        $this->controllerName = $this->controller->getName() . 'Controller';
+        $this->actionName = $this->controller->request->getParam('action');
 
         if (!$this->getConfig('use_config_file')) {
             $this->getConfig('use_config_file', false);
@@ -205,15 +205,17 @@ class YummyAclComponent extends Component
         // attempt loading config/yummy_acl.php
         $config = Configure::read('YummyAcl');
 
+        $name = $this->controller->getName();
+
         if (!$config) {
             throw new InternalErrorException(__('YummyAcl config is missing. Please create config/yummy_acl.php'));
         }
 
-        if (!isset($config[$this->controller->name])) {
+        if (!isset($config[$name])) {
             throw new InternalErrorException(__('Controller is missing from config/yummy_acl.php'));
         }
 
-        $this->configShallow($config[$this->controller->name]);
+        $this->configShallow($config[$name]);
 
         return true;
     }
@@ -229,10 +231,10 @@ class YummyAclComponent extends Component
             return true;
         }
 
-        $authConfig = $this->Auth->config();
+        $authConfig = $this->Auth->getConfig();
 
         if ($authConfig['unauthorizedRedirect'] == true) {
-            $this->setConfig('redirect', $this->request->referer(true));
+            $this->setConfig('redirect', $this->getController()->request->referer(true));
             return true;
         }
 

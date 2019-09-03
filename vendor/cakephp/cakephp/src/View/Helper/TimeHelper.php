@@ -20,7 +20,7 @@ use Cake\View\StringTemplateTrait;
 use Exception;
 
 /**
- * Time ViewHelper class for easy use of time data.
+ * Time Helper class for easy use of time data.
  *
  * Manipulation of time data.
  *

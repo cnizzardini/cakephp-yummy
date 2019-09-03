@@ -15,7 +15,7 @@ namespace Cake\Datasource\Exception;
 use Cake\Core\Exception\Exception;
 
 /**
- * ConfigurationException raised when requested page number does not exist.
+ * Exception raised when requested page number does not exist.
  */
 class PageOutOfBoundsException extends Exception
 {

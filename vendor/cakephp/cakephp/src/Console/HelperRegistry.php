@@ -46,8 +46,8 @@ class HelperRegistry extends ObjectRegistry
     /**
      * Resolve a helper classname.
      *
-     * Will prefer helpers defined in Command\ViewHelper over those
-     * defined in Shell\ViewHelper.
+     * Will prefer helpers defined in Command\Helper over those
+     * defined in Shell\Helper.
      *
      * Part of the template method for Cake\Core\ObjectRegistry::load()
      *
@@ -56,12 +56,12 @@ class HelperRegistry extends ObjectRegistry
      */
     protected function _resolveClassName($class)
     {
-        $name = App::className($class, 'Command/ViewHelper', 'ViewHelper');
+        $name = App::className($class, 'Command/Helper', 'Helper');
         if ($name) {
             return $name;
         }
 
-        return App::className($class, 'Shell/ViewHelper', 'ViewHelper');
+        return App::className($class, 'Shell/Helper', 'Helper');
     }
 
     /**

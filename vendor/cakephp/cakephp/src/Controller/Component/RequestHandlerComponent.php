@@ -230,7 +230,7 @@ class RequestHandlerComponent extends Component
     }
 
     /**
-     * ViewHelper method to parse xml input data, due to lack of anonymous functions
+     * Helper method to parse xml input data, due to lack of anonymous functions
      * this lives here.
      *
      * @param string $xml XML string.

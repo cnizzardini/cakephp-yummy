@@ -40,7 +40,7 @@ class FunctionsBuilder
     }
 
     /**
-     * ViewHelper function to build a function expression that only takes one literal
+     * Helper function to build a function expression that only takes one literal
      * argument.
      *
      * @param string $name name of the function to build

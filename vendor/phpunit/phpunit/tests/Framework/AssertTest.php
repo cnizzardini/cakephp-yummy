@@ -652,8 +652,8 @@ class AssertTest extends TestCase
                 new \DateTime('2013-03-29T05:13:35-0600'),
                 new \DateTime('2013-03-29T05:13:35-0500'),
             ],
-            // ConfigurationException
-            //array(new ConfigurationException('ConfigurationException 1'), new ConfigurationException('ConfigurationException 2')),
+            // Exception
+            //array(new Exception('Exception 1'), new Exception('Exception 2')),
             // different types
             [new \SampleClass(4, 8, 15), false],
             [false, new \SampleClass(4, 8, 15)],
@@ -768,8 +768,8 @@ class AssertTest extends TestCase
                 new \DateTime('2013-03-29T05:13:35-0500'),
                 new \DateTime('2013-03-29T04:13:35-0600'),
             ],
-            // ConfigurationException
-            //array(new ConfigurationException('ConfigurationException 1'), new ConfigurationException('ConfigurationException 1')),
+            // Exception
+            //array(new Exception('Exception 1'), new Exception('Exception 1')),
             // mixed types
             [0, '0'],
             ['0', 0],
@@ -2966,7 +2966,7 @@ XML;
             return;
         }
 
-        $this->fail('Expected ConfigurationException not thrown.');
+        $this->fail('Expected Exception not thrown.');
     }
 
     public function testAssertJsonStringEqualsJsonFileExpectingException()
@@ -2979,7 +2979,7 @@ XML;
             return;
         }
 
-        $this->fail('Expected ConfigurationException not thrown.');
+        $this->fail('Expected Exception not thrown.');
     }
 
     public function testAssertJsonStringNotEqualsJsonFile()

@@ -21,7 +21,7 @@ use Cake\View\StringTemplateTrait;
 use Cake\View\View;
 
 /**
- * Pagination ViewHelper class for easy generation of pagination links.
+ * Pagination Helper class for easy generation of pagination links.
  *
  * PaginationHelper encloses all methods needed when working with pagination.
  *
@@ -94,7 +94,7 @@ class PaginatorHelper extends Helper
      * Constructor. Overridden to merge passed args with URL options.
      *
      * @param \Cake\View\View $View The View this helper is being attached to.
-     * @param array $config ConfigurationException settings for the helper.
+     * @param array $config Configuration settings for the helper.
      */
     public function __construct(View $View, array $config = [])
     {

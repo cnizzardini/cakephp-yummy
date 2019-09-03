@@ -33,7 +33,7 @@ if (!empty($plugin) && !Plugin::isLoaded($plugin)) {
 }
 
 $this->layout = 'dev_error';
-$this->assign('title', 'Missing ViewHelper');
+$this->assign('title', 'Missing Helper');
 $this->assign('templateName', 'missing_helper.ctp');
 
 $this->start('subheading');
@@ -46,7 +46,7 @@ $this->start('subheading');
 <?php $this->start('file') ?>
 <p class="error">
     <strong>Error: </strong>
-    <?= sprintf('Create the class <em>%s</em> below in file: %s', h($class), $filePath . 'View' . DIRECTORY_SEPARATOR . 'ViewHelper' . DIRECTORY_SEPARATOR . h($class) . '.php'); ?>
+    <?= sprintf('Create the class <em>%s</em> below in file: %s', h($class), $filePath . 'View' . DIRECTORY_SEPARATOR . 'Helper' . DIRECTORY_SEPARATOR . h($class) . '.php'); ?>
 </p>
 <?php
 $code = <<<PHP
@@ -55,7 +55,7 @@ namespace {$namespace}\View\Helper;
 
 use Cake\View\Helper;
 
-class {$class} extends ViewHelper
+class {$class} extends Helper
 {
 
 }

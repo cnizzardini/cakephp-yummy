@@ -12,7 +12,7 @@ namespace PHPUnit\Framework;
 use SebastianBergmann\Comparator\ComparisonFailure;
 
 /**
- * ConfigurationException for expectations which failed their check.
+ * Exception for expectations which failed their check.
  *
  * The exception contains the error message and optionally a
  * SebastianBergmann\Comparator\ComparisonFailure which is used to

@@ -218,7 +218,7 @@ class MultiCheckboxWidget implements WidgetInterface
     }
 
     /**
-     * ViewHelper method for deciding what options are selected.
+     * Helper method for deciding what options are selected.
      *
      * @param string $key The key to test.
      * @param array|string|null $selected The selected values.
@@ -239,7 +239,7 @@ class MultiCheckboxWidget implements WidgetInterface
     }
 
     /**
-     * ViewHelper method for deciding what options are disabled.
+     * Helper method for deciding what options are disabled.
      *
      * @param string $key The key to test.
      * @param array|bool|null $disabled The disabled values.

@@ -12,7 +12,7 @@ namespace Zend\Diactoros\Exception;
 use BadMethodCallException;
 
 /**
- * ConfigurationException indicating a deprecated method.
+ * Exception indicating a deprecated method.
  */
 class DeprecatedMethodException extends BadMethodCallException implements ExceptionInterface
 {

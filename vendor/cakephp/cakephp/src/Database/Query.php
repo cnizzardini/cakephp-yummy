@@ -1960,16 +1960,9 @@ class Query implements ExpressionInterface, IteratorAggregate
     /**
      * Associates a query placeholder to a value and a type.
      *
-     * If type is expressed as "atype[]" (note braces) then it will cause the
-     * placeholder to be re-written dynamically so if the value is an array, it
-     * will create as many placeholders as values are in it. For example:
-     *
      * ```
-     * $query->bind(':id', [1, 2, 3], 'int[]');
+     * $query->bind(':id', 1, 'integer');
      * ```
-     *
-     * Will create 3 int placeholders. When using named placeholders, this method
-     * requires that the placeholders include `:` e.g. `:value`.
      *
      * @param string|int $param placeholder to be replaced with quoted version
      *   of $value
@@ -2233,7 +2226,7 @@ class Query implements ExpressionInterface, IteratorAggregate
     }
 
     /**
-     * ViewHelper function used to build conditions by composing QueryExpression objects.
+     * Helper function used to build conditions by composing QueryExpression objects.
      *
      * @param string $part Name of the query part to append the new part to
      * @param string|null|array|\Cake\Database\ExpressionInterface|callable $append Expression or builder function to append.

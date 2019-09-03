@@ -336,7 +336,7 @@ class TreeBehavior extends Behavior
     }
 
     /**
-     * ViewHelper method used to invert the sign of the left and right columns that are
+     * Helper method used to invert the sign of the left and right columns that are
      * less than 0. They were set to negative values before so their absolute value
      * wouldn't change while performing other tree transformations.
      *
@@ -555,7 +555,7 @@ class TreeBehavior extends Behavior
     }
 
     /**
-     * ViewHelper function containing the actual code for removeFromTree
+     * Helper function containing the actual code for removeFromTree
      *
      * @param \Cake\Datasource\EntityInterface $node The node to remove from the tree
      * @return \Cake\Datasource\EntityInterface|false the node after being removed from the tree or
@@ -620,7 +620,7 @@ class TreeBehavior extends Behavior
     }
 
     /**
-     * ViewHelper function used with the actual code for moveUp
+     * Helper function used with the actual code for moveUp
      *
      * @param \Cake\Datasource\EntityInterface $node The node to move
      * @param int|bool $number How many places to move the node, or true to move to first position
@@ -710,7 +710,7 @@ class TreeBehavior extends Behavior
     }
 
     /**
-     * ViewHelper function used with the actual code for moveDown
+     * Helper function used with the actual code for moveDown
      *
      * @param \Cake\Datasource\EntityInterface $node The node to move
      * @param int|bool $number How many places to move the node, or true to move to last position

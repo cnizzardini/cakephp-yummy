@@ -123,7 +123,7 @@ class TestFailure
      * Note: The test object is not set when the test is executed in process
      * isolation.
      *
-     * @see ConfigurationException
+     * @see Exception
      *
      * @return Test|null
      */

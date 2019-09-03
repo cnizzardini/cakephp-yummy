@@ -639,7 +639,7 @@ class EagerLoader
     }
 
     /**
-     * ViewHelper function used to compile a list of all associations that can be
+     * Helper function used to compile a list of all associations that can be
      * joined in the query.
      *
      * @param array $associations list of associations from which to obtain joins.
@@ -808,7 +808,7 @@ class EagerLoader
     }
 
     /**
-     * ViewHelper function used to return the keys from the query records that will be used
+     * Helper function used to return the keys from the query records that will be used
      * to eagerly load associations.
      *
      * @param array $external the list of external associations to be loaded
@@ -851,7 +851,7 @@ class EagerLoader
     }
 
     /**
-     * ViewHelper function used to iterate a statement and extract the columns
+     * Helper function used to iterate a statement and extract the columns
      * defined in $collectKeys
      *
      * @param \Cake\Database\Statement\BufferedStatement $statement The statement to read from.

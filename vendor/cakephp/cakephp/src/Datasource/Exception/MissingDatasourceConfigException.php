@@ -15,7 +15,7 @@ namespace Cake\Datasource\Exception;
 use Cake\Core\Exception\Exception;
 
 /**
- * ConfigurationException class to be thrown when a datasource configuration is not found
+ * Exception class to be thrown when a datasource configuration is not found
  */
 class MissingDatasourceConfigException extends Exception
 {

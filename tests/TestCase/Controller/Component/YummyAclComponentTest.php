@@ -3,10 +3,12 @@
 namespace Yummy\Test\TestCase\Controller\Component;
 
 use Cake\Controller\ComponentRegistry;
-use Cake\TestSuite\TestCase;
+use Cake\Core\Configure;
 use Cake\Event\Event;
-use Cake\Network\Request;
-use Cake\Network\Response;
+use Cake\Http\ServerRequest;
+use Cake\Http\Response;
+use Cake\Http\Exception\InternalErrorException;
+use Cake\TestSuite\TestCase;
 use Yummy\Controller\Component\YummyAclComponent;
 
 /**
@@ -28,14 +30,14 @@ class YummyAclComponentTest extends TestCase
     public function setUp()
     {
         parent::setUp();
-        $request = new Request();
-        $response = new Response();
 
-        $request->action = 'index';
+        $request = new ServerRequest(['params' => ['action' => 'index']]);
+        $request->withMethod('index');
+        $response = new Response();
 
         $this->controller = $this->getMockBuilder('Cake\Controller\Controller')
                 ->setConstructorArgs([$request, $response])
-                ->setMethods(null)
+                ->setMethods(['index'])
                 ->getMock();
 
         $this->controller->loadComponent('Auth');
@@ -109,7 +111,6 @@ class YummyAclComponentTest extends TestCase
      */
     public function testAllowAllAction()
     {
-
         $this->component->actions(['index' => '*']);
 
         $event = new Event('Controller.startup', $this->controller);
@@ -123,7 +124,6 @@ class YummyAclComponentTest extends TestCase
      */
     public function testAllowGroupAction()
     {
-
         $this->component->actions(['index' => ['user']]);
 
         $event = new Event('Controller.startup', $this->controller);
@@ -137,7 +137,6 @@ class YummyAclComponentTest extends TestCase
      */
     public function testDenyGroupAction()
     {
-
         $this->component->actions(['index' => ['admin']]);
 
         $event = new Event('Controller.startup', $this->controller);
@@ -151,8 +150,7 @@ class YummyAclComponentTest extends TestCase
      */
     public function testFlash()
     {
-
-        $request = new Request();
+        $request = new ServerRequest();
         $response = new Response();
 
         $controller = $this->getMockBuilder('Cake\Controller\Controller')
@@ -170,7 +168,7 @@ class YummyAclComponentTest extends TestCase
 
         try {
             $YummyAclComponent->startup($event);
-        } catch (\Cake\Network\Exception\InternalErrorException $e) {
+        } catch (InternalErrorException $e) {
             $this->assertEquals(500, $e->getCode());
         }
     }
@@ -181,8 +179,7 @@ class YummyAclComponentTest extends TestCase
      */
     public function testAuth()
     {
-
-        $request = new Request();
+        $request = new ServerRequest();
         $response = new Response();
 
         $controller = $this->getMockBuilder('Cake\Controller\Controller')
@@ -200,7 +197,7 @@ class YummyAclComponentTest extends TestCase
 
         try {
             $YummyAclComponent->startup($event);
-        } catch (\Cake\Network\Exception\InternalErrorException $e) {
+        } catch (InternalErrorException $e) {
             $this->assertEquals(500, $e->getCode());
         }
     }
@@ -211,18 +208,16 @@ class YummyAclComponentTest extends TestCase
      */
     public function testConfigFileAllowGroupAction()
     {
-        $request = new Request();
+        $request = new ServerRequest(['params' => ['controller' => 'User', 'action' => 'index']]);
+        $request->withMethod('index');
         $response = new Response();
-
-        $request->here = 'index';
-        $request->params = ['controller' => 'User', 'action' => 'index'];
 
         $controller = $this->getMockBuilder('Cake\Controller\Controller')
                 ->setConstructorArgs([$request, $response])
                 ->setMethods(null)
                 ->getMock();
 
-        $controller->name = 'User';
+        $controller->setName('User');
         $controller->loadComponent('Flash');
         $controller->loadComponent('Auth');
 
@@ -238,7 +233,7 @@ class YummyAclComponentTest extends TestCase
             'use_config_file' => true
         ]);
 
-        \Cake\Core\Configure::write('YummyAcl', [
+        Configure::write('YummyAcl', [
             'User' => [
                 'actions' => [
                     'index' => ['admin']
@@ -257,18 +252,15 @@ class YummyAclComponentTest extends TestCase
      */
     public function testConfigFileDenyGroupAction()
     {
-        $request = new Request();
+        $request = new ServerRequest(['params' => ['controller' => 'User', 'action' => 'index']]);
         $response = new Response();
-
-        $request->here = 'index';
-        $request->params = ['controller' => 'User', 'action' => 'index'];
 
         $controller = $this->getMockBuilder('Cake\Controller\Controller')
                 ->setConstructorArgs([$request, $response])
                 ->setMethods(null)
                 ->getMock();
 
-        $controller->name = 'User';
+        $controller->setName('User');
         $controller->loadComponent('Flash');
         $controller->loadComponent('Auth');
 
@@ -284,7 +276,7 @@ class YummyAclComponentTest extends TestCase
             'config' => true
         ]);
 
-        \Cake\Core\Configure::write('YummyAcl', [
+        Configure::write('YummyAcl', [
             'User' => [
                 'actions' => [
                     'index' => ['admin']
@@ -306,14 +298,14 @@ class YummyAclComponentTest extends TestCase
         // require non-empty arrays
         try {
             $this->assertNotEquals(true, $this->component->allow([]));
-        } catch (\Cake\Network\Exception\InternalErrorException $e) {
+        } catch (InternalErrorException $e) {
             $this->assertEquals(500, $e->getCode());
         }
 
         // require "*" if is string
         try {
             $this->assertNotEquals(true, $this->component->allow(''));
-        } catch (\Cake\Network\Exception\InternalErrorException $e) {
+        } catch (InternalErrorException $e) {
             $this->assertEquals(500, $e->getCode());
         }
 
@@ -333,14 +325,14 @@ class YummyAclComponentTest extends TestCase
         // require array
         try {
             $this->assertNotEquals(true, $this->component->allow('string'));
-        } catch (\Cake\Network\Exception\InternalErrorException $e) {
+        } catch (InternalErrorException $e) {
             $this->assertEquals(500, $e->getCode());
         }
 
         // require non-empty array
         try {
             $this->assertNotEquals(true, $this->component->allow([]));
-        } catch (\Cake\Network\Exception\InternalErrorException $e) {
+        } catch (InternalErrorException $e) {
             $this->assertEquals(500, $e->getCode());
         }
 

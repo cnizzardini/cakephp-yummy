@@ -650,7 +650,7 @@ class TranslateBehavior extends Behavior implements PropertyMarshalInterface
     }
 
     /**
-     * ViewHelper method used to generated multiple translated field entities
+     * Helper method used to generated multiple translated field entities
      * out of the data found in the `_translations` property in the passed
      * entity. The result will be put into its `_i18n` property
      *

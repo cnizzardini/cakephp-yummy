@@ -361,7 +361,7 @@ class Client
     }
 
     /**
-     * ViewHelper method for doing non-GET requests.
+     * Helper method for doing non-GET requests.
      *
      * @param string $method HTTP method.
      * @param string $url URL to request.

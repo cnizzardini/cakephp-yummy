@@ -60,7 +60,7 @@ class CsrfProtectionMiddleware
     ];
 
     /**
-     * ConfigurationException
+     * Configuration
      *
      * @var array
      */

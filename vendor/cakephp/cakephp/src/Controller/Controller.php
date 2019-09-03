@@ -106,7 +106,7 @@ class Controller implements EventListenerInterface, EventDispatcherInterface
 
     /**
      * An array containing the names of helpers this controller uses. The array elements should
-     * not contain the "ViewHelper" part of the class name.
+     * not contain the "Helper" part of the class name.
      *
      * Example:
      * ```
@@ -607,7 +607,12 @@ class Controller implements EventListenerInterface, EventDispatcherInterface
         /* @var callable $callable */
         $callable = [$this, $request->getParam('action')];
 
-        return $callable(...array_values($request->getParam('pass')));
+        $result = $callable(...array_values($request->getParam('pass')));
+        if ($result instanceof Response) {
+            $this->response = $result;
+        }
+
+        return $result;
     }
 
     /**

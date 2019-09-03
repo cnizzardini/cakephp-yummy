@@ -268,7 +268,7 @@ class FormHelper extends Helper
      * Construct the widgets and binds the default context providers
      *
      * @param \Cake\View\View $View The View this helper is being attached to.
-     * @param array $config ConfigurationException settings for the helper.
+     * @param array $config Configuration settings for the helper.
      */
     public function __construct(View $View, array $config = [])
     {
@@ -400,7 +400,7 @@ class FormHelper extends Helper
      *   array of meta data. You can use false or null to make a context-less form.
      * @param array $options An array of html attributes and options.
      * @return string An formatted opening FORM tag.
-     * @link https://book.cakephp.org/3.0/en/views/helpers/form.html#Cake\View\ViewHelper\FormHelper::create
+     * @link https://book.cakephp.org/3.0/en/views/helpers/form.html#Cake\View\Helper\FormHelper::create
      */
     public function create($context = null, array $options = [])
     {
@@ -2237,7 +2237,7 @@ class FormHelper extends Helper
     }
 
     /**
-     * ViewHelper method for the various single datetime component methods.
+     * Helper method for the various single datetime component methods.
      *
      * @param array $options The options array.
      * @param string $keep The option to not disable.
@@ -2509,7 +2509,7 @@ class FormHelper extends Helper
     }
 
     /**
-     * ViewHelper method for converting from FormHelper options data to widget format.
+     * Helper method for converting from FormHelper options data to widget format.
      *
      * @param array $options Options to convert.
      * @return array Converted options.

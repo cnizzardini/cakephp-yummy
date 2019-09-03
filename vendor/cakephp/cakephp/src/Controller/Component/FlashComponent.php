@@ -80,7 +80,7 @@ class FlashComponent extends Component
      * - `escape` Set to false to allow templates to print out HTML content
      *
      * @param string|\Exception $message Message to be flashed. If an instance
-     *   of \ConfigurationException the exception message will be used and code will be set
+     *   of \Exception the exception message will be used and code will be set
      *   in params.
      * @param array $options An array of options
      * @return void

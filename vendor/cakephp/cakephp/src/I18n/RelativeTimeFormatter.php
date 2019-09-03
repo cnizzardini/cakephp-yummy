@@ -18,7 +18,7 @@ use Cake\Chronos\ChronosInterface;
 use DateTimeInterface;
 
 /**
- * ViewHelper class for formatting relative dates & times.
+ * Helper class for formatting relative dates & times.
  *
  * @internal
  */

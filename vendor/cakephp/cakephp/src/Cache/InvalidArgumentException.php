@@ -18,7 +18,7 @@ use Cake\Core\Exception\Exception;
 use Psr\SimpleCache\InvalidArgumentException as InvalidArgumentInterface;
 
 /**
- * ConfigurationException raised when cache keys are invalid.
+ * Exception raised when cache keys are invalid.
  */
 class InvalidArgumentException extends Exception implements InvalidArgumentInterface
 {

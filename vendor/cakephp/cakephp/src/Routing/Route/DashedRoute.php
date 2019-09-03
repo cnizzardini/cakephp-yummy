@@ -105,7 +105,7 @@ class DashedRoute extends Route
     }
 
     /**
-     * ViewHelper method for dasherizing keys in a URL array.
+     * Helper method for dasherizing keys in a URL array.
      *
      * @param array $url An array of URL keys.
      * @return array

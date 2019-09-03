@@ -107,7 +107,7 @@ class TranslatorLocatorTest extends \PHPUnit_Framework_TestCase
             'BAR' => 'The text for "bar."',
         ]);
         // $this->packages->set('Vendor.Package', 'en_UK', $package);
-        // $this->setExpectedException('ConfigurationException');
+        // $this->setExpectedException('Exception');
         // $translator = $this->translators->get('Vendor.Package', 'en_UK');
     }
 }

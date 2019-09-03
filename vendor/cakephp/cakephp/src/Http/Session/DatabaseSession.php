@@ -135,7 +135,7 @@ class DatabaseSession implements SessionHandlerInterface
     }
 
     /**
-     * ViewHelper function called on write for database sessions.
+     * Helper function called on write for database sessions.
      *
      * @param string|int $id ID that uniquely identifies session in database.
      * @param mixed $data The data to be saved.
@@ -171,7 +171,7 @@ class DatabaseSession implements SessionHandlerInterface
     }
 
     /**
-     * ViewHelper function called on gc for database sessions.
+     * Helper function called on gc for database sessions.
      *
      * @param int $maxlifetime Sessions that have not updated for the last maxlifetime seconds will be removed.
      * @return bool True on success, false on failure.

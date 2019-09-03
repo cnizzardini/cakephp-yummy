@@ -17,7 +17,7 @@ namespace Cake\Database;
 use Cake\Core\Exception\Exception as CakeException;
 
 /**
- * ConfigurationException for the database package.
+ * Exception for the database package.
  */
 class Exception extends CakeException
 {

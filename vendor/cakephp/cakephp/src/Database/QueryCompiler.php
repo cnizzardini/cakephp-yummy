@@ -144,7 +144,7 @@ class QueryCompiler
     }
 
     /**
-     * ViewHelper function used to build the string representation of a SELECT clause,
+     * Helper function used to build the string representation of a SELECT clause,
      * it constructs the field list taking care of aliasing and
      * converting expression objects to string. This function also constructs the
      * DISTINCT clause for the query.
@@ -186,7 +186,7 @@ class QueryCompiler
     }
 
     /**
-     * ViewHelper function used to build the string representation of a FROM clause,
+     * Helper function used to build the string representation of a FROM clause,
      * it constructs the tables list taking care of aliasing and
      * converting expression objects to string.
      *
@@ -211,7 +211,7 @@ class QueryCompiler
     }
 
     /**
-     * ViewHelper function used to build the string representation of multiple JOIN clauses,
+     * Helper function used to build the string representation of multiple JOIN clauses,
      * it constructs the joins list taking care of aliasing and converting
      * expression objects to string in both the table to be joined and the conditions
      * to be used.
@@ -251,7 +251,7 @@ class QueryCompiler
     }
 
     /**
-     * ViewHelper function to generate SQL for SET expressions.
+     * Helper function to generate SQL for SET expressions.
      *
      * @param array $parts List of keys & values to set.
      * @param \Cake\Database\Query $query The query that is being compiled
@@ -368,7 +368,7 @@ class QueryCompiler
     }
 
     /**
-     * ViewHelper function used to covert ExpressionInterface objects inside an array
+     * Helper function used to covert ExpressionInterface objects inside an array
      * into their string representation.
      *
      * @param array $expressions list of strings and ExpressionInterface objects

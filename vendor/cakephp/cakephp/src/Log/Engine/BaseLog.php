@@ -39,7 +39,7 @@ abstract class BaseLog extends AbstractLogger
     /**
      * __construct method
      *
-     * @param array $config ConfigurationException array
+     * @param array $config Configuration array
      */
     public function __construct(array $config = [])
     {

@@ -84,7 +84,7 @@ class InflectedRoute extends Route
     }
 
     /**
-     * ViewHelper method for underscoring keys in a URL array.
+     * Helper method for underscoring keys in a URL array.
      *
      * @param array $url An array of URL keys.
      * @return array

@@ -77,7 +77,7 @@ class FileLog extends BaseLog
     /**
      * Sets protected properties based on config provided
      *
-     * @param array $config ConfigurationException array
+     * @param array $config Configuration array
      */
     public function __construct(array $config = [])
     {

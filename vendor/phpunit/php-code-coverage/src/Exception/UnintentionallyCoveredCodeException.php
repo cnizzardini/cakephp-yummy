@@ -11,7 +11,7 @@
 namespace SebastianBergmann\CodeCoverage;
 
 /**
- * ConfigurationException that is raised when code is unintentionally covered.
+ * Exception that is raised when code is unintentionally covered.
  */
 class UnintentionallyCoveredCodeException extends RuntimeException
 {

@@ -294,7 +294,7 @@ class EntityContext implements ContextInterface
     }
 
     /**
-     * ViewHelper method used to extract all the primary key values out of an array, The
+     * Helper method used to extract all the primary key values out of an array, The
      * primary key column is guessed out of the provided $path array
      *
      * @param array|\Traversable $values The list from which to extract primary keys from

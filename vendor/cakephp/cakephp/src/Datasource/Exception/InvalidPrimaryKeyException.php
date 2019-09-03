@@ -17,7 +17,7 @@ namespace Cake\Datasource\Exception;
 use Cake\Core\Exception\Exception;
 
 /**
- * ConfigurationException raised when the provided primary key does not match the table primary key
+ * Exception raised when the provided primary key does not match the table primary key
  */
 class InvalidPrimaryKeyException extends Exception
 {

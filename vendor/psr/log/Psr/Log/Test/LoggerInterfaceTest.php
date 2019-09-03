@@ -126,11 +126,11 @@ abstract class LoggerInterfaceTest extends \PHPUnit_Framework_TestCase
     {
         $logger = $this->getLogger();
         $logger->warning('Random message', array('exception' => 'oops'));
-        $logger->critical('Uncaught ConfigurationException!', array('exception' => new \LogicException('Fail')));
+        $logger->critical('Uncaught Exception!', array('exception' => new \LogicException('Fail')));
 
         $expected = array(
             'warning Random message',
-            'critical Uncaught ConfigurationException!'
+            'critical Uncaught Exception!'
         );
         $this->assertEquals($expected, $this->getLogs());
     }

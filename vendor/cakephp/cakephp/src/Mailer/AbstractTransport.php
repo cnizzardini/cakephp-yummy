@@ -41,7 +41,7 @@ abstract class AbstractTransport
     /**
      * Constructor
      *
-     * @param array $config ConfigurationException options.
+     * @param array $config Configuration options.
      */
     public function __construct($config = [])
     {

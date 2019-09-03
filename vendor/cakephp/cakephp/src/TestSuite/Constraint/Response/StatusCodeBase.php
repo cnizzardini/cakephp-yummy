@@ -46,7 +46,7 @@ abstract class StatusCodeBase extends ResponseBase
     }
 
     /**
-     * ViewHelper for checking status codes
+     * Helper for checking status codes
      *
      * @param int $min Min status code (inclusive)
      * @param int $max Max status code (inclusive)

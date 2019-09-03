@@ -61,7 +61,7 @@ class TestFixture implements FixtureInterface, TableSchemaInterface, TableSchema
     public $fields = [];
 
     /**
-     * ConfigurationException for importing fixture schema
+     * Configuration for importing fixture schema
      *
      * Accepts a `connection` and `model` or `table` key, to define
      * which table and which connection contain the schema to be

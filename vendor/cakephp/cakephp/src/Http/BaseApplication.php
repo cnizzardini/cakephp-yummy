@@ -123,7 +123,7 @@ abstract class BaseApplication implements
      * Create a plugin instance from a classname and configuration
      *
      * @param string $name The plugin classname
-     * @param array $config ConfigurationException options for the plugin
+     * @param array $config Configuration options for the plugin
      * @return \Cake\Core\PluginInterface
      */
     protected function makePlugin($name, array $config)

@@ -92,7 +92,7 @@ class Plugin
      *
      * Will only load the bootstrap for ApiGenerator and only the routes for DebugKit
      *
-     * ### ConfigurationException options
+     * ### Configuration options
      *
      * - `bootstrap` - array - Whether or not you want the $plugin/config/bootstrap.php file loaded.
      * - `routes` - boolean - Whether or not you want to load the $plugin/config/routes.php file.

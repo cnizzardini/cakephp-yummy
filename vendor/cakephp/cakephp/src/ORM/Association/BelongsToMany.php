@@ -1246,7 +1246,7 @@ class BelongsToMany extends Association
     }
 
     /**
-     * ViewHelper method used to delete the difference between the links passed in
+     * Helper method used to delete the difference between the links passed in
      * `$existing` and `$jointEntities`. This method will return the values from
      * `$targetEntities` that were not deleted from calculating the difference.
      *

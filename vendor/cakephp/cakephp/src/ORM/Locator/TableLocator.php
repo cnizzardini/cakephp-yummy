@@ -28,7 +28,7 @@ class TableLocator implements LocatorInterface
 {
 
     /**
-     * ConfigurationException for aliases.
+     * Configuration for aliases.
      *
      * @var array
      */

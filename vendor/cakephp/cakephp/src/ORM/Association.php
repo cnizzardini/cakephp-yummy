@@ -1206,7 +1206,7 @@ abstract class Association
     }
 
     /**
-     * ViewHelper function used to conditionally append fields to the select clause of
+     * Helper function used to conditionally append fields to the select clause of
      * a query from the fields found in another query object.
      *
      * @param \Cake\ORM\Query $query the query that will get the fields appended to
@@ -1374,7 +1374,7 @@ abstract class Association
     }
 
     /**
-     * ViewHelper method to infer the requested finder and its options.
+     * Helper method to infer the requested finder and its options.
      *
      * Returns the inferred options from the finder $type.
      *

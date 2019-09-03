@@ -5,14 +5,14 @@ namespace My\Space;
 class ExceptionNamespaceTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * ConfigurationException message
+     * Exception message
      *
      * @var string
      */
-    const ERROR_MESSAGE = 'ConfigurationException namespace message';
+    const ERROR_MESSAGE = 'Exception namespace message';
 
     /**
-     * ConfigurationException code
+     * Exception code
      *
      * @var int
      */

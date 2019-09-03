@@ -565,7 +565,7 @@ class RouteBuilder
     }
 
     /**
-     * ViewHelper to create routes that only respond to a single HTTP method.
+     * Helper to create routes that only respond to a single HTTP method.
      *
      * @param string $method The HTTP method name to match.
      * @param string $template The URL template to use.

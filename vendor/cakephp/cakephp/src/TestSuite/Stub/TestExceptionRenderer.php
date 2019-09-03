@@ -17,7 +17,7 @@ namespace Cake\TestSuite\Stub;
 use Exception;
 
 /**
- * Test ConfigurationException Renderer.
+ * Test Exception Renderer.
  *
  * Use this class if you want to re-throw exceptions that would otherwise be
  * caught by the ErrorHandlerMiddleware. This is useful while debugging or
@@ -32,7 +32,7 @@ class TestExceptionRenderer
     /**
      * Simply rethrow the given exception
      *
-     * @param \Exception $exception ConfigurationException.
+     * @param \Exception $exception Exception.
      * @return void
      * @throws \Exception $exception Rethrows the passed exception.
      */

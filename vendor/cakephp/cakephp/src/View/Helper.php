@@ -91,7 +91,7 @@ class Helper implements EventListenerInterface
      * Default Constructor
      *
      * @param \Cake\View\View $View The View this helper is being attached to.
-     * @param array $config ConfigurationException settings for the helper.
+     * @param array $config Configuration settings for the helper.
      */
     public function __construct(View $View, array $config = [])
     {
@@ -121,7 +121,7 @@ class Helper implements EventListenerInterface
      * Lazy loads helpers.
      *
      * @param string $name Name of the property being accessed.
-     * @return \Cake\View\Helper|null ViewHelper instance if helper with provided name exists
+     * @return \Cake\View\Helper|null Helper instance if helper with provided name exists
      */
     public function __get($name)
     {
@@ -139,7 +139,7 @@ class Helper implements EventListenerInterface
         if (isset($removed[$name])) {
             $method = $removed[$name];
             deprecationWarning(sprintf(
-                'ViewHelper::$%s is deprecated. Use $view->%s() instead.',
+                'Helper::$%s is deprecated. Use $view->%s() instead.',
                 $name,
                 $method
             ));
@@ -149,7 +149,7 @@ class Helper implements EventListenerInterface
 
         if ($name === 'request') {
             deprecationWarning(
-                'ViewHelper::$request is deprecated. Use $helper->getView()->getRequest() instead.'
+                'Helper::$request is deprecated. Use $helper->getView()->getRequest() instead.'
             );
 
             return $this->_View->getRequest();
@@ -157,7 +157,7 @@ class Helper implements EventListenerInterface
 
         if ($name === 'helpers') {
             deprecationWarning(
-                'ViewHelper::$helpers is now protected and should not be accessed from outside a helper class.'
+                'Helper::$helpers is now protected and should not be accessed from outside a helper class.'
             );
 
             return $this->helpers;
@@ -180,7 +180,7 @@ class Helper implements EventListenerInterface
         if (isset($removed[$name])) {
             $method = $removed[$name];
             deprecationWarning(sprintf(
-                'ViewHelper::$%s is deprecated. Use $view->%s() instead.',
+                'Helper::$%s is deprecated. Use $view->%s() instead.',
                 $name,
                 $method
             ));
@@ -191,7 +191,7 @@ class Helper implements EventListenerInterface
 
         if ($name === 'request') {
             deprecationWarning(
-                'ViewHelper::$request is deprecated. Use $helper->getView()->setRequest() instead.'
+                'Helper::$request is deprecated. Use $helper->getView()->setRequest() instead.'
             );
 
             $this->_View->setRequest($value);
@@ -201,7 +201,7 @@ class Helper implements EventListenerInterface
 
         if ($name === 'helpers') {
             deprecationWarning(
-                'ViewHelper::$helpers is now protected and should not be accessed from outside a helper class.'
+                'Helper::$helpers is now protected and should not be accessed from outside a helper class.'
             );
         }
 

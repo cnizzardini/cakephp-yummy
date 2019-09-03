@@ -657,7 +657,7 @@ class TableSchema implements TableSchemaInterface, SqlGeneratorInterface
     }
 
     /**
-     * ViewHelper method to check/validate foreign keys.
+     * Helper method to check/validate foreign keys.
      *
      * @param array $attrs Attributes to set.
      * @return array

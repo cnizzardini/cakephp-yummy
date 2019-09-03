@@ -74,7 +74,7 @@ trait CookieCryptTrait
     }
 
     /**
-     * ViewHelper method for validating encryption cipher names.
+     * Helper method for validating encryption cipher names.
      *
      * @param string $encrypt The cipher name.
      * @return void

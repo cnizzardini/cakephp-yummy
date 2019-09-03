@@ -365,7 +365,7 @@ class Xml
     }
 
     /**
-     * ViewHelper to _fromArray(). It will create childs of arrays
+     * Helper to _fromArray(). It will create childs of arrays
      *
      * @param array $data Array with information to create childs
      * @return void

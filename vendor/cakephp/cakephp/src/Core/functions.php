@@ -280,7 +280,7 @@ if (!function_exists('triggerWarning')) {
 
 if (!function_exists('deprecationWarning')) {
     /**
-     * ViewHelper method for outputting deprecation warnings
+     * Helper method for outputting deprecation warnings
      *
      * @param string $message The message to output as a deprecation warning.
      * @param int $stackFrame The stack frame to include in the error. Defaults to 1

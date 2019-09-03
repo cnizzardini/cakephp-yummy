@@ -21,7 +21,7 @@ use Traversable;
  * Input widget class for generating a selectbox.
  *
  * This class is intended as an internal implementation detail
- * of Cake\View\ViewHelper\FormHelper and is not intended for direct use.
+ * of Cake\View\Helper\FormHelper and is not intended for direct use.
  */
 class SelectBoxWidget extends BasicWidget
 {
@@ -278,7 +278,7 @@ class SelectBoxWidget extends BasicWidget
     }
 
     /**
-     * ViewHelper method for deciding what options are selected.
+     * Helper method for deciding what options are selected.
      *
      * @param string $key The key to test.
      * @param array|string|null $selected The selected values.
@@ -301,7 +301,7 @@ class SelectBoxWidget extends BasicWidget
     }
 
     /**
-     * ViewHelper method for deciding what options are disabled.
+     * Helper method for deciding what options are disabled.
      *
      * @param string $key The key to test.
      * @param array|null $disabled The disabled values.

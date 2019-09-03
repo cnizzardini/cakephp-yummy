@@ -89,7 +89,7 @@ class SchemaCache
     }
 
     /**
-     * ViewHelper method to get the schema collection.
+     * Helper method to get the schema collection.
      *
      * @param \Cake\Database\Connection $connection Connection object
      * @return \Cake\Database\Schema\Collection|\Cake\Database\Schema\CachedCollection

@@ -16,7 +16,7 @@ namespace Cake\Console\Exception;
 use Cake\Core\Exception\Exception;
 
 /**
- * ConfigurationException class for halting errors in console tasks
+ * Exception class for halting errors in console tasks
  *
  * @see \Cake\Console\Shell::_stop()
  * @see \Cake\Console\Shell::error()

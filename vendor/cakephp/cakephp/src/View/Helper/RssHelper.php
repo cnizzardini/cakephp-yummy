@@ -19,7 +19,7 @@ use Cake\View\Helper;
 use Cake\View\View;
 
 /**
- * RSS ViewHelper class for easy output RSS structures.
+ * RSS Helper class for easy output RSS structures.
  *
  * @property \Cake\View\Helper\UrlHelper $Url
  * @property \Cake\View\Helper\TimeHelper $Time
@@ -30,7 +30,7 @@ class RssHelper extends Helper
 {
 
     /**
-     * Helpers used by RSS ViewHelper
+     * Helpers used by RSS Helper
      *
      * @var array
      */

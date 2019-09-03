@@ -92,7 +92,7 @@ class CacheSession implements SessionHandlerInterface
     }
 
     /**
-     * ViewHelper function called on write for cache sessions.
+     * Helper function called on write for cache sessions.
      *
      * @param string|int $id ID that uniquely identifies session in cache.
      * @param mixed $data The data to be saved.
@@ -121,7 +121,7 @@ class CacheSession implements SessionHandlerInterface
     }
 
     /**
-     * ViewHelper function called on gc for cache sessions.
+     * Helper function called on gc for cache sessions.
      *
      * @param int $maxlifetime Sessions that have not updated for the last maxlifetime seconds will be removed.
      * @return bool Always true.

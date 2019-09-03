@@ -55,7 +55,7 @@ class NumberHelper extends Helper
      *            The class needs to be placed in the `Utility` directory.
      *
      * @param \Cake\View\View $View The View this helper is being attached to.
-     * @param array $config ConfigurationException settings for the helper
+     * @param array $config Configuration settings for the helper
      * @throws \Cake\Core\Exception\Exception When the engine class could not be found.
      */
     public function __construct(View $View, array $config = [])
@@ -169,7 +169,7 @@ class NumberHelper extends Helper
      * - `zero` - The text to use for zero values, can be a string or a number. e.g. 0, 'Free!'
      * - `places` - Number of decimal places to use. e.g. 2
      * - `precision` - Maximum Number of decimal places to use, e.g. 2
-     * - `pattern` - An ICU number pattern to use for formatting the number. e.g #,###.00
+     * - `pattern` - An ICU number pattern to use for formatting the number. e.g #,##0.00
      * - `useIntlCode` - Whether or not to replace the currency symbol with the international
      *   currency code.
      * - `escape` - Whether or not to escape html in resulting string

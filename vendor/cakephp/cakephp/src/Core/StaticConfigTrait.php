@@ -29,7 +29,7 @@ trait StaticConfigTrait
 {
 
     /**
-     * ConfigurationException sets.
+     * Configuration sets.
      *
      * @var array
      */

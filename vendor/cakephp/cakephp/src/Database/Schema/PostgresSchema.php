@@ -399,7 +399,7 @@ class PostgresSchema extends BaseSchema
                 $type = ' CHAR';
             }
             $out .= $type;
-            if (isset($data['length']) && $data['length'] != 36) {
+            if (isset($data['length'])) {
                 $out .= '(' . (int)$data['length'] . ')';
             }
         }
@@ -517,7 +517,7 @@ class PostgresSchema extends BaseSchema
     }
 
     /**
-     * ViewHelper method for generating key SQL snippets.
+     * Helper method for generating key SQL snippets.
      *
      * @param string $prefix The key prefix
      * @param array $data Key data.

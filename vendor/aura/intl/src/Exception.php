@@ -12,7 +12,7 @@ namespace Aura\Intl;
 
 /**
  *
- * ConfigurationException
+ * Exception
  *
  * @package Aura.Intl
  *

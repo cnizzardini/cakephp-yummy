@@ -6,7 +6,7 @@
     "keywords": ["cakephp3","cakephp3 search","cakephp3 acl","cakephp3 bake"],
     "require": {
         "php": ">=7.2",
-        "cakephp/cakephp": ">=3.5.0 <4.0.0"
+        "cakephp/cakephp": ">=3.5.0 <3.8.0"
     },
     "require-dev": {
         "phpunit/phpunit": "6.0.*"
@@ -18,8 +18,8 @@
     },
     "autoload-dev": {
         "psr-4": {
-            "Yummy\\Test\\": "tests",
-            "Cake\\Test\\": "./vendor/cakephp/cakephp/tests"
+            "Yummy\\Test\\": "tests/",
+            "Yummy\\Test\\Fixture\\": "tests/"
         }
     },
     "support": {
@@ -30,7 +30,7 @@
     "authors": [
         {
             "name": "Chris Nizzardini",
-            "homepage": "http://www.cnizz.com",
+            "homepage": "http://www.cnizz.com/yummy-demo",
             "role": "Developer"
         }
     ]

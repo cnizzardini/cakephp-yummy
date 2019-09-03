@@ -18,7 +18,7 @@ use Cake\Datasource\EntityInterface;
 use Cake\ORM\Association;
 
 /**
- * ViewHelper class for cascading deletes in associations.
+ * Helper class for cascading deletes in associations.
  *
  * @internal
  */

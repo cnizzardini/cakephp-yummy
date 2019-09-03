@@ -398,7 +398,7 @@ class ConsoleIo
      */
     public function styles($style = null, $definition = null)
     {
-        $this->_out->styles($style, $definition);
+        return $this->_out->styles($style, $definition);
     }
 
     /**
@@ -504,13 +504,13 @@ class ConsoleIo
     }
 
     /**
-     * Render a Console ViewHelper
+     * Render a Console Helper
      *
      * Create and render the output for a helper object. If the helper
      * object has not already been loaded, it will be loaded and constructed.
      *
      * @param string $name The name of the helper to render
-     * @param array $settings ConfigurationException data for the helper.
+     * @param array $settings Configuration data for the helper.
      * @return \Cake\Console\Helper The created helper instance.
      */
     public function helper($name, array $settings = [])

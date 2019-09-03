@@ -537,7 +537,7 @@ class MysqlSchema extends BaseSchema
     }
 
     /**
-     * ViewHelper method for generating key SQL snippets.
+     * Helper method for generating key SQL snippets.
      *
      * @param string $prefix The key prefix
      * @param array $data Key data.

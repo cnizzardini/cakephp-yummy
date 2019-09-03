@@ -24,7 +24,7 @@ use RuntimeException;
  * Input widget class for generating a date time input widget.
  *
  * This class is intended as an internal implementation detail
- * of Cake\View\ViewHelper\FormHelper and is not intended for direct use.
+ * of Cake\View\Helper\FormHelper and is not intended for direct use.
  */
 class DateTimeWidget implements WidgetInterface
 {

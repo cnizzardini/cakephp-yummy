@@ -22,7 +22,7 @@ use Cake\Utility\Hash;
 use RuntimeException;
 
 /**
- * ConfigurationException class. Used for managing runtime configuration information.
+ * Configuration class. Used for managing runtime configuration information.
  *
  * Provides features for reading and writing to the runtime configuration, as well
  * as methods for loading additional configuration files or storing runtime configuration
@@ -264,7 +264,7 @@ class Configure
      * Use Configure::isConfigured() instead.
      *
      * @param string|null $name Engine name.
-     * @return array|bool Array of the configured Engine objects, bool for specific name.
+     * @return string[]|bool Array of the configured Engine objects, bool for specific name.
      */
     public static function configured($name = null)
     {

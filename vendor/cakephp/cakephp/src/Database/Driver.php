@@ -34,7 +34,7 @@ abstract class Driver implements DriverInterface
     protected $_connection;
 
     /**
-     * ConfigurationException data.
+     * Configuration data.
      *
      * @var array
      */

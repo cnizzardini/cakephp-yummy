@@ -852,6 +852,10 @@ class Validation
      */
     public static function minLength($check, $min)
     {
+        if (!is_scalar($check)) {
+            return false;
+        }
+
         return mb_strlen($check) >= $min;
     }
 
@@ -864,6 +868,10 @@ class Validation
      */
     public static function maxLength($check, $max)
     {
+        if (!is_scalar($check)) {
+            return false;
+        }
+
         return mb_strlen($check) <= $max;
     }
 
@@ -876,6 +884,10 @@ class Validation
      */
     public static function minLengthBytes($check, $min)
     {
+        if (!is_scalar($check)) {
+            return false;
+        }
+
         return strlen($check) >= $min;
     }
 
@@ -888,6 +900,10 @@ class Validation
      */
     public static function maxLengthBytes($check, $max)
     {
+        if (!is_scalar($check)) {
+            return false;
+        }
+
         return strlen($check) <= $max;
     }
 
@@ -1190,7 +1206,7 @@ class Validation
     }
 
     /**
-     * ViewHelper for reading the file out of the various file implementations
+     * Helper for reading the file out of the various file implementations
      * we accept.
      *
      * @param string|array|\Psr\Http\Message\UploadedFileInterface $check The data to read a filename out of.
@@ -1536,7 +1552,7 @@ class Validation
      */
     public static function isInteger($value)
     {
-        if (!is_scalar($value) || is_float($value)) {
+        if (!is_numeric($value) || is_float($value)) {
             return false;
         }
         if (is_int($value)) {

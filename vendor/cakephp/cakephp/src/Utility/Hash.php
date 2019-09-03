@@ -1035,7 +1035,7 @@ class Hash
     }
 
     /**
-     * ViewHelper method for sort()
+     * Helper method for sort()
      * Squashes an array to a single hash so it can be sorted.
      *
      * @param array $data The data to squash.
