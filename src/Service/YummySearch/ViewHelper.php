@@ -44,8 +44,8 @@ class ViewHelper
         }
 
         $yummy = [
-            'base_url' => $request->here,
-            'rows' => $request->query('YummySearch'),
+            'base_url' => $request->getAttribute('here'),
+            'rows' => $request->getQuery('YummySearch'),
             'operators' => $this->config['operators'],
             'models' => isset($select) ? $select : $selectOptions
         ];
@@ -78,7 +78,7 @@ class ViewHelper
                 'data-items' => !empty($meta['options']) ? implode(',', $meta['options']) : false,
                 'data-type' => !empty($meta['options']) ? 'list' : $field['type'],
                 'data-length' => $field['length'],
-                'selected' => ($request->query('YummySearch') === null && $meta['default'] === true) ? true : false,
+                'selected' => ($request->getQuery('YummySearch') === null && $meta['default'] === true) ? true : false,
                 'data-operators' => is_array($meta['operators']) ? implode(',', $meta['operators']) : false,
                 'data-group' => $meta['group']
             ];

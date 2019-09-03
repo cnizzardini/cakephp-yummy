@@ -73,7 +73,7 @@ class Association
             return [];
         }
 
-        $contains = $query->contain();
+        $contains = $query->getContain();
         $dots = array_keys($this->dot($contains));
 
         $add = [];

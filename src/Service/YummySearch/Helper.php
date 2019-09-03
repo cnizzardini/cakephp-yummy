@@ -18,7 +18,7 @@ class Helper
     {
         $array = [];
 
-        $data = $request->query('YummySearch');
+        $data = $request->getQuery('YummySearch');
 
         $length = count($data['field']);
 
