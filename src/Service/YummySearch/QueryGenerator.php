@@ -3,6 +3,7 @@
 namespace Yummy\Service\YummySearch;
 
 use Cake\Database\Query;
+use Yummy\Exception\YummySearch\QueryException;
 
 class QueryGenerator
 {
@@ -39,15 +40,14 @@ class QueryGenerator
      * @param Query $query
      * @param Parameter $parameter
      * @return Query
-     *
-     * @throws Yummy\Exception\YummySearch\QueryException
+     * @throws \Exception
      */
     public function getWhere(Query $query, Parameter $parameter) : Query
     {
         $operator = $this->getOperator($parameter->getOperator());
 
         if ($operator === false) {
-            throw new Yummy\Exception\YummySearch\QueryException('Unknown condition encountered');
+            throw new QueryException('Unknown condition encountered');
         }
 
         $column = $parameter->getModel() . '.' . $parameter->getColumn();
