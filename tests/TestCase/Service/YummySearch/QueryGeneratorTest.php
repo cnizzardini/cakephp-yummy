@@ -9,23 +9,25 @@ use Yummy\Service\YummySearch\QueryGenerator;
 
 class QueryGeneratorTest extends TestCase
 {
+    public $fixtures = ['plugin.Yummy.Teams', 'plugin.Yummy.Divisions','plugin.Yummy.Conferences'];
+
     public function testGetWhere()
     {
-        $teamsTable = TableRegistry::get('Teams');
+        $teamsTable = TableRegistry::getTableLocator()->get('Teams');
         $teamsTable->addAssociations([
             'belongsTo' => [
                 'Divisions'
             ]
         ]);
 
-        $divisionsTable = TableRegistry::get('Divisions');
+        $divisionsTable = TableRegistry::getTableLocator()->get('Divisions');
         $divisionsTable->addAssociations([
             'belongsTo' => [
                 'Conferences'
             ]
         ]);
 
-        $query = TableRegistry::get('Teams')->find()->contain([
+        $query = TableRegistry::getTableLocator()->get('Teams')->find()->contain([
             'Divisions' => [
                 'Conferences'
             ],
@@ -54,21 +56,21 @@ class QueryGeneratorTest extends TestCase
 
     public function testGetWhereBaseModelSingleNotEqualCondition()
     {
-        $teamsTable = TableRegistry::get('Teams');
+        $teamsTable = TableRegistry::getTableLocator()->get('Teams');
         $teamsTable->addAssociations([
             'belongsTo' => [
                 'Divisions'
             ]
         ]);
 
-        $divisionsTable = TableRegistry::get('Divisions');
+        $divisionsTable = TableRegistry::getTableLocator()->get('Divisions');
         $divisionsTable->addAssociations([
             'belongsTo' => [
                 'Conferences'
             ]
         ]);
 
-        $query = TableRegistry::get('Teams')->find()->contain([
+        $query = TableRegistry::getTableLocator()->get('Teams')->find()->contain([
             'Divisions' => [
                 'Conferences'
             ],
@@ -93,21 +95,21 @@ class QueryGeneratorTest extends TestCase
 
     public function testGetWhereBaseModelSingleLikeCondition()
     {
-        $teamsTable = TableRegistry::get('Teams');
+        $teamsTable = TableRegistry::getTableLocator()->get('Teams');
         $teamsTable->addAssociations([
             'belongsTo' => [
                 'Divisions'
             ]
         ]);
 
-        $divisionsTable = TableRegistry::get('Divisions');
+        $divisionsTable = TableRegistry::getTableLocator()->get('Divisions');
         $divisionsTable->addAssociations([
             'belongsTo' => [
                 'Conferences'
             ]
         ]);
 
-        $query = TableRegistry::get('Teams')->find()->contain([
+        $query = TableRegistry::getTableLocator()->get('Teams')->find()->contain([
             'Divisions' => [
                 'Conferences'
             ],
@@ -138,21 +140,21 @@ class QueryGeneratorTest extends TestCase
 
     public function testGetWhereBaseModelSingleNotLikeCondition()
     {
-        $teamsTable = TableRegistry::get('Teams');
+        $teamsTable = TableRegistry::getTableLocator()->get('Teams');
         $teamsTable->addAssociations([
             'belongsTo' => [
                 'Divisions'
             ]
         ]);
 
-        $divisionsTable = TableRegistry::get('Divisions');
+        $divisionsTable = TableRegistry::getTableLocator()->get('Divisions');
         $divisionsTable->addAssociations([
             'belongsTo' => [
                 'Conferences'
             ]
         ]);
 
-        $query = TableRegistry::get('Teams')->find()->contain([
+        $query = TableRegistry::getTableLocator()->get('Teams')->find()->contain([
             'Divisions' => [
                 'Conferences'
             ],
@@ -177,21 +179,21 @@ class QueryGeneratorTest extends TestCase
 
     public function testGetWhereBaseModelSingleGreaterThanCondition()
     {
-        $teamsTable = TableRegistry::get('Teams');
+        $teamsTable = TableRegistry::getTableLocator()->get('Teams');
         $teamsTable->addAssociations([
             'belongsTo' => [
                 'Divisions'
             ]
         ]);
 
-        $divisionsTable = TableRegistry::get('Divisions');
+        $divisionsTable = TableRegistry::getTableLocator()->get('Divisions');
         $divisionsTable->addAssociations([
             'belongsTo' => [
                 'Conferences'
             ]
         ]);
 
-        $query = TableRegistry::get('Teams')->find()->contain([
+        $query = TableRegistry::getTableLocator()->get('Teams')->find()->contain([
             'Divisions' => [
                 'Conferences'
             ],
@@ -216,21 +218,21 @@ class QueryGeneratorTest extends TestCase
 
     public function testGetWhereBaseModelSingleLessThanCondition()
     {
-        $teamsTable = TableRegistry::get('Teams');
+        $teamsTable = TableRegistry::getTableLocator()->get('Teams');
         $teamsTable->addAssociations([
             'belongsTo' => [
                 'Divisions'
             ]
         ]);
 
-        $divisionsTable = TableRegistry::get('Divisions');
+        $divisionsTable = TableRegistry::getTableLocator()->get('Divisions');
         $divisionsTable->addAssociations([
             'belongsTo' => [
                 'Conferences'
             ]
         ]);
 
-        $query = TableRegistry::get('Teams')->find()->contain([
+        $query = TableRegistry::getTableLocator()->get('Teams')->find()->contain([
             'Divisions' => [
                 'Conferences'
             ],

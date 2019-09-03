@@ -10,9 +10,11 @@ use Yummy\Service\YummySearch\Rule;
 
 class SchemaTest extends TestCase
 {
+    public $fixtures = ['plugin.Yummy.Teams', 'plugin.Yummy.Divisions','plugin.Yummy.Conferences'];
+
     public function testGetColumns()
     {
-        $query = TableRegistry::get('Teams')->find()->contain([
+        $query = TableRegistry::getTableLocator()->get('Teams')->find()->contain([
             'Divisions' => [
                 'Conferences'
             ]
@@ -37,13 +39,12 @@ class SchemaTest extends TestCase
         $this->assertEquals('id', $columns['Teams.id']['column']);
         $this->assertEquals('Id', $columns['Teams.id']['text']);
         $this->assertEquals('smallinteger', $columns['Teams.id']['type']);
-        $this->assertEquals('2', $columns['Teams.id']['length']);
         $this->assertEquals('', $columns['Teams.id']['sort-order']);
     }
 
     public function testGetColumnsCustomAllow()
     {
-        $query = TableRegistry::get('Teams')->find()->contain([
+        $query = TableRegistry::getTableLocator()->get('Teams')->find()->contain([
             'Divisions' => [
                 'Conferences'
             ],
@@ -70,7 +71,7 @@ class SchemaTest extends TestCase
 
     public function testGetColumnsException()
     {
-        $query = TableRegistry::get('Teams')->find()->contain([
+        $query = TableRegistry::getTableLocator()->get('Teams')->find()->contain([
             'Divisions' => [
                 'Conferences'
             ],

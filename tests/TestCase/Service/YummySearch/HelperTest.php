@@ -10,6 +10,8 @@ use Yummy\Service\YummySearch\Helper;
 
 class HelperTest extends TestCase
 {
+    public $fixtures = ['plugin.Yummy.Teams', 'plugin.Yummy.Divisions','plugin.Yummy.Conferences'];
+
     public function testGetFormattedData()
     {
         $request = new ServerRequest();

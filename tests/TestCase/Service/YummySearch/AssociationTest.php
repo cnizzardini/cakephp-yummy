@@ -10,9 +10,11 @@ use Yummy\Service\YummySearch\Association;
 
 class AssociationTest extends TestCase
 {
+    public $fixtures = ['plugin.Yummy.Teams', 'plugin.Yummy.Divisions','plugin.Yummy.Conferences'];
+
     public function testGetModels()
     {
-        $query = TableRegistry::get('Teams')->find()->contain([
+        $query = TableRegistry::getTableLocator()->get('Teams')->find()->contain([
             'Divisions' => [
                 'Conferences'
             ]

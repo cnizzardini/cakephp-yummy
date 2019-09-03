@@ -8,6 +8,8 @@ use Yummy\Service\YummySearch\Rule;
 
 class RuleTest extends TestCase
 {
+    public $fixtures = ['plugin.Yummy.Teams', 'plugin.Yummy.Divisions','plugin.Yummy.Conferences'];
+
     public function testIsColumnAllowedTrue()
     {
         $rule = new Rule([
