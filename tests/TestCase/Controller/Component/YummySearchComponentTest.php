@@ -14,9 +14,11 @@ use Yummy\Controller\Component\YummySearchComponent;
  */
 class YummySearchComponentTest extends TestCase
 {
+    public $fixtures = ['plugin.Yummy.Teams', 'plugin.Yummy.Divisions','plugin.Yummy.Conferences'];
+
     public function testSearch()
     {
-        $request = new ServerRequest();
+        $request = new ServerRequest(['params' => ['action' => 'index']]);
         $request = $request->withQueryParams([
             'YummySearch' => [
                 'field' => [
@@ -32,8 +34,6 @@ class YummySearchComponentTest extends TestCase
         ]);
         $response = new Response();
 
-        $request->action = 'index';
-
         $controller = $this->getMockBuilder('Cake\Controller\Controller')
             ->setConstructorArgs([$request, $response])
             ->setMethods(null)
@@ -41,21 +41,21 @@ class YummySearchComponentTest extends TestCase
 
         $controller->loadComponent('Paginator');
 
-        $teamsTable = TableRegistry::get('Teams');
+        $teamsTable = TableRegistry::getTableLocator()->get('Teams');
         $teamsTable->addAssociations([
             'belongsTo' => [
                 'Divisions'
             ]
         ]);
 
-        $divisionsTable = TableRegistry::get('Divisions');
+        $divisionsTable = TableRegistry::getTableLocator()->get('Divisions');
         $divisionsTable->addAssociations([
             'belongsTo' => [
                 'Conferences'
             ]
         ]);
 
-        $query = TableRegistry::get('Teams')->find()->contain([
+        $query = TableRegistry::getTableLocator()->get('Teams')->find()->contain([
             'Divisions' => [
                 'Conferences'
             ],
