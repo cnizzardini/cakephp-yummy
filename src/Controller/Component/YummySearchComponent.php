@@ -107,7 +107,7 @@ class YummySearchComponent extends Component
     {
         $request = $this->controller->request;
 
-        if ($request->query('YummySearch') == null || $request->query('YummySearch_clear') != null) {
+        if ($request->getQuery('YummySearch') == null || $request->getQuery('YummySearch_clear') != null) {
             return $query;
         }
 
