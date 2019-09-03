@@ -2,7 +2,9 @@
 
 namespace Yummy\Service\YummySearch;
 
+use Cake\Database\Connection;
 use Cake\Utility\Inflector;
+use Yummy\Exception\YummySearch\SchemaException;
 
 class Schema
 {
@@ -16,16 +18,16 @@ class Schema
     /**
      * Returns array of columns after checking allow/deny rules
      *
-     * @param \Cake\Database\Connection $connection
+     * @param Connection $connection
      * @param string $modelName
      * @return array
      *
      * @throw Yummy\Exception\YummySearch\SchemaException
      */
-    public function getColumns(\Cake\Database\Connection $connection, string $modelName)
+    public function getColumns(Connection $connection, string $modelName)
     {
         $data = [];
-        $collection = $connection->schemaCollection();
+        $collection = $connection->getSchemaCollection();
         $tableName = Inflector::underscore($modelName);
         $modelName = Inflector::camelize($tableName);
 
@@ -33,7 +35,7 @@ class Schema
             $schema = $collection->describe($tableName);
             $columns = $schema->columns();
         } catch(\Cake\Database\Exception $e) {
-            throw new \Yummy\Exception\YummySearch\SchemaException(
+            throw new SchemaException(
                 "Unable to determine schema. Does this controller have an associated "
                 . "database schema? Try manually defining the model YummySearch should use.  "
                 . "\Cake\Database\Exception: " . $e->getMessage()
