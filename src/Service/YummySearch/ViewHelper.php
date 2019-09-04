@@ -175,27 +175,39 @@ class ViewHelper
         if ($this->config['selectGroups'] === false && isset($options[$name])) {
             $return = $options[$name];
         } else if ($this->config['selectGroups'] === 'custom') {
-            $tmp = $options[$name];
-            $return = [];
-
-            $groups = $this->getSortedGroups();
-
-            foreach ($tmp as $key => $option) {
-
-                $groupName = $option['data-group'] ? $option['data-group'] : $name;
-
-                $index = array_search($groupName, $groups);
-                $padding = count($groups) - $index;
-
-                $groupIndex = str_pad('', $padding, ' ') . $groupName;
-
-                $return[$groupIndex][$key] = $option;
-            }
+            $return = $this->buildCustomSelectGroup($options[$name]);
         } else {
             $return = $options;
         }
 
         return $return;
+    }
+
+    /**
+     * Builds custom select group
+     *
+     * @param array $options
+     * @return array
+     */
+    private function buildCustomSelectGroup(array $options) : array
+    {
+        $array = [];
+
+        $groups = $this->getSortedGroups();
+
+        foreach ($options as $key => $option) {
+
+            $groupName = $option['data-group'] ? $option['data-group'] : $name;
+
+            $index = array_search($groupName, $groups);
+            $padding = count($groups) - $index;
+
+            $groupIndex = str_pad('', $padding, ' ') . $groupName;
+
+            $return[$groupIndex][$key] = $option;
+        }
+
+        return $array;
     }
 
     /**
