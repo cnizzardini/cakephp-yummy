@@ -3,6 +3,7 @@
 namespace Yummy\Service\YummySearch;
 
 use Cake\Database\Connection;
+use Cake\Database\Schema\TableSchema;
 use Cake\Utility\Inflector;
 use Yummy\Exception\YummySearch\SchemaException;
 
@@ -48,17 +49,30 @@ class Schema
                 continue;
             }
 
-            $columnMeta = $schema->getColumn($column);
-
-            $data["$modelName.$column"] = [
-                'column' => $column,
-                'text' => Inflector::humanize($column),
-                'type' => $columnMeta['type'],
-                'length' => $columnMeta['length'],
-                'sort-order' => $this->rule->hasAllowRule() ? $this->rule->getSortOrder($modelName, $column) : null
-            ];
+            $data["$modelName.$column"] = $this->buildData($schema, $modelName, $column);
         }
 
         return $data;
+    }
+
+    /**
+     * Builds Yummy compatible schema data
+     *
+     * @param TableSchema $schema
+     * @param string $modelName
+     * @param string $column
+     * @return array
+     */
+    private function buildData(TableSchema $schema, string $modelName, string $column) : array
+    {
+        $columnMeta = $schema->getColumn($column);
+
+        return [
+            'column' => $column,
+            'text' => Inflector::humanize($column),
+            'type' => $columnMeta['type'],
+            'length' => $columnMeta['length'],
+            'sort-order' => $this->rule->hasAllowRule() ? $this->rule->getSortOrder($modelName, $column) : null
+        ];
     }
 }
