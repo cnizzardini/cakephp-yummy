@@ -49,9 +49,7 @@ class Helper
     public static function checkComponents(Controller $controller) : bool
     {
         if (!isset($controller->Paginator)) {
-            throw new ConfigurationException(
-                __('YummySearch requires Paginator Component')
-            );
+            throw new ConfigurationException(__('YummySearch requires Paginator Component'));
         }
 
         return true;
