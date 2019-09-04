@@ -21,6 +21,7 @@ class QueryGenerator
      * @param string $model
      * @param Parameter $parameter
      * @return Query
+     * @throws \Exception
      */
     public function getQuery(Query $query, string $model, Parameter $parameter) : Query
     {
