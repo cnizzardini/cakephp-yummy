@@ -24,7 +24,7 @@ class Schema
      *
      * @throw Yummy\Exception\YummySearch\SchemaException
      */
-    public function getColumns(Connection $connection, string $modelName)
+    public function getColumns(Connection $connection, string $modelName) : array
     {
         $data = [];
         $collection = $connection->getSchemaCollection();
