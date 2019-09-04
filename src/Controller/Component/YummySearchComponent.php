@@ -28,7 +28,8 @@ use Yummy\Service\YummySearch\ViewHelper;
  */
 class YummySearchComponent extends Component
 {
-    private $models = false;
+    private $models = false,
+            $controller;
     protected $_defaultConfig = [
         'operators' => [
             'like' => 'Containing',
@@ -157,7 +158,8 @@ class YummySearchComponent extends Component
         $option = array_merge($options, [
             'name' => false,
             'operators' => false,
-            'select' => false
+            'select' => false,
+            'casteToDate' => false
         ]);
 
         $this->_config['allow'][$column] = $option;
