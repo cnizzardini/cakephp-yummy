@@ -14,6 +14,7 @@ namespace Yummy\Controller\Component;
 use Cake\Controller\Component;
 use Cake\Datasource\ConnectionManager;
 use Cake\Database\Query;
+use Yummy\Service\YummySearch\Factory\ParameterFactory;
 use Yummy\Service\YummySearch\Helper;
 use Yummy\Service\YummySearch\Parameter;
 use Yummy\Service\YummySearch\QueryGenerator;
@@ -130,11 +131,8 @@ class YummySearchComponent extends Component
 
             $path = isset($this->models[$model]['path']) ? $this->models[$model]['path'] : '';
 
-            $parameter = new Parameter($model, $column, $this->_config);
-            $parameter
-                ->setType($this->models[$model]['columns']["$model.$column"]['type'])
-                ->setOperator($item['operator'])
-                ->setValue($item['search']);
+            $parameterFactory = new ParameterFactory($this->_config, $this->models);
+            $parameter = $parameterFactory->create($model, $column, $item);
 
             $query = $queryGenerator->getQuery(
                 $query,
