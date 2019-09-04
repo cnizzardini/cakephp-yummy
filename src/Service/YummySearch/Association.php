@@ -14,7 +14,7 @@ class Association
      * @param array $config
      * @return array
      */
-    public function getModels(Connection $connection, array $config)
+    public function getModels(Connection $connection, array $config) : array
     {
         $baseModel = $config['model'];
         $allowedModels = isset($config['allow']) ? $config['allow'] : [];
@@ -65,7 +65,7 @@ class Association
      * @param array $config
      * @return array
      */
-    private function getPaths(array $config)
+    private function getPaths(array $config) : array
     {
         $query = $config['query'];
 
@@ -106,7 +106,7 @@ class Association
      * @param string $prepend
      * @return array
      */
-    private function dot($array, $prepend = '')
+    private function dot($array, $prepend = '') : array
     {
         $results = [];
         foreach ($array as $key => $value) {
@@ -126,7 +126,7 @@ class Association
      * @param string $baseModel
      * @return string
      */
-    private function getHumanName(array $allowedModels, string $baseModel)
+    private function getHumanName(array $allowedModels, string $baseModel) : string
     {
         if (isset($allowedModels[$baseModel]['_niceName'])) {
             return $allowedModels[$baseModel]['_niceName'];
