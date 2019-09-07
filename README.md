@@ -104,6 +104,17 @@ You can also view the source code for demo project on github:
 
 [https://github.com/cnizzardini/cakephp-yummy-demo](https://github.com/cnizzardini/cakephp-yummy-demo)
 
+## CakePHP 3 Support
+
+| Version  | Supported | Notes |
+| ------------- | ------------- | ------------- |
+| 3.8 | Yes  | Unit tested |
+| 3.7 | Yes  | End-user tested + unit tested |
+| 3.6 | Yes  | Unit tested |
+
+Note, unit tests fail on 3.5 and lower. Unit tests were ran against CakePHP `4.0.0-beta3` 
+and failed.
+
 ## Unit Testing
 ```
 vendor/bin/phpunit 
