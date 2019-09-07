@@ -104,7 +104,31 @@ You can also view the source code for demo project on github:
 
 [https://github.com/cnizzardini/cakephp-yummy-demo](https://github.com/cnizzardini/cakephp-yummy-demo)
 
-## Test Cases
+## Unit Testing
 ```
 vendor/bin/phpunit 
 ```
+
+## Developers
+
+Fork and send a pull request. You can include Yummy in your Cake project 
+as a local source to make developing easier use these steps:
+
+- Remove `cnizzardini\cakephp-yummy` from your `composer.json`
+
+- Add a paths repository to your `composer.json`
+```
+"repositories": [
+    {
+        "type": "path",
+        "url": "/absolute/local-path-to/cakephp-yummy",
+        "options": {
+          "symlink": true
+        }
+    }
+]
+```
+- Run `composer require cnizzardini/cakephp-yummy @dev`
+
+Undo these steps when you're done. Read the full composer documentation 
+on loading from path here: [https://getcomposer.org/doc/05-repositories.md#path](https://getcomposer.org/doc/05-repositories.md#path)
