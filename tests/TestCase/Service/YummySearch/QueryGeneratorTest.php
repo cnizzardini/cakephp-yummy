@@ -39,7 +39,7 @@ class QueryGeneratorTest extends TestCase
             'trim' => true
         ];
 
-        $queryGenerator = new QueryGenerator($config, $query);
+        $queryGenerator = new QueryGenerator($config);
         $parameter  = new Parameter('Teams','name', $config);
         $parameter->setType('string')->setOperator('eq')->setValue('NY Giants');
 
@@ -82,7 +82,7 @@ class QueryGeneratorTest extends TestCase
             'trim' => true
         ];
 
-        $queryGenerator = new QueryGenerator($config, $query);
+        $queryGenerator = new QueryGenerator($config);
         $parameter  = new Parameter('Teams','id', $config);
         $parameter->setType('integer')->setOperator('not_eq')->setValue('1');
 
@@ -121,7 +121,7 @@ class QueryGeneratorTest extends TestCase
             'trim' => true
         ];
 
-        $queryGenerator = new QueryGenerator($config, $query);
+        $queryGenerator = new QueryGenerator($config);
         $parameter  = new Parameter('Teams','name', $config);
         $parameter->setType('string')->setOperator('like')->setValue('NY');
 
@@ -166,7 +166,7 @@ class QueryGeneratorTest extends TestCase
             'trim' => true
         ];
 
-        $queryGenerator = new QueryGenerator($config, $query);
+        $queryGenerator = new QueryGenerator($config);
         $parameter  = new Parameter('Teams','name', $config);
         $parameter->setType('string')->setOperator('not_like')->setValue('NY G');
 
@@ -205,7 +205,7 @@ class QueryGeneratorTest extends TestCase
             'trim' => true
         ];
 
-        $queryGenerator = new QueryGenerator($config, $query);
+        $queryGenerator = new QueryGenerator($config);
         $parameter  = new Parameter('Teams','id', $config);
         $parameter->setType('integer')->setOperator('gt')->setValue('1');
 
@@ -244,7 +244,7 @@ class QueryGeneratorTest extends TestCase
             'trim' => true
         ];
 
-        $queryGenerator = new QueryGenerator($config, $query);
+        $queryGenerator = new QueryGenerator($config);
         $parameter  = new Parameter('Teams','id', $config);
         $parameter->setType('integer')->setOperator('lt')->setValue('10');
 
@@ -257,6 +257,30 @@ class QueryGeneratorTest extends TestCase
 
     public function testCastToDate()
     {
-        $this->markTestIncomplete('@todo');
+        $query = TableRegistry::getTableLocator()->get('Conferences')->find();
+
+        $config = [
+            'query' => $query,
+            'model' => 'Teams',
+            'trim' => true,
+            'allow' => [
+                'Conferences.created' => [
+                    'castToDate' => true
+                ]
+            ]
+        ];
+
+        $queryGenerator = new QueryGenerator($config);
+        $parameter  = new Parameter('Conferences','created', $config);
+        $parameter
+            ->setType('datetime')
+            ->setOperator('gt_eq')
+            ->setValue('2019-01-01 00:00:00');
+
+        $query = $queryGenerator->getWhere($query, $parameter);
+
+        $results = $query->toArray();
+
+        $this->assertCount(2, $results);
     }
 }
