@@ -8,7 +8,10 @@ echo $this->Form->create(null,[
 ]);
 
 if (isset($classes)) {
+    $hidden = $classes['hide'];
     echo '<div id="yummy-attributes" show="' . $classes['show'] . '" hide="' . $classes['hide'] . '">';
+} else {
+    $hidden = '';
 }
 
 $i = 0;
@@ -55,6 +58,7 @@ do{
         <div class="col-lg-3 col-md-3 col-xs-9">
             <div class="input text">
                 <?php
+
                 echo $this->Form->input('YummySearch.search[]',[
                     'class' => 'form-control border-input yummy-input',
                     'placeholder' => 'Search',
@@ -110,6 +114,24 @@ while($i < $length);
         <div class="col-lg-6 col-md-6 col-xs-12">
             <?php echo $this->Form->button('Search', ['class' => 'btn btn-info btn-fill', 'value' => 1]); ?>
             <?php echo $this->Html->link('Clear', $YummySearch['base_url'], ['class' => 'btn btn-info']); ?>
+            <?php
+                foreach ($YummySearch['models'] as $model) {
+                    foreach($model as $column) {
+
+                        if (empty($column['data-items'])) {
+                            continue;
+                        }
+
+                        echo $this->Form->select('YummySearchHidden.' . $column['value'], $column['data-items'], [
+                            'class' => $hidden,
+                            'id' => '',
+                            'label' => false,
+                            'default' => $search,
+                            'style' => empty($hidden) ? 'display:none' : ''
+                        ]);
+                    }
+                }
+            ?>
         </div>
     </div>
 <?php echo $this->Form->end();

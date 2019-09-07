@@ -254,4 +254,9 @@ class QueryGeneratorTest extends TestCase
 
         $this->assertCount(9, $results);
     }
+
+    public function testCastToDate()
+    {
+        $this->markTestIncomplete('@todo');
+    }
 }

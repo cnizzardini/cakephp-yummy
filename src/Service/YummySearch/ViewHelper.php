@@ -72,7 +72,7 @@ class ViewHelper
                 'text' => ($meta['niceName'] !== false) ? $meta['niceName'] : $field['text'],
                 'path' => $model['path'],
                 'value' => $column,
-                'data-items' => !empty($meta['options']) ? implode(',', $meta['options']) : false,
+                'data-items' => !empty($meta['options']) ? $meta['options'] : false,
                 'data-type' => !empty($meta['options']) ? 'list' : $field['type'],
                 'data-length' => $field['length'],
                 'selected' => ($request->getQuery('YummySearch') === null && $meta['default'] === true) ? true : false,
@@ -188,7 +188,7 @@ class ViewHelper
      */
     private function buildCustomSelectGroup(array $options) : array
     {
-        $array = [];
+        $return = [];
 
         $groups = $this->getSortedGroups();
 
@@ -204,7 +204,7 @@ class ViewHelper
             $return[$groupIndex][$key] = $option;
         }
 
-        return $array;
+        return $return;
     }
 
     /**

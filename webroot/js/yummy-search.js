@@ -47,7 +47,6 @@
         var prevOperator = this.getPreviousOperator(operator);
         var prevValue = this.getPreviousSearchValue(row)
         var items = this.getCustomSearchList(option);
-
         var self = this;
 
         new Promise(function(resolve, reject) {
@@ -163,7 +162,12 @@
 
     YummySearch.getCustomSearchList = function(option) {
         if (option.getAttribute('data-type').toLowerCase() === 'list') {
-            return option.getAttribute('data-items').split(',');
+            var name = option.getAttribute('value');
+            var pieces = name.split('.');
+            if (pieces.length === 2) {
+                var select = document.getElementsByName('YummySearchHidden[' + pieces[0] + '][' + pieces[1] + ']');
+                return select[0].options;
+            }
         }
         return false;
     };
@@ -217,8 +221,8 @@
 
         for (var i=0; i<detail.items.length; i++) {
             var option = document.createElement("option");
-            option.value = detail.items[ i ];
-            option.text = detail.items[ i ];
+            option.value = detail.items[ i ].value;
+            option.text = detail.items[ i ].text;
             if (detail.prevValue === detail.items[ i ]) {
                 option.selected = 'selected';
             }
