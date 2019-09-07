@@ -95,7 +95,6 @@ class YummySearchComponent extends Component
 
         $yummy = $viewHelper->getYummyHelperData($this->models, $this->controller->request);
 
-        // make yummy search data available to view
         $this->controller->set('YummySearch', $yummy);
     }
 
@@ -104,6 +103,7 @@ class YummySearchComponent extends Component
      *
      * @param Query $query
      * @return Query
+     * @throws \Exception
      */
     public function search(Query $query) : Query
     {
