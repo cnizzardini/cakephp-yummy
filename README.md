@@ -106,11 +106,11 @@ You can also view the source code for demo project on github:
 
 ## CakePHP 3 Support
 
-| Version  | Supported | Notes |
-| ------------- | ------------- | ------------- |
-| 3.8 | Yes  | Unit tested |
-| 3.7 | Yes  | End-user tested + unit tested |
-| 3.6 | Yes  | Unit tested |
+| Version  | Supported | Unit Tests | Notes |
+| ------------- | ------------- | ------------- | ------------- |
+| 3.8 | Yes  | Passing | - |
+| 3.7 | Yes  | Passing | Tested |
+| 3.6 | Yes  | Passing | - |
 
 Note, unit tests fail on 3.5 and lower. Unit tests were ran against CakePHP `4.0.0-beta3` 
 and failed.
