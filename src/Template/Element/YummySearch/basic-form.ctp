@@ -115,22 +115,31 @@ while($i < $length);
             <?php echo $this->Form->button('Search', ['class' => 'btn btn-info btn-fill', 'value' => 1]); ?>
             <?php echo $this->Html->link('Clear', $YummySearch['base_url'], ['class' => 'btn btn-info']); ?>
             <?php
-                foreach ($YummySearch['models'] as $model) {
-                    foreach($model as $column) {
 
-                        if (empty($column['data-items'])) {
-                            continue;
-                        }
+            $columns = [];
 
-                        echo $this->Form->select('YummySearchHidden.' . $column['value'], $column['data-items'], [
-                            'class' => $hidden,
-                            'id' => '',
-                            'label' => false,
-                            'default' => $search,
-                            'style' => empty($hidden) ? 'display:none' : ''
-                        ]);
-                    }
+            foreach ($YummySearch['models'] as $key => $model) {
+                if (is_numeric($key)) {
+                    $columns[] = $model;
+                } else {
+                    $columns = array_merge($columns, $model);
                 }
+            }
+
+            foreach($columns as $column) {
+
+                if (empty($column['data-items'])) {
+                    continue;
+                }
+
+                echo $this->Form->select('YummySearchHidden.' . $column['value'], $column['data-items'], [
+                    'class' => $hidden,
+                    'id' => '',
+                    'label' => false,
+                    'default' => $search,
+                    'style' => empty($hidden) ? 'display:none' : ''
+                ]);
+            }
             ?>
         </div>
     </div>
