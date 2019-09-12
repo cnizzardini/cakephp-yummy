@@ -22,3 +22,4 @@ tags
 /vendor
 /phpunit.xml
 /config/app.php
+/tmp/
