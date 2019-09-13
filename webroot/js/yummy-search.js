@@ -223,7 +223,7 @@
             var option = document.createElement("option");
             option.value = detail.items[ i ].value;
             option.text = detail.items[ i ].text;
-            if (detail.prevValue === detail.items[ i ]) {
+            if (detail.prevValue === detail.items[ i ].value) {
                 option.selected = 'selected';
             }
             dropdown.appendChild(option);
