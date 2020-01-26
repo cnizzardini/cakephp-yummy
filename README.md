@@ -108,6 +108,7 @@ You can also view the source code for demo project on github:
 
 | Version  | Supported | Unit Tests | Notes |
 | ------------- | ------------- | ------------- | ------------- |
+| 4.0 | No  | No | Work in progress |
 | 3.8 | Yes  | Passing | - |
 | 3.7 | Yes  | Passing | Tested |
 | 3.6 | Yes  | Passing | - |
