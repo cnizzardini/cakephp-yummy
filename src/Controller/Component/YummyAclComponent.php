@@ -16,7 +16,7 @@ class YummyAclComponent extends Component
 
     public $components = ['Flash', 'Auth'];
 
-    public function initialize(array $config)
+    public function initialize(array $config) : void
     {
         parent::initialize($config);
 
@@ -27,8 +27,6 @@ class YummyAclComponent extends Component
         if (!$this->getConfig('use_config_file')) {
             $this->getConfig('use_config_file', false);
         }
-
-        return true;
     }
 
     public function startup()
