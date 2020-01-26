@@ -12,6 +12,18 @@ and boostrap 3 Bake Themes. Each of these components may be used separately.
 
 [Live Demo available](https://cnizz.com/yummy-demo) and fully documented in the [git wiki](https://github.com/cnizzardini/cakephp-yummy/wiki).
 
+## Supported Versions
+
+| Version  | Supported | Unit Tests | Notes |
+| ------------- | ------------- | ------------- | ------------- |
+| 4.0 | No  | Failing | See cake-4.0 branch, this is a work in progress |
+| 3.8 | Yes  | Passing | - |
+| 3.7 | Yes  | Passing | Tested |
+| 3.6 | Yes  | Passing | - |
+
+Note, unit tests fail on 3.5 and lower. Unit tests were ran against CakePHP `4.0.0-beta3` 
+and failed.
+
 ## Features
 
 ### [YummySearch](https://github.com/cnizzardini/cakephp-yummy/wiki/Yummy-Search)
@@ -103,18 +115,6 @@ Checkout the [Wiki](https://github.com/cnizzardini/cakephp-yummy/wiki/).
 You can also view the source code for demo project on github:
 
 [https://github.com/cnizzardini/cakephp-yummy-demo](https://github.com/cnizzardini/cakephp-yummy-demo)
-
-## CakePHP 3 Support
-
-| Version  | Supported | Unit Tests | Notes |
-| ------------- | ------------- | ------------- | ------------- |
-| 4.0 | No  | Failing | See cake-4.0 branch, this is a work in progress |
-| 3.8 | Yes  | Passing | - |
-| 3.7 | Yes  | Passing | Tested |
-| 3.6 | Yes  | Passing | - |
-
-Note, unit tests fail on 3.5 and lower. Unit tests were ran against CakePHP `4.0.0-beta3` 
-and failed.
 
 ## Unit Testing
 ```
