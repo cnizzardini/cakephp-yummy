@@ -6,10 +6,10 @@
     "keywords": ["cakephp3","cakephp3 search","cakephp3 acl","cakephp3 bake"],
     "require": {
         "php": ">=7.2",
-        "cakephp/cakephp": ">=3.6.0 <=3.9.0"
+        "cakephp/cakephp": "4.0"
     },
     "require-dev": {
-        "phpunit/phpunit": "6.0.*"
+        "phpunit/phpunit": "^7.0"
     },
     "autoload": {
         "psr-4": {
